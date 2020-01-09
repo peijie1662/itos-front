@@ -26,3 +26,9 @@ export const getTaskLog = params => { return axios.post(`${base}/tasklog`, param
 
 //智能提示列表
 export const getSmartTipsList = params => { return axios.post(`${base}/smarttipslist`, params).then(res => res.data); };
+//添加智能提示
+export const addSmarttips = params => { return axios.post(`${base}/addSmarttips`, params).then(res => res.data); };
+//修改智能提示
+export const updateSmarttips = params => { return axios.post(`${base}/updateSmarttips`, params).then(res => res.data); };
+//删除智能提示
+export const deleteSmarttips = params => { return axios.post(`${base}/deleteSmarttips`, params).then(res => res.data); };
