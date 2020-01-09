@@ -41,6 +41,13 @@
       "unicode_decimal": 58891
     },
     {
+      "icon_id": "1880052",
+      "name": "进行中",
+      "font_class": "jinhangzhong",
+      "unicode": "e7d4",
+      "unicode_decimal": 59348
+    },
+    {
       "icon_id": "1903573",
       "name": "crab",
       "font_class": "crab",
@@ -67,6 +74,13 @@
       "font_class": "truck",
       "unicode": "e5cf",
       "unicode_decimal": 58831
+    },
+    {
+      "icon_id": "2877906",
+      "name": "取消",
+      "font_class": "quxiao",
+      "unicode": "e626",
+      "unicode_decimal": 58918
     },
     {
       "icon_id": "3053534",
@@ -104,11 +118,25 @@
       "unicode_decimal": 58892
     },
     {
+      "icon_id": "3677677",
+      "name": "完成",
+      "font_class": "wancheng",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
       "icon_id": "3718686",
       "name": "truck",
       "font_class": "truck1",
       "unicode": "e618",
       "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "4168388",
+      "name": "完成",
+      "font_class": "wancheng1",
+      "unicode": "e637",
+      "unicode_decimal": 58935
     },
     {
       "icon_id": "4558473",
@@ -139,6 +167,20 @@
       "unicode_decimal": 58906
     },
     {
+      "icon_id": "4927393",
+      "name": "完成",
+      "font_class": "wancheng2",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "5034698",
+      "name": "正在进行",
+      "font_class": "jinhang",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
       "icon_id": "5159152",
       "name": "auto",
       "font_class": "auto",
@@ -160,6 +202,13 @@
       "unicode_decimal": 58946
     },
     {
+      "icon_id": "5815597",
+      "name": "登记",
+      "font_class": "dengji",
+      "unicode": "e68f",
+      "unicode_decimal": 59023
+    },
+    {
       "icon_id": "5846212",
       "name": "phone",
       "font_class": "phone",
@@ -179,6 +228,13 @@
       "font_class": "icons-sts_crane",
       "unicode": "ed7b",
       "unicode_decimal": 60795
+    },
+    {
+      "icon_id": "6218998",
+      "name": "进行中",
+      "font_class": "jinhangzhong1",
+      "unicode": "e661",
+      "unicode_decimal": 58977
     },
     {
       "icon_id": "6502266",
@@ -258,6 +314,20 @@
       "unicode_decimal": 58990
     },
     {
+      "icon_id": "9176421",
+      "name": "进行中",
+      "font_class": "jinhangzhong2",
+      "unicode": "e70d",
+      "unicode_decimal": 59149
+    },
+    {
+      "icon_id": "9288276",
+      "name": "完成",
+      "font_class": "wancheng3",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
       "icon_id": "9889501",
       "name": "robot",
       "font_class": "robot2",
@@ -268,8 +338,22 @@
       "icon_id": "10114000",
       "name": "system",
       "font_class": "system2",
-      "unicode": "e626",
-      "unicode_decimal": 58918
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "10232439",
+      "name": "取消",
+      "font_class": "quxiao1",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "10388712",
+      "name": "取消",
+      "font_class": "quxiao2",
+      "unicode": "e667",
+      "unicode_decimal": 58983
     },
     {
       "icon_id": "10962049",
@@ -277,6 +361,13 @@
       "font_class": "person3",
       "unicode": "e502",
       "unicode_decimal": 58626
+    },
+    {
+      "icon_id": "11207327",
+      "name": "换人",
+      "font_class": "icon-test",
+      "unicode": "e620",
+      "unicode_decimal": 58912
     },
     {
       "icon_id": "11241055",

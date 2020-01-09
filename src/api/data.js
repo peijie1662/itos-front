@@ -108,20 +108,6 @@ export const TASKICONS = [
   },
 ]
 
-//智能提示
-export const SMARTTIPS = [
-  {
-    pre: ["号$"],
-    next: ["桥吊", "龙门吊", "堆高机", "集卡"]
-  }, {
-    pre: ["集卡$"],
-    next: ["手麦没声音", "喇叭没声音", "蓝屏了"]
-  }, {
-    pre: ["H\\d{3,}$"],
-    next: ["速度慢", "生产系统不能打开", "蓝屏了", "开不了机"]
-  }
-]
-
 //任务的
 //1.通用状态
 //CHECKIN(登记)->PROCESSING(处理中)->DONE(完成)
@@ -129,30 +115,30 @@ export const SMARTTIPS = [
 //SWAP(换人)-可以在任一阶段
 //MODIFY(内容修改)-可以在任一阶段
 //CANCEL(取消)-可以在任一阶段,终点
-//SUSPEND(暂停)-可以在任一阶段
+//FOLLOWUP(灌水)-可以在任一阶段
 export const TASKSTATUS = [
   {
     id: "CHECKIN",
     desc: "登记",
-    icon: "iconfont icon-dengji- icon",
+    icon: "iconfont icon-dengji icon",
     size: "large",//图标大小(timeline中使用) 
     iconclass: { background: "#e9ebec", color: "#7ab900" },
     hoverclass: { background: "#7ab900", color: "white" },
-    next: ["PROCESSING", "DONE", "SWAP", "MODIFY", "SUSPEND", "CANCEL"]
+    next: ["PROCESSING", "DONE", "SWAP", "MODIFY", "CANCEL"]
   },
   {
     id: "PROCESSING",
     desc: "处理中",
-    icon: "iconfont icon-Processing icon",
+    icon: "iconfont icon-jinhangzhong1 icon",
     size: "large",
-    iconclass: { background: "#e9ebec", color: "#46b246" },
-    hoverclass: { background: "#46b246", color: "white" },
-    next: ["PROCESSING", "DONE", "SWAP", "MODIFY", "SUSPEND", "CANCEL"]
+    iconclass: { background: "#e9ebec", color: "#67C23A" },
+    hoverclass: { background: "#67C23A", color: "white" },
+    next: ["PROCESSING", "DONE", "SWAP", "MODIFY", "CANCEL"]
   },
   {
     id: "DONE",
     desc: "完成",
-    icon: "iconfont icon-on-line1 icon",
+    icon: "iconfont icon-wancheng2 icon",
     size: "large",
     iconclass: { background: "#e9ebec", color: "#3b99ff" },
     hoverclass: { background: "#3b99ff", color: "white" },
@@ -161,34 +147,25 @@ export const TASKSTATUS = [
   {
     id: "CANCEL",
     desc: "取消",
-    icon: "iconfont icon-cancel1 icon",
+    icon: "iconfont icon-quxiao2 icon",
     size: "large",
-    iconclass: { background: "#e9ebec", color: "red" },
-    hoverclass: { background: "red", color: "white" },
+    iconclass: { background: "#e9ebec", color: "#F56C6C" },
+    hoverclass: { background: "#F56C6C", color: "white" },
     next: ["TERMINAL"]
-  },
-  {
-    id: "SUSPEND",
-    desc: "暂停",
-    icon: "iconfont icon-suspend icon",
-    size: "large",
-    iconclass: { background: "#e9ebec", color: "#f2723c" },    
-    hoverclass: { background: "#f2723c", color: "white" },
-    next: ["INHERIT"] //继承上一状态的链节点
   },
   {
     id: "MODIFY",
     desc: "内容修改",
-    icon: "iconfont icon-modify icon",
+    icon: "iconfont icon-note3 icon",
     size: "large",
-    iconclass: { background: "#e9ebec", color: "skyblue" },
-    hoverclass: { background: "skyblue", color: "white" },
+    iconclass: { background: "#e9ebec", color: "#E6A23C" },
+    hoverclass: { background: "#E6A23C", color: "white" },
     next: ["INHERIT"] //继承上一状态的链节点
   },
   {
     id: "SWAP",
     desc: "换人",
-    icon: "iconfont icon-coordinates icon",
+    icon: "iconfont icon-icon-test icon",
     size: "large",
     iconclass: { background: "#e9ebec", color: "#b848ff" },
     hoverclass: { background: "#b848ff", color: "#b848ff" },

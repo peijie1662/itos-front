@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       newTask: null,
-      tasklist: []
+      tasklist: [],
     };
   },
   methods: {
@@ -49,7 +49,7 @@ export default {
   },
   components: {
     taskCom,
-    newTaskCom
+    newTaskCom,
   },
   mounted() {
     this.loadData();

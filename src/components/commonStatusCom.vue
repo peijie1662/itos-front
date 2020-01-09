@@ -1,14 +1,12 @@
 <template>
   <div>
-    <el-dialog title="改变状态" width="520px" :visible.sync="dialogVisible">
+    <el-dialog :title="task.title" width="520px" :visible.sync="dialogVisible">
       <div style="position:relative;">
         <div>
           <span>备注</span>
         </div>
         <!-- 备注 -->
-        <div class="content">
-
-        </div>
+        <div contenteditable="true" class="content"></div>
         <!-- 按钮 -->
         <div style="overflow:hidden;margin-top:10px;">
           <el-button
@@ -26,14 +24,13 @@
 
 <style scoped>
 .content {
-  height: 200px;
+  height: 100px;
   border: 1px solid #c0c4cc;
   border-radius: 5px;
 }
 </style>
 
 <script>
-
 export default {
   data() {
     return {
@@ -48,6 +45,7 @@ export default {
       handler(newVal) {
         if (newVal != null) {
           this.task = newVal;
+          this.task.title = `${newVal.newStatus.desc} (${newVal.newStatus.id})`;
           this.dialogVisible = true;
         }
       },

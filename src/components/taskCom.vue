@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="outer" @>
+    <div class="outer" @mouseleave="showNextStatus = false">
       <!-- 图标 -->
       <div class="task_icon">
         <i :class="task.icon.icon" :style="task.icon.iconclass" style="font-size:40px;"></i>
@@ -27,7 +27,8 @@
           :key="status.id"
           :class="status.icon"
           :style="status.iconclass"
-          style="margin-left:1px;font-size:30px;border-radius:2px;"
+          style="margin-left:1px;font-size:35px;border-radius:2px;"
+          @click="nextStatus(task,status)"
         ></i>
       </div>
       <!-- 简介 -->
@@ -53,7 +54,14 @@
         </div>
       </div>
     </div>
-    <!-- 任务处理中 -->
+    <!-- 执行中窗口 -->
+    <processingCom :ttask="processingTask"></processingCom>
+    <!-- 完成窗口 -->
+    <doneCom :ttask="doneTask"></doneCom>
+    <!-- 取消窗口 -->
+    <cancelCom :ttask="cancelTask"></cancelCom>
+    <!-- 灌水窗口 -->
+    <followupCom :ttask="followupTask"></followupCom>
   </div>
 </template>
 
@@ -113,6 +121,10 @@ import {
   getTaskStatusById,
   getUserNameById
 } from "@/api/data";
+import processingCom from "@/components/commonStatusCom.vue";
+import doneCom from "@/components/commonStatusCom.vue";
+import cancelCom from "@/components/commonStatusCom.vue";
+import followupCom from "@/components/commonStatusCom.vue";
 
 export default {
   data() {
@@ -120,7 +132,12 @@ export default {
       statusHover: false,
       showNextStatus: false,
       task: "",
-      taskLog: []
+      taskLog: [],
+      //
+      processingTask: null,
+      doneTask: null,
+      cancelTask: null,
+      followupTask: null
     };
   },
   methods: {
@@ -142,6 +159,16 @@ export default {
           });
         }
       });
+    },
+    nextStatus(task,status){
+      task.newStatus = status;
+      if (status.id == "PROCESSING"){
+        this.processingTask = {...task}
+      }else if (status.id == "DONE"){
+        this.doneTask = {...task}
+      }else if (status.id == "CANCEL"){
+        this.cancelTask = {...task}
+      }
     }
   },
   props: ["ttask"],
@@ -166,6 +193,12 @@ export default {
       deep: true,
       immediate: true
     }
+  },
+  components: {
+    processingCom,
+    doneCom,
+    cancelCom,
+    followupCom
   }
 };
 </script>

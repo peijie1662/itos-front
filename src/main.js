@@ -5,7 +5,6 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import routes from './routes'
 import './assets/iconfont/iconfont.css'
-import './assets/iconfont-jcl/iconfont.css'
 
 Vue.use(VueRouter)
 Vue.use(ElementUI)
