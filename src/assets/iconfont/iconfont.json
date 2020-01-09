@@ -1,0 +1,289 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "210397",
+      "name": "note",
+      "font_class": "note",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "313751",
+      "name": "person",
+      "font_class": "p",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "377712",
+      "name": "Context Phone",
+      "font_class": "contextphone",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
+      "icon_id": "796168",
+      "name": "network",
+      "font_class": "network",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "1128792",
+      "name": "note",
+      "font_class": "note1",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "1903573",
+      "name": "crab",
+      "font_class": "crab",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "2535191",
+      "name": "Container truck_alar",
+      "font_class": "Containertruck_alar",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "2648261",
+      "name": "Home phone",
+      "font_class": "Homephone",
+      "unicode": "e675",
+      "unicode_decimal": 58997
+    },
+    {
+      "icon_id": "2687762",
+      "name": "truck",
+      "font_class": "truck",
+      "unicode": "e5cf",
+      "unicode_decimal": 58831
+    },
+    {
+      "icon_id": "3053534",
+      "name": "system",
+      "font_class": "system",
+      "unicode": "e56e",
+      "unicode_decimal": 58734
+    },
+    {
+      "icon_id": "3215169",
+      "name": "computer",
+      "font_class": "picker-computer",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "3558349",
+      "name": "trustnote-2",
+      "font_class": "trustnote-",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "3558354",
+      "name": "trustnote-3",
+      "font_class": "trustnote-1",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "3616315",
+      "name": "trustnote-5",
+      "font_class": "trustnote-2",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "3718686",
+      "name": "truck",
+      "font_class": "truck1",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "4558473",
+      "name": "crab-glyph-color",
+      "font_class": "crab-glyph-color",
+      "unicode": "e7f1",
+      "unicode_decimal": 59377
+    },
+    {
+      "icon_id": "4700036",
+      "name": "network",
+      "font_class": "network1",
+      "unicode": "eca6",
+      "unicode_decimal": 60582
+    },
+    {
+      "icon_id": "4814414",
+      "name": "note",
+      "font_class": "note2",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "4832828",
+      "name": "icon_12px_robot",
+      "font_class": "icon_px_robot",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "5159152",
+      "name": "auto",
+      "font_class": "auto",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "5209089",
+      "name": "icon_crab_line",
+      "font_class": "icon_crab_line",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "5777819",
+      "name": "person",
+      "font_class": "person",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "5846212",
+      "name": "phone",
+      "font_class": "phone",
+      "unicode": "e521",
+      "unicode_decimal": 58657
+    },
+    {
+      "icon_id": "6001484",
+      "name": "icons8-rtg_crane",
+      "font_class": "icons-rtg_crane",
+      "unicode": "ec8c",
+      "unicode_decimal": 60556
+    },
+    {
+      "icon_id": "6002275",
+      "name": "icons8-sts_crane",
+      "font_class": "icons-sts_crane",
+      "unicode": "ed7b",
+      "unicode_decimal": 60795
+    },
+    {
+      "icon_id": "6502266",
+      "name": "system",
+      "font_class": "system1",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "7154151",
+      "name": "robot",
+      "font_class": "robot",
+      "unicode": "e7b9",
+      "unicode_decimal": 59321
+    },
+    {
+      "icon_id": "7307299",
+      "name": "person",
+      "font_class": "person1",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "7344570",
+      "name": "phone",
+      "font_class": "phone1",
+      "unicode": "e7c9",
+      "unicode_decimal": 59337
+    },
+    {
+      "icon_id": "7756965",
+      "name": "network cable.2",
+      "font_class": "networkcable",
+      "unicode": "ebd3",
+      "unicode_decimal": 60371
+    },
+    {
+      "icon_id": "7925838",
+      "name": "contact person",
+      "font_class": "contactperson",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "8873786",
+      "name": "system management",
+      "font_class": "systemmanagement",
+      "unicode": "e679",
+      "unicode_decimal": 59001
+    },
+    {
+      "icon_id": "8891276",
+      "name": "person",
+      "font_class": "person2",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "8917242",
+      "name": "note",
+      "font_class": "note3",
+      "unicode": "e74a",
+      "unicode_decimal": 59210
+    },
+    {
+      "icon_id": "8922525",
+      "name": "CRAB",
+      "font_class": "CRAB",
+      "unicode": "e739",
+      "unicode_decimal": 59193
+    },
+    {
+      "icon_id": "9080929",
+      "name": "robot",
+      "font_class": "robot1",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "9889501",
+      "name": "robot",
+      "font_class": "robot2",
+      "unicode": "e6e6",
+      "unicode_decimal": 59110
+    },
+    {
+      "icon_id": "10114000",
+      "name": "system",
+      "font_class": "system2",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "10962049",
+      "name": "person",
+      "font_class": "person3",
+      "unicode": "e502",
+      "unicode_decimal": 58626
+    },
+    {
+      "icon_id": "11241055",
+      "name": "computer protection",
+      "font_class": "computerprotection",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    }
+  ]
+}
