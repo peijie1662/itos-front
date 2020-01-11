@@ -5,6 +5,7 @@ import TaskInput from './views/task/taskInput.vue'
 import TaskQuery from './views/task/taskQuery.vue'
 import ModelList from './views/taskmodel/modelList.vue'
 import SmartTips from './views/settings/smartTips.vue'
+import DispatchTask from './views/task/dispatchTask.vue'
 
 let routes = [
     {
@@ -34,6 +35,9 @@ let routes = [
                 meta: { dis: false }
             }, {
                 path: '/model_list', component: ModelList, name: '任务模版',
+                meta: { dis: false }
+            },{
+                path: '/task_dispatch', component: DispatchTask, name: '系统任务',
                 meta: { dis: false }
             }
         ]

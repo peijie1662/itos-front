@@ -23,6 +23,12 @@ export const getManualTaskList = params => { return axios.post(`${base}/manualta
 export const addManualTask = params => { return axios.post(`${base}/addManualtask`, params).then(res => res.data); };
 //任务日志
 export const getTaskLog = params => { return axios.post(`${base}/tasklog`, params).then(res => res.data); };
+//任务状态-PROCESSING,DONE,CANCEL
+export const updateTaskStatus = params => { return axios.post(`${base}/updatetaskstatus`, params).then(res => res.data); };
+//任务状态-MODIFY
+export const modifyTask = params => { return axios.post(`${base}/modifytask`, params).then(res => res.data); };
+//任务状态-SWAP
+export const swapTask = params => { return axios.post(`${base}/swaptask`, params).then(res => res.data); };
 
 //智能提示列表
 export const getSmartTipsList = params => { return axios.post(`${base}/smarttipslist`, params).then(res => res.data); };

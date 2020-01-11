@@ -10,7 +10,7 @@
         class="task_status"
         @mouseenter="statusHover = true"
         @mouseleave="statusHover = false"
-        @click="showNextStatus = !showNextStatus"
+        @click="showNextStatusFun()"
       >
         <i
           v-if="statusHover"
@@ -21,7 +21,7 @@
         <i v-else :class="task.sta.icon" :style="task.sta.iconclass" style="font-size:40px;"></i>
       </div>
       <!-- Next状态-->
-      <div v-show="showNextStatus" class="task_next_status">
+      <div v-show="showNextStatus " class="task_next_status">
         <i
           v-for="status in task.nextSta"
           :key="status.id"
@@ -33,7 +33,7 @@
       </div>
       <!-- 简介 -->
       <div class="task_abs">
-        <span style="margin-left:50px;font-size:20px;">{{task.abs}}</span>
+        <span style="margin-left:50px;font-size:20px;user-select:none;">{{task.abs}}</span>
       </div>
       <!-- 内容 -->
       <div class="task_content">
@@ -46,22 +46,27 @@
       </div>
       <!-- 处理日志 -->
       <div style="font-size:10px;">
-        <div v-for="(item,index) in taskLog" :key="index">
-          <span style="color:black;background:#e9ebec;">{{item.opDtStr}}</span>
-          <br />
-          <i :class="task.sta.icon" :style="task.sta.hoverclass" style="margin-left:10px;"></i>
+        <div v-for="(item,index) in taskLog" :key="index" style="margin-top:2px;">
+          <i :class="item.sta.icon" :style="item.sta.iconclass" style="margin-left:10px;"></i>
+          <span>{{item.opDtStr}}</span>
           <span style="margin-left:10px;">{{item.statusdesc}}</span>
+          <div v-show="item.remark != null" style="margin-left:25px;">
+            <span>备注:</span>
+            <span>{{item.remark}}</span>
+          </div>
         </div>
       </div>
     </div>
     <!-- 执行中窗口 -->
-    <processingCom :ttask="processingTask"></processingCom>
+    <processingCom :ttask="processingTask" @updateTaskSuccess="updateTaskSuccess"></processingCom>
     <!-- 完成窗口 -->
-    <doneCom :ttask="doneTask"></doneCom>
+    <doneCom :ttask="doneTask" @updateTaskSuccess="updateTaskSuccess"></doneCom>
     <!-- 取消窗口 -->
-    <cancelCom :ttask="cancelTask"></cancelCom>
-    <!-- 灌水窗口 -->
-    <followupCom :ttask="followupTask"></followupCom>
+    <cancelCom :ttask="cancelTask" @updateTaskSuccess="updateTaskSuccess"></cancelCom>
+    <!-- 修改窗口 -->
+    <modifyCom :ttask="modifyTask" @updateTaskSuccess="updateTaskSuccess"></modifyCom>
+    <!-- 换人窗口 -->
+    <swapCom :ttask="swapTask" @updateTaskSuccess="updateTaskSuccess"></swapCom>
   </div>
 </template>
 
@@ -119,12 +124,14 @@ import { localDateToStr } from "@/api/util";
 import {
   getTaskIconById,
   getTaskStatusById,
-  getUserNameById
+  getUserNameById,
+  listIsEmpty
 } from "@/api/data";
 import processingCom from "@/components/commonStatusCom.vue";
 import doneCom from "@/components/commonStatusCom.vue";
 import cancelCom from "@/components/commonStatusCom.vue";
-import followupCom from "@/components/commonStatusCom.vue";
+import modifyCom from "@/components/modifyCom.vue";
+import swapCom from "@/components/swapCom.vue";
 
 export default {
   data() {
@@ -137,10 +144,18 @@ export default {
       processingTask: null,
       doneTask: null,
       cancelTask: null,
-      followupTask: null
+      modifyTask: null,
+      swapTask: null
     };
   },
   methods: {
+    updateTaskSuccess() {
+      this.$emit("updateTaskSuccess");
+    },
+    showNextStatusFun() {
+      this.showNextStatus =
+        !this.showNextStatus && !listIsEmpty(this.task.nextSta);
+    },
     loadData() {
       let me = this;
       getTaskLog({
@@ -156,18 +171,23 @@ export default {
           me.taskLog = data;
           me.taskLog.forEach(item => {
             item.opDtStr = localDateToStr(item.opDate);
+            item.sta = getTaskStatusById(item.status);
           });
         }
       });
     },
-    nextStatus(task,status){
+    nextStatus(task, status) {
       task.newStatus = status;
-      if (status.id == "PROCESSING"){
-        this.processingTask = {...task}
-      }else if (status.id == "DONE"){
-        this.doneTask = {...task}
-      }else if (status.id == "CANCEL"){
-        this.cancelTask = {...task}
+      if (status.id == "PROCESSING") {
+        this.processingTask = { ...task };
+      } else if (status.id == "DONE") {
+        this.doneTask = { ...task };
+      } else if (status.id == "CANCEL") {
+        this.cancelTask = { ...task };
+      } else if (status.id == "MODIFY") {
+        this.modifyTask = { ...task };
+      } else if (status.id == "SWAP") {
+        this.swapTask = { ...task };
       }
     }
   },
@@ -198,7 +218,8 @@ export default {
     processingCom,
     doneCom,
     cancelCom,
-    followupCom
+    modifyCom,
+    swapCom
   }
 };
 </script>

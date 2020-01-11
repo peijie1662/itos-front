@@ -2,11 +2,15 @@
   <div>
     <el-dialog :title="task.title" width="520px" :visible.sync="dialogVisible">
       <div style="position:relative;">
+        <!-- 内容 -->
+        <div ref="content" contenteditable="true" class="content">
+          <span>{{task.content}}</span>
+        </div>
         <div>
           <span>备注</span>
         </div>
         <!-- 备注 -->
-        <div ref="content" contenteditable="true" class="content"></div>
+        <div ref="remark" contenteditable="true" class="remark"></div>
         <!-- 按钮 -->
         <div style="overflow:hidden;margin-top:10px;">
           <el-button
@@ -23,6 +27,12 @@
 </template>
 
 <style scoped>
+.remark {
+  min-height: 50px;
+  border: 1px solid #c0c4cc;
+  border-radius: 5px;
+}
+
 .content {
   min-height: 100px;
   border: 1px solid #c0c4cc;
@@ -31,7 +41,7 @@
 </style>
 
 <script>
-import { updateTaskStatus } from "@/api/api";
+import { modifyTask } from "@/api/api";
 
 export default {
   data() {
@@ -58,10 +68,11 @@ export default {
   methods: {
     saveTask() {
       let me = this;
-      updateTaskStatus({
+      modifyTask({
         taskId: me.task.taskId,
         status: me.task.newStatus.id,
-        remark: me.$refs.content.textContent,
+        content: me.$refs.content.textContent,
+        remark: me.$refs.remark.textContent,
         oper: me.userInfo.userId
       }).then(res => {
         let { flag, errMsg } = res;

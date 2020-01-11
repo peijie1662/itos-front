@@ -192,7 +192,7 @@ export const getTaskIconInContent = function (content) {
 
 //根据ID寻找对应TASK
 export const getTaskStatusById = function (id) {
-  var status = "";
+  let status = "";
   for (let i = 0; i < TASKSTATUS.length; i++) {
     if (TASKSTATUS[i].id == id) {
       status = TASKSTATUS[i];
@@ -246,4 +246,13 @@ export const labelToValue = (data, label) => {
     }
   });
   return result;
-}  
+}
+
+export const listIsEmpty = function (list) {
+  if (list.length == 0) {
+    return true;
+  } else if (list.length == 1 && list[0] == "") {
+    return true;
+  }
+  return false;
+}

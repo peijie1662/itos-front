@@ -1,12 +1,9 @@
 <template>
   <div>
-    <el-dialog :title="task.title" width="520px" :visible.sync="dialogVisible">
+    <el-dialog :title="task.title" :visible.sync="dialogVisible">
       <div style="position:relative;">
-        <div>
-          <span>备注</span>
-        </div>
-        <!-- 备注 -->
-        <div ref="content" contenteditable="true" class="content"></div>
+        <!-- 内容 -->
+        <el-transfer v-model="selVal" :data="allVal" :titles="['围观群众', '处理人员']"></el-transfer>
         <!-- 按钮 -->
         <div style="overflow:hidden;margin-top:10px;">
           <el-button
@@ -23,6 +20,12 @@
 </template>
 
 <style scoped>
+.remark {
+  min-height: 50px;
+  border: 1px solid #c0c4cc;
+  border-radius: 5px;
+}
+
 .content {
   min-height: 100px;
   border: 1px solid #c0c4cc;
@@ -31,14 +34,17 @@
 </style>
 
 <script>
-import { updateTaskStatus } from "@/api/api";
+import { swapTask } from "@/api/api";
+import { TASKHANDLERS } from "@/api/data";
 
 export default {
   data() {
     return {
       userInfo: "",
       dialogVisible: false,
-      task: ""
+      task: "",
+      allVal: [],
+      selVal: []
     };
   },
   props: ["ttask"],
@@ -49,6 +55,13 @@ export default {
           this.task = newVal;
           this.task.title = `${newVal.newStatus.desc} (${newVal.newStatus.id})`;
           this.dialogVisible = true;
+          this.allVal = TASKHANDLERS.map(item => {
+            return {
+              key: item.value,
+              label: item.label
+            };
+          });
+          this.selVal = newVal.handler;
         }
       },
       deep: true,
@@ -58,10 +71,9 @@ export default {
   methods: {
     saveTask() {
       let me = this;
-      updateTaskStatus({
+      swapTask({
         taskId: me.task.taskId,
-        status: me.task.newStatus.id,
-        remark: me.$refs.content.textContent,
+        handler: me.selVal.join(","),
         oper: me.userInfo.userId
       }).then(res => {
         let { flag, errMsg } = res;
