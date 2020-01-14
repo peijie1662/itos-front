@@ -62,6 +62,15 @@
               :value="item.value"
             ></el-option>
           </el-select>
+          <el-upload
+            :action="uploadUrl"
+            :data="{'userId':userInfo.userId,'taskId':task.taskId}"
+            :show-file-list="false"
+            :on-success="handlerSuccess"
+            style="float:right;margin-top:10px;"
+          >
+            <el-button size="small" type="primary">上传图片</el-button>
+          </el-upload>
         </div>
         <!-- 按钮 -->
         <div style="overflow:hidden;margin-top:10px;">
@@ -88,13 +97,19 @@
 </style>
 
 <script>
-import { getSmartTipsList, addManualTask } from "@/api/api";
+import {
+  STATIC_URL,
+  UPLOAD_TASK_URL,
+  getSmartTipsList,
+  addManualTask
+} from "@/api/api";
 import { TASKHANDLERS, getTaskIconInContent } from "@/api/data";
-import { insertContent } from "@/api/util";
+import { insertContent, generateUUID } from "@/api/util";
 
 export default {
   data() {
     return {
+      uploadUrl: UPLOAD_TASK_URL,
       userInfo: "",
       dialogVisible: false,
       task: "",
@@ -113,6 +128,8 @@ export default {
         if (newVal != null) {
           this.loadSmartTips();
           this.task = newVal;
+          //提前生成UUID,因为上传图片可能要先用
+          this.task.taskId = generateUUID();
           this.dialogVisible = true;
         }
       },
@@ -121,6 +138,18 @@ export default {
     }
   },
   methods: {
+    handlerSuccess(res, file) {
+      let { flag, errMsg } = res;
+      if (flag) {
+        this.$refs.content.focus();
+        let url =
+          STATIC_URL + "task_file" + "/" + this.task.taskId + "/" + file.name;
+        let pic = `<img src=${url}>`;
+        insertContent(pic);
+      } else {
+        this.$message.error(errMsg);
+      }
+    },
     loadSmartTips() {
       let me = this;
       getSmartTipsList({}).then(res => {
@@ -137,9 +166,10 @@ export default {
     },
     saveTask() {
       let me = this;
-      let task_content = me.$refs.content.textContent;
+      let task_content = me.$refs.content.innerHTML;
       let icon = getTaskIconInContent(task_content);
       addManualTask({
+        taskId: me.task.taskId,
         abstract: icon.label,
         taskIcon: icon.id,
         phone: me.task.phone,
@@ -156,6 +186,7 @@ export default {
             type: "error"
           });
         } else {
+          me.$refs.content.innerHTML = "";
           me.dialogVisible = false;
           me.$emit("taskUpdateOk");
         }

@@ -33,11 +33,17 @@ let routes = [
             {
                 path: '/task_query', component: TaskQuery, name: '任务查询',
                 meta: { dis: false }
-            }, {
-                path: '/model_list', component: ModelList, name: '任务模版',
-                meta: { dis: false }
-            },{
-                path: '/task_dispatch', component: DispatchTask, name: '系统任务',
+            }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '自动任务',
+        iconCls: 'el-icon-edit-outline',
+        children: [
+            {
+                path: '/task_client', component: DispatchTask, name: '在线终端',
                 meta: { dis: false }
             }
         ]
@@ -47,11 +53,14 @@ let routes = [
         component: Home,
         name: '系统设置',
         iconCls: 'el-icon-edit-outline',
-        children: [
-            {
-                path: '/smart_tips', component: SmartTips, name: '智能提示',
-                meta: { dis: false }
-            }
+        children: [{
+            path: '/model_list', component: ModelList, name: '模版设置',
+            meta: { dis: false }
+        },
+        {
+            path: '/smart_tips', component: SmartTips, name: '智能提示',
+            meta: { dis: false }
+        }
         ]
     },
     {

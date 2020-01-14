@@ -61,7 +61,7 @@ export default {
       updateTaskStatus({
         taskId: me.task.taskId,
         status: me.task.newStatus.id,
-        remark: me.$refs.content.textContent,
+        remark: me.$refs.content.innerHTML,
         oper: me.userInfo.userId
       }).then(res => {
         let { flag, errMsg } = res;

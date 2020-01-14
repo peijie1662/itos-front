@@ -4,10 +4,12 @@
       <div :style="triangleStyle"></div>
       <!-- 按钮 -->
       <div style="position: absolute;top: 2px;right: 2px;">
-        <i class="el-icon-more" @click="modelDetail"></i>
+        <i class="el-icon-more" @click="modelDetail" style="font-size:20px;color:#909399;"></i>
       </div>
       <!-- 简介 -->
-      <div style="text-align: center;">{{taskModel.abs}}</div>
+      <div style="text-align: center;">
+        <span style="line-height:50px;font-size:18px;">{{taskModel.abs}}</span>
+      </div>
     </div>
     <!-- 模版详情 -->
     <modelDetailCom :tmodel="detailModel" @modelUpdateOk="modelUpdateOk"></modelDetailCom>
@@ -69,12 +71,14 @@ export default {
 
 <style scoped>
 .outer {
-  width: 120px;
-  height: 80px;
+  width: 160px;
+  height: 120px;
   border: 1px solid #909399;
   position: relative;
+  border-radius: 5px;
   box-shadow: 2px 2px 3px #909399;
 }
+
 .el-icon-more:hover {
   color: white;
   background: #409eff;

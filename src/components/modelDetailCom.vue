@@ -12,16 +12,22 @@
             <span class="dialogtitle" style="left:20px;">任务简介</span>
             <span class="dialogContent" style="left:120px;">{{taskModel.abs}}</span>
           </div>
+
+          <!-- 任务内容 -->
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">任务内容</span>
           </div>
-          <div>
-            <el-input
-              type="textarea"
-              :autosize="{ minRows: 3, maxRows: 6}"
-              v-model="taskModel.comments"
-            ></el-input>
-          </div>
+          <div ref="content" contenteditable="true" class="content" v-html="taskModel.comments"></div>
+          <el-upload
+            :action="uploadUrl"
+            :data="{'userId':userInfo.userId,'modelId':taskModel.modelId}"
+            :show-file-list="false"
+            :on-success="handlerSuccess"
+            style="margin-top:5px;margin-left:360px;"
+          >
+            <el-button size="mini" type="primary">上传文档</el-button>
+          </el-upload>
+          <!-- 执行时间 -->
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">执行时间</span>
           </div>
@@ -76,11 +82,14 @@
 </template>
 
 <script>
-import { updateModel, deleteModel } from "@/api/api";
+import { updateModel, deleteModel, STATIC_URL, UPLOAD_MODEL_URL } from "@/api/api";
+import { insertContent } from "@/api/util";
 
 export default {
   data() {
     return {
+      uploadUrl: UPLOAD_MODEL_URL,
+      userInfo: "",
       dialogVisible: false,
       taskModel: ""
     };
@@ -99,6 +108,23 @@ export default {
     }
   },
   methods: {
+    handlerSuccess(res, file) {
+      let { flag, errMsg } = res;
+      if (flag) {
+        this.$refs.content.focus();
+        let url =
+          STATIC_URL +
+          "model_file" +
+          "/" +
+          this.taskModel.modelId +
+          "/" +
+          file.name;
+        let fileUrl = `<a href=${url}>${file.name}</a>`;
+        insertContent(fileUrl);
+      } else {
+        this.$message.error(errMsg);
+      }
+    },
     updateModel() {
       let me = this;
       updateModel({
@@ -137,6 +163,9 @@ export default {
         }
       });
     }
+  },
+  mounted() {
+    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
   }
 };
 </script>

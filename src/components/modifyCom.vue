@@ -3,9 +3,7 @@
     <el-dialog :title="task.title" width="520px" :visible.sync="dialogVisible">
       <div style="position:relative;">
         <!-- 内容 -->
-        <div ref="content" contenteditable="true" class="content">
-          <span>{{task.content}}</span>
-        </div>
+        <div ref="content" contenteditable="true" class="content" v-html="task.content"></div>
         <div>
           <span>备注</span>
         </div>
@@ -71,8 +69,8 @@ export default {
       modifyTask({
         taskId: me.task.taskId,
         status: me.task.newStatus.id,
-        content: me.$refs.content.textContent,
-        remark: me.$refs.remark.textContent,
+        content: me.$refs.content.innerHTML,
+        remark: me.$refs.remark.innerHTML,
         oper: me.userInfo.userId
       }).then(res => {
         let { flag, errMsg } = res;

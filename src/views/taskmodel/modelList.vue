@@ -85,11 +85,11 @@ export default {
   cursor: pointer;
 }
 .addmodelouter {
-  width: 120px;
-  height: 80px;
+  width: 160px;
+  height: 120px;
   border: 1px solid #909399;
   text-align: center;
-  line-height: 80px;
+  line-height: 120px;
   cursor: pointer;
 }
 .addmodelouter:hover {

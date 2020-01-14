@@ -36,9 +36,8 @@
         <span style="margin-left:50px;font-size:20px;user-select:none;">{{task.abs}}</span>
       </div>
       <!-- 内容 -->
-      <div class="task_content">
-        <span>{{task.content}}</span>
-      </div>
+      <div class="task_content" v-html="task.content"></div>
+      <img src="http://" alt="">
       <!-- 处理人 -->
       <div class="task_handler">
         <span style="color:black;background:#e9ebec;">处理人员</span>
@@ -52,7 +51,7 @@
           <span style="margin-left:10px;">{{item.statusdesc}}</span>
           <div v-show="item.remark != null" style="margin-left:25px;">
             <span>备注:</span>
-            <span>{{item.remark}}</span>
+            <div v-html="item.remark"></div>
           </div>
         </div>
       </div>
@@ -107,13 +106,14 @@
 .task_content {
   text-align: left;
   border-bottom: 1px solid #c0c4cc;
-  min-height: 120px;
+  min-height: 50px;
+  overflow-x: auto;
 }
 
 .task_handler {
   text-align: left;
   border-bottom: 1px solid #c0c4cc;
-  min-height: 30px;
+  min-height: 20px;
   margin-top: 5px;
 }
 </style>
