@@ -286,7 +286,7 @@ export const taskUploadDom = function (file, id) {
     id +
     "/" +
     file.name;
-  if (file.getType.startsWith("image/")) {
+  if (file.raw.type.startsWith("image/")) {
     return `<img src=${url}>`;
   } else {
     return `<a href=${url}>${file.name}</a>`;

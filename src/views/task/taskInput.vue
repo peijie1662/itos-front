@@ -32,7 +32,7 @@
 <script>
 import { getManualTaskList } from "@/api/api";
 import taskCom from "@/components/taskCom";
-import newTaskCom from "@/components/newTaskCom.vue";
+import newTaskCom from "@/components/newManualTaskCom.vue";
 
 export default {
   data() {

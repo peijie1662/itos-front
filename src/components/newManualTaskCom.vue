@@ -158,11 +158,8 @@ export default {
     },
     saveTask() {
       let me = this;
-      me.task.content =
-        me.task.category == "COMMON"
-          ? me.$refs.content.innerHTML
-          : me.$refs.content.textContent;
-      let icon = getTaskIconInContent(me.$refs.content.textContent);
+      me.task.content = me.$refs.content.innerHTML;
+      let icon = getTaskIconInContent(me.task.content);
       addManualTask({
         taskId: me.task.taskId,
         abstract: icon.label,
