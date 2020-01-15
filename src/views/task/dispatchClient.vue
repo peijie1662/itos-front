@@ -1,6 +1,6 @@
 <template>
     <div>
-        下发任务
+        执行终端
     </div>
 </template>
 

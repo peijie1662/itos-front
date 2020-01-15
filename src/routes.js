@@ -1,11 +1,12 @@
 import Login from './views/login.vue'
 import Home from './views/home.vue'
 import NotFound from './404.vue'
-import TaskInput from './views/task/taskInput.vue'
-import TaskQuery from './views/task/taskQuery.vue'
+import ManualTaskInput from './views/task/manualTaskInput.vue'
+import ManualTaskQuery from './views/task/manualTaskQuery.vue'
 import ModelList from './views/taskmodel/modelList.vue'
 import SmartTips from './views/settings/smartTips.vue'
-import DispatchTask from './views/task/dispatchTask.vue'
+import DispatchTaskInput from './views/task/dispatchTaskInput.vue'
+import DispatchClient from './views/task/dispatchClient.vue'
 
 let routes = [
     {
@@ -27,11 +28,11 @@ let routes = [
         iconCls: 'el-icon-edit-outline',
         children: [
             {
-                path: '/task_input', component: TaskInput, name: '任务登记',
+                path: '/manual_task_input', component: ManualTaskInput, name: '任务登记',
                 meta: { dis: false }
             },
             {
-                path: '/task_query', component: TaskQuery, name: '任务查询',
+                path: '/manual_task_query', component: ManualTaskQuery, name: '任务查询',
                 meta: { dis: false }
             }
         ]
@@ -39,11 +40,15 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '自动任务',
+        name: '系统任务',
         iconCls: 'el-icon-edit-outline',
         children: [
             {
-                path: '/task_client', component: DispatchTask, name: '在线终端',
+                path: '/dispatch_client', component: DispatchClient, name: '执行终端',
+                meta: { dis: false }
+            },
+            {
+                path: '/dispatch_task_input', component: DispatchTaskInput, name: '任务登记',
                 meta: { dis: false }
             }
         ]

@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import { getManualTaskList } from "@/api/api";
-import taskCom from "@/components/taskCom";
-import newTaskCom from "@/components/newManualTaskCom.vue";
+import { getDispatchTaskList } from "@/api/api";
+import taskCom from "@/components/dispatchTaskCom";
+import newTaskCom from "@/components/newDispatchTaskCom.vue";
 
 export default {
   data() {
@@ -64,7 +64,7 @@ export default {
     },
     loadData() {
       let me = this;
-      getManualTaskList({}).then(res => {
+      getDispatchTaskList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
           this.$message({
