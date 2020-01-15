@@ -69,7 +69,7 @@
             :on-success="handlerSuccess"
             style="float:right;margin-top:10px;"
           >
-            <el-button size="small" type="primary">上传图片</el-button>
+            <el-button size="small" type="primary">图文上传</el-button>
           </el-upload>
         </div>
         <!-- 按钮 -->
@@ -92,18 +92,13 @@
   height: 200px;
   border: 1px solid #c0c4cc;
   border-radius: 5px;
-  overflow: scroll;
+  overflow: auto;
 }
 </style>
 
 <script>
-import {
-  STATIC_URL,
-  UPLOAD_TASK_URL,
-  getSmartTipsList,
-  addManualTask
-} from "@/api/api";
-import { TASKHANDLERS, getTaskIconInContent } from "@/api/data";
+import { UPLOAD_TASK_URL, getSmartTipsList, addManualTask } from "@/api/api";
+import { TASKHANDLERS, getTaskIconInContent, taskUploadDom } from "@/api/data";
 import { insertContent, generateUUID } from "@/api/util";
 
 export default {
@@ -142,10 +137,7 @@ export default {
       let { flag, errMsg } = res;
       if (flag) {
         this.$refs.content.focus();
-        let url =
-          STATIC_URL + "task_file" + "/" + this.task.taskId + "/" + file.name;
-        let pic = `<img src=${url}>`;
-        insertContent(pic);
+        insertContent(taskUploadDom(file, this.task.taskId));
       } else {
         this.$message.error(errMsg);
       }
@@ -166,8 +158,11 @@ export default {
     },
     saveTask() {
       let me = this;
-      let task_content = me.$refs.content.innerHTML;
-      let icon = getTaskIconInContent(task_content);
+      me.task.content =
+        me.task.category == "COMMON"
+          ? me.$refs.content.innerHTML
+          : me.$refs.content.textContent;
+      let icon = getTaskIconInContent(me.$refs.content.textContent);
       addManualTask({
         taskId: me.task.taskId,
         abstract: icon.label,
@@ -175,7 +170,7 @@ export default {
         phone: me.task.phone,
         location: me.task.location,
         customer: me.task.customer,
-        content: task_content,
+        content: me.task.content,
         oper: me.userInfo.userId,
         handler: me.task.handler ? me.task.handler.join(",") : ""
       }).then(res => {

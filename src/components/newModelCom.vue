@@ -62,8 +62,9 @@
             :show-file-list="false"
             :on-success="handlerSuccess"
             style="margin-top:5px;margin-left:360px;"
+            :disabled="taskModel.category != 'COMMON'"
           >
-            <el-button size="mini" type="primary">上传文档</el-button>
+            <el-button size="mini" type="primary" :disabled="taskModel.category != 'COMMON'">图文上传</el-button>
           </el-upload>
           <!-- 执行时间 -->
           <div class="dialogLine">
@@ -94,6 +95,10 @@
               style="font-size:10px;left:150px;"
             >"W,D,HHMM",如"2,3,1530"表示"第二周周一15:30"</span>
           </div>
+          <div class="dialogLine" v-if="taskModel.cycle == 'CIRCULAR'">
+            <span class="dialogtitle" style="font-size:10px;left:20px;">循环任务时间格式：</span>
+            <span class="dialogContent" style="font-size:10px;left:150px;">单位秒,如"600"表示"下一次任务在10分钟后"</span>
+          </div>
         </div>
         <div style="overflow:hidden;">
           <el-button
@@ -110,8 +115,8 @@
 </template>
 
 <script>
-import { STATIC_URL, UPLOAD_MODEL_URL, addModel } from "@/api/api";
-import { CATEGORYS, CYCLES } from "@/api/data";
+import { UPLOAD_MODEL_URL, addModel } from "@/api/api";
+import { CATEGORYS, CYCLES, modelUploadDom } from "@/api/data";
 import { insertContent, generateUUID } from "@/api/util";
 
 export default {
@@ -144,22 +149,17 @@ export default {
       let { flag, errMsg } = res;
       if (flag) {
         this.$refs.content.focus();
-        let url =
-          STATIC_URL +
-          "model_file" +
-          "/" +
-          this.taskModel.modelId +
-          "/" +
-          file.name;
-        let fileUrl = `<a href=${url}>${file.name}</a>`;
-        insertContent(fileUrl);
+        insertContent(modelUploadDom(file, this.taskModel.modelId));
       } else {
         this.$message.error(errMsg);
       }
     },
     saveModel() {
       let me = this;
-      me.taskModel.comments = me.$refs.content.innerHTML;
+      me.taskModel.comments =
+        me.taskModel.category == "COMMON"
+          ? me.$refs.content.innerHTML
+          : me.$refs.content.textContent;
       addModel({ ...me.taskModel }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {

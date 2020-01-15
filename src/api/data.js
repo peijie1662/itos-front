@@ -30,6 +30,10 @@ export const CYCLES = [
   {
     value: "PERMONTH",
     label: "每月任务"
+  },
+  {
+    value: "CIRCULAR",
+    label: "循环任务"
   }
 ]
 
@@ -255,4 +259,36 @@ export const listIsEmpty = function (list) {
     return true;
   }
   return false;
+}
+
+import { STATIC_URL } from "@/api/api"
+
+export const modelUploadDom = function (file, id) {
+  let url =
+    STATIC_URL +
+    "model_file" +
+    "/" +
+    id +
+    "/" +
+    file.name;
+  if (file.raw.type.startsWith("image/")) {
+    return `<img src=${url}>`;
+  } else {
+    return `<a href=${url}>${file.name}</a>`;
+  }
+}
+
+export const taskUploadDom = function (file, id) {
+  let url =
+    STATIC_URL +
+    "task_file" +
+    "/" +
+    id +
+    "/" +
+    file.name;
+  if (file.getType.startsWith("image/")) {
+    return `<img src=${url}>`;
+  } else {
+    return `<a href=${url}>${file.name}</a>`;
+  }
 }

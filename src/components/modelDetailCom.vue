@@ -5,6 +5,10 @@
         <!-- 详情内容 -->
         <div class="subcontent">
           <div class="dialogLine">
+            <span class="dialogtitle" style="left:20px;">模版ID</span>
+            <span class="dialogContent" style="left:120px;">{{taskModel.modelId}}</span>
+          </div>
+          <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">任务类型</span>
             <span class="dialogContent" style="left:120px;">{{taskModel.category}}</span>
           </div>
@@ -12,7 +16,6 @@
             <span class="dialogtitle" style="left:20px;">任务简介</span>
             <span class="dialogContent" style="left:120px;">{{taskModel.abs}}</span>
           </div>
-
           <!-- 任务内容 -->
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">任务内容</span>
@@ -24,8 +27,9 @@
             :show-file-list="false"
             :on-success="handlerSuccess"
             style="margin-top:5px;margin-left:360px;"
+            :disabled="taskModel.category != 'COMMON'"
           >
-            <el-button size="mini" type="primary">上传文档</el-button>
+            <el-button size="mini" type="primary" :disabled="taskModel.category != 'COMMON'">图文上传</el-button>
           </el-upload>
           <!-- 执行时间 -->
           <div class="dialogLine">
@@ -56,6 +60,13 @@
               style="font-size:10px;left:150px;"
             >"W,D,HHMM",如"2,3,1530"表示"第二周周一15:30"</span>
           </div>
+          <div class="dialogLine" v-if="taskModel.cycle == 'CIRCULAR'">
+            <span class="dialogtitle" style="font-size:10px;left:20px;">循环任务时间格式：</span>
+            <span
+              class="dialogContent"
+              style="font-size:10px;left:150px;"
+            >单位秒,如"600"表示"下一次任务在10分钟后"</span>
+          </div>
         </div>
         <div style="overflow:hidden;">
           <el-button
@@ -82,8 +93,8 @@
 </template>
 
 <script>
-import { updateModel, deleteModel, STATIC_URL, UPLOAD_MODEL_URL } from "@/api/api";
-import { insertContent } from "@/api/util";
+import { updateModel, deleteModel, UPLOAD_MODEL_URL } from "@/api/api";
+import { insertContent, modelUploadDom } from "@/api/util";
 
 export default {
   data() {
@@ -112,21 +123,17 @@ export default {
       let { flag, errMsg } = res;
       if (flag) {
         this.$refs.content.focus();
-        let url =
-          STATIC_URL +
-          "model_file" +
-          "/" +
-          this.taskModel.modelId +
-          "/" +
-          file.name;
-        let fileUrl = `<a href=${url}>${file.name}</a>`;
-        insertContent(fileUrl);
+        insertContent(modelUploadDom(file, this.taskModel.modelId));
       } else {
         this.$message.error(errMsg);
       }
     },
     updateModel() {
       let me = this;
+      me.taskModel.comments =
+        me.taskModel.category == "COMMON"
+          ? me.$refs.content.innerHTML
+          : me.$refs.content.textContent;
       updateModel({
         modelId: me.taskModel.modelId,
         abs: me.taskModel.abs,
@@ -192,5 +199,11 @@ export default {
   padding: 5px;
   border: 1px solid rgb(175, 177, 179);
   border-radius: 5px;
+}
+.content {
+  height: 200px;
+  border: 1px solid #c0c4cc;
+  border-radius: 5px;
+  overflow: auto;
 }
 </style>

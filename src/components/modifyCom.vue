@@ -66,10 +66,14 @@ export default {
   methods: {
     saveTask() {
       let me = this;
+      me.task.content =
+        me.task.category == "COMMON"
+          ? me.$refs.content.innerHTML
+          : me.$refs.content.textContent;
       modifyTask({
         taskId: me.task.taskId,
         status: me.task.newStatus.id,
-        content: me.$refs.content.innerHTML,
+        content: me.task.content,
         remark: me.$refs.remark.innerHTML,
         oper: me.userInfo.userId
       }).then(res => {
