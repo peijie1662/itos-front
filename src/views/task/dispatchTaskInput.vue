@@ -9,14 +9,6 @@
         <el-checkbox v-model="selDone" @change="filter">完成</el-checkbox>
         <el-checkbox v-model="selCancel" @change="filter">删除</el-checkbox>
       </div>
-      <div>
-        <el-button
-          type="primary"
-          @click="addTask"
-          size="mini"
-          style="margin-top:15px;margin-left:50px;"
-        >登记任务</el-button>
-      </div>
     </div>
     <div class="content">
       <!-- 任务列表 -->
@@ -24,15 +16,12 @@
         <taskCom :ttask="task" @updateTaskSuccess="loadData"></taskCom>
       </div>
     </div>
-    <!-- 创建任务 -->
-    <newTaskCom :ttask="newTask" @taskUpdateOk="loadData"></newTaskCom>
   </div>
 </template>
 
 <script>
 import { getDispatchTaskAll } from "@/api/api";
 import taskCom from "@/components/dispatchTaskCom";
-import newTaskCom from "@/components/newDispatchTaskCom.vue";
 
 export default {
   data() {
@@ -80,7 +69,6 @@ export default {
   },
   components: {
     taskCom,
-    newTaskCom
   },
   mounted() {
     this.loadData();

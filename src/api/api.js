@@ -18,6 +18,8 @@ export const updateModel = params => { return axios.post(`${base}/model/update`,
 export const deleteModel = params => { return axios.post(`${base}/model/delete`, params).then(res => res.data); };
 //创建任务模版
 export const addModel = params => { return axios.post(`${base}/model/add`, params).then(res => res.data); };
+//改变模版状态
+export const chgModelStatus = params => { return axios.post(`${base}/model/status`, params).then(res => res.data); };
 
 //下发终端任务列表
 export const getDispatchTaskAll = params => { return axios.post(`${base}/dispatchtask/all`, params).then(res => res.data); };

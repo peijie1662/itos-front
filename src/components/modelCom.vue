@@ -15,17 +15,25 @@
       <div :style="bottomTriangleStyle"></div>
       <!-- 生成按钮 -->
       <div style="position: absolute;bottom: 2px;left: 2px;">
-        <i class="el-icon-circle-plus-outline small-btn" @click="dialogVisible = true"></i>
+        <i class="el-icon-circle-plus-outline small-btn" @click="crtDialogVisible = true"></i>
+      </div>
+      <div style="position: absolute;bottom: 2px;left: 22px;">
+        <i
+          :class="[taskModel.invalid?'el-icon-document-delete':'el-icon-document-checked']"
+          class="small-btn"
+          @click="chgInvalidStatus"
+        ></i>
       </div>
     </div>
     <!-- 生成新任务窗口 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="临时创建新任务" :visible.sync="crtDialogVisible" width="30%">
       <div>
+        <span>输入任务执行时间：</span>
         <el-time-picker v-model="planDt"></el-time-picker>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="createOnceTask">确 定</el-button>
+        <el-button @click="crtDialogVisible = false" size="small">取 消</el-button>
+        <el-button type="primary" @click="createOnceTask" size="small">确 定</el-button>
       </span>
     </el-dialog>
     <!-- 模版详情 -->
@@ -34,7 +42,7 @@
 </template>
 
 <script>
-import { saveOnceTask } from "@/api/api";
+import { saveOnceTask, chgModelStatus } from "@/api/api";
 import { getCategoryColor } from "@/api/data";
 import modelDetailCom from "@/components/modelDetailCom.vue";
 
@@ -42,7 +50,7 @@ export default {
   data() {
     return {
       userInfo: "",
-      dialogVisible: false,
+      crtDialogVisible: false,
       planDt: new Date(),
       detailModel: null,
       taskModel: "",
@@ -93,9 +101,52 @@ export default {
             message: msg,
             type: "success"
           });
-          me.dialogVisible = false;
+          me.crtDialogVisible = false;
         }
       });
+    },
+    chgInvalidStatus() {
+      let me = this;
+      let msg = me.taskModel.invalid
+        ? "是否确定启用该模版？"
+        : "是否确定停用该模版？";
+      me.$confirm(msg, "模版状态", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          chgModelStatus({
+            modelId: me.taskModel.modelId,
+            invalid: !me.taskModel.invalid ? "Y" : "N"
+          }).then(res => {
+            let { flag, errMsg } = res;
+            if (!flag) {
+              me.$message({
+                message: errMsg,
+                type: "error"
+              });
+            } else {
+              me.setModelColor();
+              me.$emit("modelUpdateOk");
+            }
+          });
+        })
+        .catch(() => {});
+    },
+    setModelColor() {
+      let me = this;
+      if (me.taskModel.invalid) {
+        this.topTriangleStyle.borderTop =
+          "30px solid " + getCategoryColor(null);
+        this.bottomTriangleStyle.borderBottom =
+          "30px solid " + getCategoryColor(null);
+      } else {
+        this.topTriangleStyle.borderTop =
+          "30px solid " + getCategoryColor(me.taskModel.category);
+        this.bottomTriangleStyle.borderBottom =
+          "30px solid " + getCategoryColor(me.taskModel.category);
+      }
     }
   },
   props: ["tmodel"],
@@ -103,10 +154,7 @@ export default {
     tmodel: {
       handler(newVal) {
         this.taskModel = newVal;
-        this.topTriangleStyle.borderTop =
-          "30px solid " + getCategoryColor(newVal.category);
-        this.bottomTriangleStyle.borderBottom =
-          "30px solid " + getCategoryColor(newVal.category);
+        this.setModelColor();
       },
       deep: true,
       immediate: true
