@@ -28,11 +28,11 @@ let routes = [
         iconCls: 'el-icon-edit-outline',
         children: [
             {
-                path: '/manual_task_input', component: ManualTaskInput, name: '任务登记',
+                path: '/manual_task_input', component: ManualTaskInput, name: '人工任务登记',
                 meta: { dis: false }
             },
             {
-                path: '/manual_task_query', component: ManualTaskQuery, name: '任务查询',
+                path: '/manual_task_query', component: ManualTaskQuery, name: '人工任务查询',
                 meta: { dis: false }
             }
         ]
@@ -44,11 +44,11 @@ let routes = [
         iconCls: 'el-icon-edit-outline',
         children: [
             {
-                path: '/dispatch_client', component: DispatchClient, name: '执行终端',
+                path: '/dispatch_client', component: DispatchClient, name: '系统执行终端',
                 meta: { dis: false }
             },
             {
-                path: '/dispatch_task_input', component: DispatchTaskInput, name: '任务登记',
+                path: '/dispatch_task_input', component: DispatchTaskInput, name: '系统任务登记',
                 meta: { dis: false }
             }
         ]

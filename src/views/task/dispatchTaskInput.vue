@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { getDispatchTaskList } from "@/api/api";
+import { getDispatchTaskAll } from "@/api/api";
 import taskCom from "@/components/dispatchTaskCom";
 import newTaskCom from "@/components/newDispatchTaskCom.vue";
 
@@ -64,7 +64,7 @@ export default {
     },
     loadData() {
       let me = this;
-      getDispatchTaskList({}).then(res => {
+      getDispatchTaskAll({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
           this.$message({
@@ -103,6 +103,7 @@ export default {
   border: 1px solid #c0c4cc;
   padding: 10px;
   min-height: 680px;
+  margin-top: 10px;
 }
 
 .task {

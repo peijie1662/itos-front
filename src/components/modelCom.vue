@@ -1,35 +1,66 @@
 <template>
   <div>
     <div class="outer">
-      <div :style="triangleStyle"></div>
-      <!-- 按钮 -->
+      <!-- 顶部三角 -->
+      <div :style="topTriangleStyle"></div>
+      <!-- 详情按钮 -->
       <div style="position: absolute;top: 2px;right: 2px;">
-        <i class="el-icon-more" @click="modelDetail" style="font-size:20px;color:#909399;"></i>
+        <i class="el-icon-more small-btn" @click="modelDetail"></i>
       </div>
       <!-- 简介 -->
       <div style="text-align: center;">
         <span style="line-height:50px;font-size:18px;">{{taskModel.abs}}</span>
       </div>
+      <!-- 底部三角 -->
+      <div :style="bottomTriangleStyle"></div>
+      <!-- 生成按钮 -->
+      <div style="position: absolute;bottom: 2px;left: 2px;">
+        <i class="el-icon-circle-plus-outline small-btn" @click="dialogVisible = true"></i>
+      </div>
     </div>
+    <!-- 生成新任务窗口 -->
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+      <div>
+        <el-time-picker v-model="planDt"></el-time-picker>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="createOnceTask">确 定</el-button>
+      </span>
+    </el-dialog>
     <!-- 模版详情 -->
     <modelDetailCom :tmodel="detailModel" @modelUpdateOk="modelUpdateOk"></modelDetailCom>
   </div>
 </template>
 
 <script>
+import { saveOnceTask } from "@/api/api";
 import { getCategoryColor } from "@/api/data";
 import modelDetailCom from "@/components/modelDetailCom.vue";
 
 export default {
   data() {
     return {
+      userInfo: "",
+      dialogVisible: false,
+      planDt: new Date(),
       detailModel: null,
       taskModel: "",
-      triangleStyle: {
+      topTriangleStyle: {
         width: "0",
         height: "0",
         borderTop: "30px solid red",
-        borderRight: "30px solid transparent"
+        borderRight: "30px solid transparent",
+        borderTopRadius: "5px"
+      },
+      bottomTriangleStyle: {
+        width: "0",
+        height: "0",
+        borderBottom: "30px solid red",
+        borderLeft: "30px solid transparent",
+        position: "absolute",
+        bottom: "0px",
+        right: "0px"
       }
     };
   },
@@ -39,6 +70,32 @@ export default {
     },
     modelUpdateOk() {
       this.$emit("modelUpdateOk");
+    },
+    createOnceTask() {
+      let me = this;
+      saveOnceTask({
+        modelId: me.taskModel.modelId,
+        planDt: me.planDt,
+        userId: me.userInfo.userId
+      }).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          me.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          let msg =
+            me.taskModel.category == "COMMON"
+              ? "生成人工任务成功，请到‘任务大厅’中查看。"
+              : "生成系统任务成功，请到‘系统任务’中查看。";
+          me.$message({
+            message: msg,
+            type: "success"
+          });
+          me.dialogVisible = false;
+        }
+      });
     }
   },
   props: ["tmodel"],
@@ -46,22 +103,17 @@ export default {
     tmodel: {
       handler(newVal) {
         this.taskModel = newVal;
-        if (newVal.category == "COMMON") {
-          this.triangleStyle.borderTop =
-            "30px solid " + getCategoryColor("COMMON");
-        } else if (newVal.category == "CMD") {
-          this.triangleStyle.borderTop =
-            "30px solid " + getCategoryColor("CMD");
-        } else if (newVal.category == "PROCEDURE") {
-          this.triangleStyle.borderTop =
-            "30px solid " + getCategoryColor("PROCEDURE");
-        } else {
-          this.triangleStyle.borderTop = "30px solid #909399 ";
-        }
+        this.topTriangleStyle.borderTop =
+          "30px solid " + getCategoryColor(newVal.category);
+        this.bottomTriangleStyle.borderBottom =
+          "30px solid " + getCategoryColor(newVal.category);
       },
       deep: true,
       immediate: true
     }
+  },
+  mounted() {
+    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
   },
   components: {
     modelDetailCom
@@ -76,10 +128,16 @@ export default {
   border: 1px solid #909399;
   position: relative;
   border-radius: 5px;
-  box-shadow: 2px 2px 3px #909399;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.el-icon-more:hover {
+.small-btn {
+  font-size: 20px;
+  color: #909399;
+}
+
+.small-btn:hover {
   color: white;
   background: #409eff;
 }

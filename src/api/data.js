@@ -207,13 +207,14 @@ export const getTaskStatusById = function (id) {
 
 //根据ID寻找对应CATEGOTY的color
 export const getCategoryColor = function (val) {
-  let category = "";
+  let defaultColor = "#909399";
+  let category = null;
   for (let i = 0; i < CATEGORYS.length; i++) {
     if (CATEGORYS[i].value == val) {
       category = CATEGORYS[i];
     }
   }
-  return category.color;
+  return category ? category.color : defaultColor;
 }
 
 //根据ID寻找TaskIcon

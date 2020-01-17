@@ -20,11 +20,13 @@ export const deleteModel = params => { return axios.post(`${base}/model/delete`,
 export const addModel = params => { return axios.post(`${base}/model/add`, params).then(res => res.data); };
 
 //下发终端任务列表
-export const getDispatchTaskList = params => { return axios.post(`${base}/dispatchtask/list`, params).then(res => res.data); };
+export const getDispatchTaskAll = params => { return axios.post(`${base}/dispatchtask/all`, params).then(res => res.data); };
 //人工执行任务列表
 export const getManualTaskList = params => { return axios.post(`${base}/manualtask/list`, params).then(res => res.data); };
 //创建人工任务
 export const addManualTask = params => { return axios.post(`${base}/manualtask/add`, params).then(res => res.data); };
+//临时任务
+export const saveOnceTask = params => { return axios.post(`${base}/task/once`, params).then(res => res.data); };
 //任务日志
 export const getTaskLog = params => { return axios.post(`${base}/task/log`, params).then(res => res.data); };
 //任务状态-PROCESSING,DONE,CANCEL

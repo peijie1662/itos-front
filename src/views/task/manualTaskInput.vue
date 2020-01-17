@@ -103,6 +103,7 @@ export default {
   border: 1px solid #c0c4cc;
   padding: 10px;
   min-height: 680px;
+  margin-top: 10px;
 }
 
 .task {
