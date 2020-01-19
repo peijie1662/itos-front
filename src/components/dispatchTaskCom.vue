@@ -37,7 +37,6 @@
       </div>
       <!-- 内容 -->
       <div class="task_content" v-html="task.content"></div>
-      <img src="http://" alt="">
       <!-- 处理人 -->
       <div class="task_handler">
         <span style="color:black;background:#e9ebec;">处理人员</span>

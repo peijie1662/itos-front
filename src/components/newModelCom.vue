@@ -23,7 +23,7 @@
               </el-option>
             </el-select>
           </div>
-          <div class="dialogLine">
+          <div class="dialogLine" v-show="taskModel.category != 'COMPOSE'">
             <span class="dialogtitle" style="left:20px;">执行周期</span>
             <el-select
               v-model="taskModel.cycle"
@@ -62,42 +62,51 @@
             :show-file-list="false"
             :on-success="handlerSuccess"
             style="margin-top:5px;margin-left:360px;"
-            :disabled="taskModel.category != 'COMMON'"
+            :disabled="taskModel.category == 'CMD' || taskModel.category == 'PROCEDURE'"
           >
-            <el-button size="mini" type="primary" :disabled="taskModel.category != 'COMMON'">图文上传</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              :disabled="taskModel.category == 'CMD' || taskModel.category == 'PROCEDURE'"
+            >图文上传</el-button>
           </el-upload>
           <!-- 执行时间 -->
-          <div class="dialogLine">
-            <span class="dialogtitle" style="left:20px;">执行时间</span>
-          </div>
-          <div>
-            <el-input
-              type="textarea"
-              :autosize="{ minRows: 2, maxRows: 4}"
-              v-model="taskModel.planDates"
-            ></el-input>
-          </div>
-          <div class="dialogLine" v-if="taskModel.cycle == 'PERDAY'">
-            <span class="dialogtitle" style="font-size:10px;left:20px;">每日任务时间格式：</span>
-            <span class="dialogContent" style="font-size:10px;left:150px;">"HHMM",如"1530"表示"15:30"</span>
-          </div>
-          <div class="dialogLine" v-if="taskModel.cycle == 'PERWEEK'">
-            <span class="dialogtitle" style="font-size:10px;left:20px;">每周任务时间格式：</span>
-            <span
-              class="dialogContent"
-              style="font-size:10px;left:150px;"
-            >"D,HHMM",如"1,1530"表示"周一15:30"</span>
-          </div>
-          <div class="dialogLine" v-if="taskModel.cycle == 'PERMONTH'">
-            <span class="dialogtitle" style="font-size:10px;left:20px;">每月任务时间格式：</span>
-            <span
-              class="dialogContent"
-              style="font-size:10px;left:150px;"
-            >"W,D,HHMM",如"2,3,1530"表示"第二周周一15:30"</span>
-          </div>
-          <div class="dialogLine" v-if="taskModel.cycle == 'CIRCULAR'">
-            <span class="dialogtitle" style="font-size:10px;left:20px;">循环任务时间格式：</span>
-            <span class="dialogContent" style="font-size:10px;left:150px;">单位秒,如"600"表示"下一次任务在10分钟后"</span>
+          <div v-show="taskModel.category != 'COMPOSE'">
+            <div class="dialogLine">
+              <span class="dialogtitle" style="left:20px;">执行时间</span>
+            </div>
+            <div>
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 4}"
+                v-model="taskModel.planDates"
+              ></el-input>
+            </div>
+            <div class="dialogLine" v-if="taskModel.cycle == 'PERDAY'">
+              <span class="dialogtitle" style="font-size:10px;left:20px;">每日任务时间格式：</span>
+              <span class="dialogContent" style="font-size:10px;left:150px;">"HHMM",如"1530"表示"15:30"</span>
+            </div>
+            <div class="dialogLine" v-if="taskModel.cycle == 'PERWEEK'">
+              <span class="dialogtitle" style="font-size:10px;left:20px;">每周任务时间格式：</span>
+              <span
+                class="dialogContent"
+                style="font-size:10px;left:150px;"
+              >"D,HHMM",如"1,1530"表示"周一15:30"</span>
+            </div>
+            <div class="dialogLine" v-if="taskModel.cycle == 'PERMONTH'">
+              <span class="dialogtitle" style="font-size:10px;left:20px;">每月任务时间格式：</span>
+              <span
+                class="dialogContent"
+                style="font-size:10px;left:150px;"
+              >"W,D,HHMM",如"2,3,1530"表示"第二周周一15:30"</span>
+            </div>
+            <div class="dialogLine" v-if="taskModel.cycle == 'CIRCULAR'">
+              <span class="dialogtitle" style="font-size:10px;left:20px;">循环任务时间格式：</span>
+              <span
+                class="dialogContent"
+                style="font-size:10px;left:150px;"
+              >单位秒,如"600"表示"下一次任务在10分钟后"</span>
+            </div>
           </div>
         </div>
         <div style="overflow:hidden;">
@@ -156,8 +165,9 @@ export default {
     },
     saveModel() {
       let me = this;
+      if (me.taskModel.category == "COMPOSE") me.taskModel.cycle = "NONE";
       me.taskModel.comments =
-        me.taskModel.category == "COMMON"
+        me.taskModel.category == "COMMON" || me.taskModel.category == "COMPOSE"
           ? me.$refs.content.innerHTML
           : me.$refs.content.textContent;
       addModel({ ...me.taskModel }).then(res => {

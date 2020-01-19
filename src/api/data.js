@@ -13,8 +13,13 @@ export const CATEGORYS = [
   {
     value: "PROCEDURE",
     label: "调用存储过程任务",
+    color: "#E6A23C"
+  },
+  {
+    value: "COMPOSE",
+    label: "组合任务",
     color: "#F56C6C"
-  }
+  },  
 ]
 
 //执行周期

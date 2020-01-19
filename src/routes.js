@@ -7,6 +7,7 @@ import ModelList from './views/taskmodel/modelList.vue'
 import SmartTips from './views/settings/smartTips.vue'
 import DispatchTaskInput from './views/task/dispatchTaskInput.vue'
 import DispatchClient from './views/task/dispatchClient.vue'
+import DispatchCompose from './views/task/dispatchCompose.vue'
 
 let routes = [
     {
@@ -24,15 +25,15 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '任务大厅',
+        name: '人工任务',
         iconCls: 'el-icon-edit-outline',
         children: [
             {
-                path: '/manual_task_input', component: ManualTaskInput, name: '人工任务登记',
+                path: '/manual_task_input', component: ManualTaskInput, name: '任务登记',
                 meta: { dis: false }
             },
             {
-                path: '/manual_task_query', component: ManualTaskQuery, name: '人工任务查询',
+                path: '/manual_task_query', component: ManualTaskQuery, name: '任务查询',
                 meta: { dis: false }
             }
         ]
@@ -44,11 +45,27 @@ let routes = [
         iconCls: 'el-icon-edit-outline',
         children: [
             {
-                path: '/dispatch_client', component: DispatchClient, name: '系统执行终端',
+                path: '/dispatch_client', component: DispatchClient, name: '执行终端',
                 meta: { dis: false }
             },
             {
-                path: '/dispatch_task_input', component: DispatchTaskInput, name: '系统任务登记',
+                path: '/dispatch_task_input', component: DispatchTaskInput, name: '任务查看',
+                meta: { dis: false }
+            }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '组合任务',
+        iconCls: 'el-icon-edit-outline',
+        children: [
+            {
+                path: '/dispatch_compose', component: DispatchCompose, name: '组合维护',
+                meta: { dis: false }
+            },
+            {
+                path: '/manual_task_query', component: ManualTaskQuery, name: '控制中心',
                 meta: { dis: false }
             }
         ]

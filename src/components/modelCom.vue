@@ -14,15 +14,17 @@
       <!-- 底部三角 -->
       <div :style="bottomTriangleStyle"></div>
       <!-- 生成按钮 -->
-      <div style="position: absolute;bottom: 2px;left: 2px;">
-        <i class="el-icon-circle-plus-outline small-btn" @click="crtDialogVisible = true"></i>
-      </div>
-      <div style="position: absolute;bottom: 2px;left: 22px;">
-        <i
-          :class="[taskModel.invalid?'el-icon-document-delete':'el-icon-document-checked']"
-          class="small-btn"
-          @click="chgInvalidStatus"
-        ></i>
+      <div v-show="taskModel.category != 'COMPOSE'">
+        <div style="position: absolute;bottom: 2px;left: 2px;">
+          <i class="el-icon-circle-plus-outline small-btn" @click="crtDialogVisible = true"></i>
+        </div>
+        <div style="position: absolute;bottom: 2px;left: 22px;">
+          <i
+            :class="[taskModel.invalid?'el-icon-document-delete':'el-icon-document-checked']"
+            class="small-btn"
+            @click="chgInvalidStatus"
+          ></i>
+        </div>
       </div>
     </div>
     <!-- 生成新任务窗口 -->
