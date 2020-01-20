@@ -1,91 +1,65 @@
 <template>
   <div>
     <div class="header">
-
-        <el-button size="small" @click="addSmarttips()">新增</el-button>
-        
-
+      <el-button size="small" @click="addSmarttips()">新增</el-button>
     </div>
 
     <div class="content">
+      <el-table :data="list" border style="width: 100%">
+        <el-table-column label="序号" width="150">
+          <template slot-scope="scope">{{scope.$index+1}}</template>
+        </el-table-column>
+        <el-table-column prop="preReg" label="正则表达式" width="200"></el-table-column>
+        <el-table-column prop="nextWord" label="提示词" width="200"></el-table-column>
 
-    <el-table
-        :data="tableData"
-        border
-        style="width: 100%">
-            <el-table-column
-                label="序号"
-                width="150">
-            <template slot-scope="scope">
-            {{scope.$index+1}}
-            </template>
-            </el-table-column>
-            <el-table-column
-                prop="preReg"
-                label="正则表达式"
-                width="200">
-            </el-table-column>
-            <el-table-column
-                prop="nextWord"
-                label="提示词"
-                width="200">
-            </el-table-column>
-            
-            <el-table-column
-                label="操作"
-                width="150">
-            <template >
+        <el-table-column label="操作" width="150">
+          <template>
             <el-button size="small" @click="addSmarttips()">新增</el-button>
             <el-button size="small" @click="addSmarttips()">新增</el-button>
-            </template>
-            </el-table-column>
-    </el-table>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
 
 <script>
-
-import { getSmartTipsList, } from "@/api/api";
+import { getSmartTipsList } from "@/api/api";
 
 export default {
   data() {
     return {
-        userinfo: '',
-        list:[],
-        tableData:[],
+      userinfo: "",
+      list: []
     };
   },
   methods: {
-
-   getSmartTipsList(){
-       let params={oper: this.userinfo.userId};
-        getSmartTipsList(params).then(res => {
-            let {flag, data, errMsg}  = res;
-            if(!flag){
-                this.$$message({
-                    message:errMsg,
-                    type:"error"
-                });
-            }else{
-                this.list=data;
-            }
-        });
-    },
+    getSmartTipsList() {
+      let params = { oper: this.userinfo.userId };
+      getSmartTipsList(params).then(res => {
+        let { flag, data, errMsg } = res;
+        if (!flag) {
+          this.$$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          this.list = data;
+        }
+      });
+    }
   },
 
-    addSmarttips(){},
-    deleteSmarttips(){},
-    updateSmarttips(){},
+  addSmarttips() {},
+  deleteSmarttips() {},
+  updateSmarttips() {},
 
-  components: {
-    
-  },
+  components: {},
   mounted() {
+    this.getSmartTipsList();
     this.userinfo = JSON.parse(sessionStorage.getItem("userinfo"));
   }
 };
-
 </script>
 
 <style scoped>
