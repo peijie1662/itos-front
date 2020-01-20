@@ -34,6 +34,17 @@
           @input="smartTips"
           @keydown="selTip($event)"
         ></div>
+        <!-- 智能提示标签 -->
+        <div>
+          <el-tag
+            v-for="(tag,index) in tags"
+            :key="index"
+            closable
+            :type="tag.type"
+            @close="handleClose(tag)"
+            style="margin:5px;"
+          >{{tag.name}}</el-tag>
+        </div>
         <!-- 智能提示 -->
         <div
           v-show="showTips"
@@ -88,6 +99,14 @@
 </template>
 
 <style scoped>
+.tags {
+  height: 50px;
+  border: 1px solid #c0c4cc;
+  border-radius: 5px;
+  overflow: auto;
+  margin-bottom: 10px;
+}
+
 .content {
   height: 200px;
   border: 1px solid #c0c4cc;
@@ -97,7 +116,12 @@
 </style>
 
 <script>
-import { UPLOAD_TASK_URL, getSmartTipsList, addManualTask } from "@/api/api";
+import {
+  UPLOAD_TASK_URL,
+  getSmartTipsList,
+  addManualTask,
+  machineNameAssociate
+} from "@/api/api";
 import { TASKHANDLERS, getTaskIconInContent, taskUploadDom } from "@/api/data";
 import { insertContent, generateUUID } from "@/api/util";
 
@@ -113,7 +137,8 @@ export default {
       showTips: false,
       all_tips: [],
       cur_tips: [],
-      cur_index: 0
+      cur_index: 0,
+      tags: []
     };
   },
   props: ["ttask"],
@@ -133,6 +158,9 @@ export default {
     }
   },
   methods: {
+    handleClose(tag) {
+      this.tags.splice(this.tags.indexOf(tag), 1);
+    },
     handlerSuccess(res, file) {
       let { flag, errMsg } = res;
       if (flag) {
@@ -155,6 +183,33 @@ export default {
           me.all_tips = data;
         }
       });
+    },
+    machineNameAssociate(machineName) {
+      let me = this;
+      let tagExist = me.tags.some(item => {
+        return item.name.split(",")[0] == machineName;
+      });
+      if (!tagExist) {
+        machineNameAssociate({
+          machineName
+        }).then(res => {
+          if (res) {
+            me.tags.push({
+              name:
+                res.machineName +
+                ", 司机:" +
+                res.driverName +
+                ", 电话:" +
+                res.driverPhone +
+                ", IP:" +
+                res.machineIp +
+                ", 编号:" +
+                res.machineNo,
+              type: "success"
+            });
+          }
+        });
+      }
     },
     saveTask() {
       let me = this;
@@ -224,8 +279,10 @@ export default {
       //1.判断是否提示
       me.all_tips.forEach(item => {
         let reg = RegExp(item.preReg, "i");
-        if (reg.test(content)) {
+        let matchs = reg.exec(content);
+        if (matchs) {
           me.cur_tips = item.nextWord;
+          me.machineNameAssociate(matchs[0].toUpperCase());
         }
       });
       //2.提示

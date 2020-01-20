@@ -13,6 +13,9 @@
           <span style="float: right; color: #8492a6; font-size: 13px">{{ item.category }}</span>
         </el-option>
       </el-select>
+
+      <button type="button" @click="saveComposeModelDetail" style="float:right;">save</button>
+
     </div>
     <div class="content">
       <!-- 模版列表 -->
@@ -29,17 +32,14 @@
  
 <script>
 import draggable from "vuedraggable";
-import { getComposeModelList } from "@/api/api";
+import { getComposeModelList, saveComposeModelDetail } from "@/api/api";
 
 export default {
-  name: "draggabletest",
-  components: {
-    draggable
-  },
   data() {
     return {
       models: [],
       selModel: "",
+
       listdata: [
         {
           id: 1,
@@ -88,7 +88,29 @@ export default {
           me.models = data;
         }
       });
+    },
+    saveComposeModelDetail() {
+      let me = this;
+      saveComposeModelDetail({
+        details: [
+          { composeId: "c123", level: 1, modelId: "m123" },
+          { composeId: "c123", level: 1, modelId: "m124" }
+        ]
+      }).then(res => {
+        let { flag, data, errMsg } = res;
+        if (!flag) {
+          this.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.models = data;
+        }
+      });
     }
+  },
+  components: {
+    draggable
   },
   mounted() {
     this.loadComposeTasks();
