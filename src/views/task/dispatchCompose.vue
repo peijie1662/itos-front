@@ -157,7 +157,7 @@ export default {
         });
       });
     },
-    loadComposeTasks() {
+    loadComposeModels() {
       let me = this;
       getComposeModelList({}).then(res => {
         let { flag, data, errMsg } = res;
@@ -272,7 +272,7 @@ export default {
     draggable
   },
   mounted() {
-    this.loadComposeTasks();
+    this.loadComposeModels();
   }
 };
 </script>
@@ -296,6 +296,7 @@ export default {
   border: 2px dashed #409eff;
   overflow: hidden;
   padding: 10px;
+  width: 70%;
   min-height: 100px;
 }
 
