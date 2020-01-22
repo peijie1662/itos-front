@@ -22,8 +22,13 @@ export const addModel = params => { return axios.post(`${base}/model/add`, param
 export const chgModelStatus = params => { return axios.post(`${base}/model/status`, params).then(res => res.data); };
 //组合任务模版
 export const getComposeModelList = params => { return axios.post(`${base}/model/composelist`, params).then(res => res.data); };
+//非组合任务模版
+export const getNotComposeModelList = params => { return axios.post(`${base}/model/notcomposelist`, params).then(res => res.data); };
+
 //组合任务模版详细信息
-export const saveComposeModelDetail = params => { return axios.post(`${base}/model/composedetail`, params).then(res => res.data); };
+export const saveComposeModelDetail = params => { return axios.post(`${base}/composetask/savecomposedetail`, params).then(res => res.data); };
+//组合任务模版详细信息
+export const getComposeModelDetail = params => { return axios.post(`${base}/composetask/getcomposedetail`, params).then(res => res.data); };
 
 //下发终端任务列表
 export const getDispatchTaskAll = params => { return axios.post(`${base}/dispatchtask/all`, params).then(res => res.data); };

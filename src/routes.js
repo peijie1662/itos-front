@@ -8,6 +8,7 @@ import SmartTips from './views/settings/smartTips.vue'
 import DispatchTaskInput from './views/task/dispatchTaskInput.vue'
 import DispatchClient from './views/task/dispatchClient.vue'
 import DispatchCompose from './views/task/dispatchCompose.vue'
+import ControlCenter from './views/task/controlCenter.vue'
 
 let routes = [
     {
@@ -65,7 +66,7 @@ let routes = [
                 meta: { dis: false }
             },
             {
-                path: '/manual_task_query', component: ManualTaskQuery, name: '控制中心',
+                path: '/control_center', component: ControlCenter, name: '控制中心',
                 meta: { dis: false }
             }
         ]
