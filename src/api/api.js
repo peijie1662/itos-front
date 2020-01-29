@@ -29,6 +29,12 @@ export const getNotComposeModelList = params => { return axios.post(`${base}/mod
 export const saveComposeModelDetail = params => { return axios.post(`${base}/composetask/savecomposedetail`, params).then(res => res.data); };
 //组合任务模版详细信息
 export const getComposeModelDetail = params => { return axios.post(`${base}/composetask/getcomposedetail`, params).then(res => res.data); };
+//读取组合模版的组合任务
+export const getComposeTaskByModel = params => { return axios.post(`${base}/composetask/getcomposetaskbymodel`, params).then(res => res.data); };
+//启动组合任务
+export const startComposeTask = params => { return axios.post(`${base}/composetask/startcomposetask`, params).then(res => res.data); };
+//读取组合任务的子任务
+export const getTaskInCompose = params => { return axios.post(`${base}/composetask/gettaskincompose`, params).then(res => res.data); };
 
 //下发终端任务列表
 export const getDispatchTaskAll = params => { return axios.post(`${base}/dispatchtask/all`, params).then(res => res.data); };

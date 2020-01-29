@@ -235,6 +235,7 @@ export default {
         } else {
           me.$refs.content.innerHTML = "";
           me.dialogVisible = false;
+          me.task.taskId = generateUUID();//这里ID要改变，否则再触发就重复了
           me.$emit("taskUpdateOk");
         }
       });

@@ -113,7 +113,7 @@ export default {
       path: WS_URL,
       socket: "",
       online_users: [],
-      sys_logs: ["aaaaaaaaa", "bbbbbbbbbbbb"]
+      sys_logs: []
     };
   },
   methods: {

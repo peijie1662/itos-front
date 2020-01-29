@@ -7,8 +7,9 @@ import ModelList from './views/taskmodel/modelList.vue'
 import SmartTips from './views/settings/smartTips.vue'
 import DispatchTaskInput from './views/task/dispatchTaskInput.vue'
 import DispatchClient from './views/task/dispatchClient.vue'
-import DispatchCompose from './views/task/dispatchCompose.vue'
-import ControlCenter from './views/task/controlCenter.vue'
+import ComposeDetail from './views/task/composeDetail.vue'
+import ComposeControlCenter from './views/task/composeControlCenter.vue'
+import ComposeMaintance from './views/task/composeMaintance.vue'
 
 let routes = [
     {
@@ -62,11 +63,15 @@ let routes = [
         iconCls: 'el-icon-edit-outline',
         children: [
             {
-                path: '/dispatch_compose', component: DispatchCompose, name: '组合维护',
+                path: '/compose_detail', component: ComposeDetail, name: '组合模版',
                 meta: { dis: false }
             },
             {
-                path: '/control_center', component: ControlCenter, name: '控制中心',
+                path: '/compose_control_center', component: ComposeControlCenter, name: '控制中心',
+                meta: { dis: false }
+            },
+            {
+                path: '/compose_maintancer', component: ComposeMaintance, name: '组合维护',
                 meta: { dis: false }
             }
         ]

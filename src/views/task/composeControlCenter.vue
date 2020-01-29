@@ -1,0 +1,397 @@
+<template>
+  <div>
+    <div class="header">
+      <div style="margin-top:10px;">
+        <span>组合模版</span>
+        <el-select
+          v-model="selComposeModel"
+          @change="selectOneModel"
+          size="mini"
+          style="width:250px;margin-left:10px;"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in composeModels"
+            :key="item.modelId"
+            :label="item.abs"
+            :value="item"
+          >
+            <span style="float: left">{{ item.abs }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.category }}</span>
+          </el-option>
+        </el-select>
+        <el-button
+          type="primary"
+          size="mini"
+          @click="createComposeTask"
+          style="margin-left:10px;"
+        >创建任务</el-button>
+        <el-divider direction="vertical"></el-divider>
+        <span>组合任务</span>
+
+        <el-select
+          v-model="selComposeTask"
+          @change="selectOneTask"
+          size="mini"
+          style="width:250px;margin-left:10px;"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in composeTasks"
+            :key="item.taskId"
+            :label="item.abs"
+            :value="item"
+            style="height:120px;"
+          >
+            <div
+              style="border-bottom:1px solid #909399;font-weight:normal;"
+              :style="{color: item.color}"
+            >
+              <div style="overflow:hidden;">
+                <span style="float:left;">{{ item.abs }}</span>
+                <span style="float:right;">{{ item.status }}</span>
+              </div>
+              <div style="overflow:hidden;">
+                <span style="float:left;">开始时间:</span>
+                <span style="float:right;">{{item.bgDt}}</span>
+              </div>
+              <div style="overflow:hidden;">
+                <span style="float:left;">结束时间:</span>
+                <span style="float:right;">{{item.edDt}}</span>
+              </div>
+            </div>
+          </el-option>
+        </el-select>
+
+        <el-button
+          type="primary"
+          size="mini"
+          @click="startComposeTask"
+          style="margin-left:10px;"
+        >启动任务</el-button>
+        <el-button
+          type="primary"
+          size="mini"
+          @click="startComposeTask"
+          style="margin-left:10px;"
+        >任务报告</el-button>
+      </div>
+    </div>
+    <div class="content">
+      <div>
+        <span class="blocktag">任务内容</span>
+      </div>
+      <div class="block" v-html="selComposeModel.comments"></div>
+      <span class="blocktag">STEP-1</span>
+      <div class="block">
+        <mini-com v-for="item in step01" :key="item.model.modelId" :detail="item"></mini-com>
+      </div>
+      <span class="blocktag">STEP-2</span>
+      <div class="block">
+        <mini-com v-for="item in step02" :key="item.model.modelId" :detail="item"></mini-com>
+      </div>
+      <span class="blocktag">STEP-3</span>
+      <div class="block">
+        <mini-com v-for="item in step03" :key="item.model.modelId" :detail="item"></mini-com>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import {
+  WS_URL,
+  getComposeModelList,
+  getComposeTaskByModel,
+  saveOnceTask,
+  startComposeTask,
+  getTaskInCompose,
+  getNotComposeModelList,
+  getComposeModelDetail
+} from "@/api/api";
+import miniCom from "@/components/miniModelAndTaskCom.vue";
+import { localDateToStr } from "@/api/util";
+import { getTaskStatusById } from "@/api/data";
+
+export default {
+  data() {
+    return {
+      userInfo: "",
+      composeModels: [], //组合模版
+      selComposeModel: "", //选中组合模版
+      composeTasks: [], //组合任务
+      selComposeTask: "", //选中组合任务
+      //
+      notComposeModels: [], //组合模版的备选子模版
+      subTasks: [], //子任务
+      details: [], //选中组合模版详细信息,需将子模版与子任务填进此结构。
+      //
+      step01: [],
+      step02: [],
+      step03: [],
+      //
+      path: WS_URL,
+      socket: ""
+    };
+  },
+  methods: {
+    selectOneModel: async function() {
+      await this.loadComposeTasks();
+    },
+    loadComposeTasks() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getComposeTaskByModel({
+          modelId: me.selComposeModel.modelId
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            this.$message({
+              message: errMsg,
+              type: "error"
+            });
+            reject();
+          } else {
+            data.forEach(item => {
+              item.bgDt = localDateToStr(item.bgDt);
+              item.edDt = localDateToStr(item.edDt);
+              item.color = getTaskStatusById(item.status).iconclass.color;
+            });
+            me.composeTasks = data;
+            resolve();
+          }
+        });
+      });
+    },
+    loadNoComposeTasks() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getNotComposeModelList({}).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            this.$message({
+              message: errMsg,
+              type: "error"
+            });
+            reject();
+          } else {
+            me.notComposeModels = data;
+            resolve();
+          }
+        });
+      });
+    },
+    loadTaskInCompose() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getTaskInCompose({
+          composeId: me.selComposeTask.taskId
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            this.$message({
+              message: errMsg,
+              type: "error"
+            });
+            reject();
+          } else {
+            me.subTasks = data;
+            resolve();
+          }
+        });
+      });
+    },
+    loadComposeDetail() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getComposeModelDetail({
+          composeId: me.selComposeModel.modelId
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            this.$message({
+              message: errMsg,
+              type: "error"
+            });
+            reject();
+          } else {
+            me.details = data;
+            resolve();
+          }
+        });
+      });
+    },
+    selectOneTask: async function() {
+      let me = this;
+      //1.读取备选子模版
+      await me.loadNoComposeTasks();
+      //2.读取子任务
+      await me.loadTaskInCompose();
+      //3.读取模版详细信息
+      await me.loadComposeDetail();
+      //4.组合
+      me.details.forEach(d => {
+        me.notComposeModels.forEach(m => {
+          if (d.modelId == m.modelId) {
+            d.model = { ...m };
+          }
+        });
+        me.subTasks.forEach(t => {
+          if (d.modelId == t.modelId) {
+            d.task = { ...t };
+          }
+        });
+      });
+      //5.各层
+      if (me.selComposeTask) {
+        me.step01 = me.details.filter(d => {
+          return d.composeLevel == 1;
+        });
+        me.step02 = me.details.filter(d => {
+          return d.composeLevel == 2;
+        });
+        me.step03 = me.details.filter(d => {
+          return d.composeLevel == 3;
+        });
+      }
+      //6.compose task状态刷新
+      await me.loadComposeTasks();
+    },
+    createComposeTask() {
+      let me = this;
+      saveOnceTask({
+        modelId: me.selComposeModel.modelId,
+        planDt: new Date(),
+        userId: me.userInfo.userId
+      }).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          me.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.$message({
+            message: "组合任务创建成功。",
+            type: "success"
+          });
+          me.selectOneModel(); //刷新任务列表
+        }
+      });
+    },
+    startComposeTask() {
+      let me = this;
+      startComposeTask({
+        taskId: me.selComposeTask.taskId,
+        userId: me.userInfo.userId
+      }).then(res => {
+        let { flag, data, errMsg } = res;
+        if (!flag) {
+          me.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.$message({
+            message: "组合任务启动成功，创建第一层任务" + data + "个。",
+            type: "success"
+          });
+          me.selectOneTask(); //刷新子任务列表
+        }
+      });
+    },
+    loadComposeModels() {
+      let me = this;
+      getComposeModelList({}).then(res => {
+        let { flag, data, errMsg } = res;
+        if (!flag) {
+          this.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.composeModels = data;
+        }
+      });
+    },
+    initWebsocket() {
+      if (typeof WebSocket === "undefined") {
+        alert("您的浏览器不支持socket");
+      } else {
+        // 实例化socket
+        this.socket = new WebSocket(this.path);
+        // 监听socket连接
+        this.socket.onopen = this.open;
+        // 监听socket错误信息
+        this.socket.onerror = this.error;
+        // 监听socket消息
+        this.socket.onmessage = this.getMessage;
+        //关闭
+        this.socket.onclose = this.close;
+      }
+    },
+    open() {
+      console.log("socket连接成功");
+      this.socket.send("USERLOGIN^" + JSON.stringify(this.userInfo));
+    },
+    error() {
+      console.log("连接错误");
+    },
+    getMessage(msg) {
+      console.log(msg.data);
+      this.selectOneTask();
+    },
+    send() {
+      this.socket.send("hello world!");
+    },
+    close() {
+      console.log("socket已经关闭");
+    }
+  },
+  mounted() {
+    this.loadComposeModels();
+    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
+    this.initWebsocket();
+  },
+  components: {
+    miniCom
+  }
+};
+</script>
+
+<style scoped>
+.header {
+  border-radius: 10px;
+  border: 1px solid #c0c4cc;
+  padding: 10px;
+  min-height: 50px;
+}
+
+.content {
+  border-radius: 10px;
+  border: 1px solid #c0c4cc;
+  padding: 10px;
+  margin-top: 10px;
+  min-height: 700px;
+}
+
+.blocktag {
+  background: #909399;
+  color: white;
+  display: block;
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: -15px;
+}
+
+.block {
+  margin-top: 20px;
+  border: 2px dashed #409eff;
+  overflow: hidden;
+  padding: 10px;
+  width: 70%;
+  min-height: 100px;
+}
+</style>

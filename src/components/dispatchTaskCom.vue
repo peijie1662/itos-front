@@ -21,7 +21,7 @@
         <i v-else :class="task.sta.icon" :style="task.sta.iconclass" style="font-size:40px;"></i>
       </div>
       <!-- Next状态-->
-      <div v-show="showNextStatus " class="task_next_status">
+      <div v-show="showNextStatus" class="task_next_status">
         <i
           v-for="status in task.nextSta"
           :key="status.id"
