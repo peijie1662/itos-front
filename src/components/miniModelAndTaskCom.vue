@@ -60,8 +60,18 @@
       <!-- 内容第3行 执行IP -->
       <div class="block">
         <span class="block-tag">IP:</span>
-        <span :style="task.sta.hoverclass" class="block-txt" style="width:90px;">169.169.41.226</span>
+        <span :style="task.sta.hoverclass" class="block-txt" style="width:100px;">169.169.41.226</span>
       </div>
+      <!-- 内容第4行 开始时间-->
+      <div class="block">
+        <span class="block-tag">开始:</span>
+        <span :style="task.sta.hoverclass" class="block-txt" style="width:120px;">{{task.bgDtStr}}</span>
+      </div>
+      <!-- 内容第5行 结束时间-->
+      <div class="block">
+        <span class="block-tag">结束:</span>
+        <span :style="task.sta.hoverclass" class="block-txt" style="width:120px;">{{task.edDtStr}}</span>
+      </div>      
     </div>
     <!-- 执行中窗口 -->
     <processingCom :ttask="processingTask" @updateTaskSuccess="updateTaskSuccess"></processingCom>
@@ -154,8 +164,8 @@ export default {
 
 <style scoped>
 .outer {
-  width: 120px;
-  height: 100px;
+  width: 150px;
+  height: 120px;
   border: 1px solid #909399;
   position: relative;
   border-radius: 5px;

@@ -28,7 +28,6 @@
         >创建任务</el-button>
         <el-divider direction="vertical"></el-divider>
         <span>组合任务</span>
-
         <el-select
           v-model="selComposeTask"
           @change="selectOneTask"
@@ -62,7 +61,6 @@
             </div>
           </el-option>
         </el-select>
-
         <el-button
           type="primary"
           size="mini"
@@ -78,21 +76,33 @@
       </div>
     </div>
     <div class="content">
-      <div>
+      <div class="blocktagouter">
         <span class="blocktag">任务内容</span>
       </div>
       <div class="block" v-html="selComposeModel.comments"></div>
-      <span class="blocktag">STEP-1</span>
-      <div class="block">
-        <mini-com v-for="item in step01" :key="item.model.modelId" :detail="item"></mini-com>
+      <div class="blocktagouter">
+        <span class="blocktag">STEP-1</span>
+        <span class="blocksubtag">开始时间：{{step01.bgDt}}</span>
+        <span class="blocksubtag">结束时间：{{step01.edDt}}</span>
       </div>
-      <span class="blocktag">STEP-2</span>
       <div class="block">
-        <mini-com v-for="item in step02" :key="item.model.modelId" :detail="item"></mini-com>
+        <mini-com v-for="item in step01.tasks" :key="item.model.modelId" :detail="item"></mini-com>
       </div>
-      <span class="blocktag">STEP-3</span>
+      <div class="blocktagouter">
+        <span class="blocktag">STEP-2</span>
+        <span class="blocksubtag">开始时间：{{step02.bgDt}}</span>
+        <span class="blocksubtag">结束时间：{{step02.edDt}}</span>
+      </div>
       <div class="block">
-        <mini-com v-for="item in step03" :key="item.model.modelId" :detail="item"></mini-com>
+        <mini-com v-for="item in step02.tasks" :key="item.model.modelId" :detail="item"></mini-com>
+      </div>
+      <div class="blocktagouter">
+        <span class="blocktag">STEP-3</span>
+        <span class="blocksubtag">开始时间：{{step03.bgDt}}</span>
+        <span class="blocksubtag">结束时间：{{step03.edDt}}</span>
+      </div>
+      <div class="block">
+        <mini-com v-for="item in step03.tasks" :key="item.model.modelId" :detail="item"></mini-com>
       </div>
     </div>
   </div>
@@ -111,7 +121,7 @@ import {
 } from "@/api/api";
 import miniCom from "@/components/miniModelAndTaskCom.vue";
 import { localDateToStr } from "@/api/util";
-import { getTaskStatusById } from "@/api/data";
+import { getTaskStatusById, countStepTime } from "@/api/data";
 
 export default {
   data() {
@@ -126,9 +136,21 @@ export default {
       subTasks: [], //子任务
       details: [], //选中组合模版详细信息,需将子模版与子任务填进此结构。
       //
-      step01: [],
-      step02: [],
-      step03: [],
+      step01: {
+        tasks: [],
+        bgDt: "",
+        edDt: ""
+      },
+      step02: {
+        tasks: [],
+        bgDt: "",
+        edDt: ""
+      },
+      step03: {
+        tasks: [],
+        bgDt: "",
+        edDt: ""
+      },
       //
       path: WS_URL,
       socket: ""
@@ -196,6 +218,10 @@ export default {
             reject();
           } else {
             me.subTasks = data;
+            me.subTasks.forEach(item => {
+              item.bgDtStr = localDateToStr(item.bgDt);
+              item.edDtStr = localDateToStr(item.edDt);
+            });
             resolve();
           }
         });
@@ -244,17 +270,21 @@ export default {
       });
       //5.各层
       if (me.selComposeTask) {
-        me.step01 = me.details.filter(d => {
+        me.step01.tasks = me.details.filter(d => {
           return d.composeLevel == 1;
         });
-        me.step02 = me.details.filter(d => {
+        me.step02.tasks = me.details.filter(d => {
           return d.composeLevel == 2;
         });
-        me.step03 = me.details.filter(d => {
+        me.step03.tasks = me.details.filter(d => {
           return d.composeLevel == 3;
         });
       }
-      //6.compose task状态刷新
+      //6.统计各层时间
+      countStepTime(me.step01);
+      countStepTime(me.step02);
+      countStepTime(me.step03);
+      //7.compose task状态刷新
       await me.loadComposeTasks();
     },
     createComposeTask() {
@@ -375,6 +405,13 @@ export default {
   min-height: 700px;
 }
 
+.blocktagouter {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: -18px;
+  margin-top: 15px;
+}
+
 .blocktag {
   background: #909399;
   color: white;
@@ -382,8 +419,19 @@ export default {
   width: 100px;
   height: 20px;
   text-align: center;
-  margin-top: 20px;
-  margin-bottom: -15px;
+  float: left;
+}
+
+.blocksubtag {
+  background: #909399;
+  color: white;
+  display: block;
+  width: 250px;
+  height: 20px;
+  text-align: left;
+  float: left;
+  margin-left: 50px;
+  padding-left: 10px;
 }
 
 .block {

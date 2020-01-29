@@ -1,3 +1,6 @@
+import { STATIC_URL } from "@/api/api"
+import { formatDate, localDateToInt } from "@/api/util"
+
 //任务类别
 export const CATEGORYS = [
   {
@@ -19,7 +22,7 @@ export const CATEGORYS = [
     value: "COMPOSE",
     label: "组合任务",
     color: "#F56C6C"
-  },  
+  },
 ]
 
 //执行周期
@@ -267,8 +270,6 @@ export const listIsEmpty = function (list) {
   return false;
 }
 
-import { STATIC_URL } from "@/api/api"
-
 export const modelUploadDom = function (file, id) {
   let url =
     STATIC_URL +
@@ -297,4 +298,30 @@ export const taskUploadDom = function (file, id) {
   } else {
     return `<a href=${url}>${file.name}</a>`;
   }
+}
+
+//统计每层的开始结束时间
+export const countStepTime = function (step) {
+  step.bgDt = "";
+  step.edDt = "";
+  step.tasks.forEach(item => {
+    if (step.bgDt) {
+      step.bgDt = Math.min(
+        step.bgDt,
+        localDateToInt(item.task.bgDt)
+      );
+    } else if (item.task && item.task.bgDt) {
+      step.bgDt = localDateToInt(item.task.bgDt);
+    }
+    if (step.edDt) {
+      step.edDt = Math.max(
+        step.edDt,
+        localDateToInt(item.task.edDt)
+      );
+    } else if (item.task && item.task.edDt) {
+      step.edDt = localDateToInt(item.task.edDt);
+    }
+  });
+  step.bgDt = step.bgDt ? formatDate(new Date(step.bgDt), "yyyy-MM-dd hh:mm:ss") : "";
+  step.edDt = step.edDt ? formatDate(new Date(step.edDt), "yyyy-MM-dd hh:mm:ss") : "";
 }
