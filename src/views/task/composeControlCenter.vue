@@ -423,8 +423,8 @@ export default {
 }
 
 .blocksubtag {
-  background: #909399;
-  color: white;
+  background: #E4E7ED;
+  color: #409eff;
   display: block;
   width: 250px;
   height: 20px;

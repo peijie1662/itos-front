@@ -10,6 +10,7 @@ import DispatchClient from './views/task/dispatchClient.vue'
 import ComposeDetail from './views/task/composeDetail.vue'
 import ComposeControlCenter from './views/task/composeControlCenter.vue'
 import ComposeMaintance from './views/task/composeMaintance.vue'
+import UserManager from './views/settings/userManager.vue'
 
 let routes = [
     {
@@ -32,11 +33,11 @@ let routes = [
         children: [
             {
                 path: '/manual_task_input', component: ManualTaskInput, name: '任务登记',
-                meta: { dis: false }
+                meta: { funID: '1001', dis: false }
             },
             {
                 path: '/manual_task_query', component: ManualTaskQuery, name: '任务查询',
-                meta: { dis: false }
+                meta: { funId: '1002', dis: false }
             }
         ]
     },
@@ -48,11 +49,11 @@ let routes = [
         children: [
             {
                 path: '/dispatch_client', component: DispatchClient, name: '执行终端',
-                meta: { dis: false }
+                meta: { funId: '2001', dis: false }
             },
             {
                 path: '/dispatch_task_input', component: DispatchTaskInput, name: '任务查看',
-                meta: { dis: false }
+                meta: { funId: '2002', dis: false }
             }
         ]
     },
@@ -64,15 +65,15 @@ let routes = [
         children: [
             {
                 path: '/compose_detail', component: ComposeDetail, name: '组合模版',
-                meta: { dis: false }
+                meta: { funId: '3001', dis: false }
             },
             {
                 path: '/compose_control_center', component: ComposeControlCenter, name: '控制中心',
-                meta: { dis: false }
+                meta: { funId: '3002', dis: false }
             },
             {
                 path: '/compose_maintancer', component: ComposeMaintance, name: '组合维护',
-                meta: { dis: false }
+                meta: { funId: '3003', dis: false }
             }
         ]
     },
@@ -83,12 +84,16 @@ let routes = [
         iconCls: 'el-icon-edit-outline',
         children: [{
             path: '/model_list', component: ModelList, name: '模版设置',
-            meta: { dis: false }
+            meta: { funId: '4001', dis: false }
         },
         {
             path: '/smart_tips', component: SmartTips, name: '智能提示',
-            meta: { dis: false }
-        }
+            meta: { funId: '4002', dis: false }
+        },
+        {
+            path: '/user_manager', component: UserManager, name: '用户管理',
+            meta: { funId: '4003', dis: false }
+        }        
         ]
     },
     {

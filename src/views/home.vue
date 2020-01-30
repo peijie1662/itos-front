@@ -7,13 +7,13 @@
           <el-col :span="10">
             <div class="tools" @click.prevent="collapse">
               <i class="el-icon-menu" style="font-size:30px;margin-top:15px;">
-                <span style="margin-left:10px;font-size:20px;">IT Operation Platform 资讯科技部运维平台</span>
+                <span style="margin-left:10px;font-size:20px;">IT Operation System 资讯科技部运维系统</span>
                 <i class="iconfont icon-icon_crab_line icon" style="font-size:20px;"></i>
               </i>
             </div>
           </el-col>
           <el-col :span="4" class="userinfo">
-            <div class="headertag">部门:ITD / ID:{{userinfo.workId}} / 用户:{{userinfo.userName}}</div>
+            <div class="headertag">部门:{{userInfo.department}} / 工号:{{userInfo.workId}} / 用户:{{userInfo.userName}}</div>
             <el-dropdown trigger="hover">
               <span class="el-dropdown-link userinfo-inner">
                 <img src="../assets/face/man.png" />
@@ -107,7 +107,7 @@ import { WS_URL } from "@/api/api";
 export default {
   data() {
     return {
-      userinfo: {},
+      userInfo: {},
       showIM: false,
       isCollapse: false,
       path: WS_URL,
@@ -163,7 +163,7 @@ export default {
     },
     open() {
       console.log("socket连接成功");
-      this.socket.send("USERLOGIN^" + JSON.stringify(this.userinfo));
+      this.socket.send("USERLOGIN^" + JSON.stringify(this.userInfo));
     },
     error() {
       console.log("连接错误");
@@ -182,9 +182,9 @@ export default {
   },
   mounted() {
     //1.用户信息
-    var userinfo = sessionStorage.getItem("userinfo");
-    if (userinfo) {
-      this.userinfo = JSON.parse(userinfo);
+    var userInfo = sessionStorage.getItem("userinfo");
+    if (userInfo) {
+      this.userInfo = JSON.parse(userInfo);
     }
     //2.WS连接
     this.init();
@@ -214,7 +214,7 @@ $color-primary: #20a0ff; //#18c79c
 .headertag {
   position: absolute;
   top: 12px;
-  right: 150px;
+  right: 130px;
   color: white;
 }
 

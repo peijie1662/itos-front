@@ -62,6 +62,9 @@ export const updateSmarttips = params => { return axios.post(`${base}/smarttips/
 //删除智能提示
 export const deleteSmarttips = params => { return axios.post(`${base}/smarttips/delete`, params).then(res => res.data); };
 
+//用户管理
+export const getUserList = params => { return axios.post(`${base}/user/list`, params).then(res => res.data); };
+
 //设备号关联信息
 export const machineNameAssociate = params => { return axios.post(`${base}/associate/machinename`, params).then(res => res.data); };
 
