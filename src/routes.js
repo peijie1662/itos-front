@@ -29,11 +29,12 @@ let routes = [
         path: '/',
         component: Home,
         name: '人工任务',
+        funId: '1000',
         iconCls: 'el-icon-edit-outline',
         children: [
             {
                 path: '/manual_task_input', component: ManualTaskInput, name: '任务登记',
-                meta: { funID: '1001', dis: false }
+                meta: { funId: '1001', dis: false }
             },
             {
                 path: '/manual_task_query', component: ManualTaskQuery, name: '任务查询',
@@ -45,6 +46,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '系统任务',
+        funId: '2000',
         iconCls: 'el-icon-edit-outline',
         children: [
             {
@@ -61,6 +63,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '组合任务',
+        funId: '3000',
         iconCls: 'el-icon-edit-outline',
         children: [
             {
@@ -81,6 +84,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '系统设置',
+        funId: '4000',
         iconCls: 'el-icon-edit-outline',
         children: [{
             path: '/model_list', component: ModelList, name: '模版设置',

@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="header">
-        <el-button type="primary" size="mini" style="margin-left:20px;" @click="getUserList">查询</el-button>
+      <el-button type="primary" size="mini" style="margin-left:20px;" @click="getUserList">查询</el-button>
+      <el-button type="primary" size="mini" style="margin-left:20px;" @click="getUserList">添加</el-button>
     </div>
     <div class="content">
       <el-table :data="users" :header-cell-style="headerCellStyle" :cell-style="cellStyle" border>
@@ -17,31 +18,44 @@
               type="primary"
               plain
               size="mini"
-              @click="chg(scope.$index, scope.row)"
+              @click="chgUserContent(scope.$index, scope.row)"
             >修改</el-button>
             <el-button
-              type="danger"
+              type="warning"
               plain
               size="mini"
-              @click="del(scope.$index, scope.row)"
-            >删除</el-button>
+              @click="setAuthority(scope.$index, scope.row)"
+            >权限</el-button>
+            <el-button type="danger" plain size="mini" @click="del(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <AuthorityCom :user="authorityUser" @updateUserSuccess="getUserList"></AuthorityCom>
+    <UserCom :user="contentUser" @updateUserSuccess="getUserList"></UserCom>
   </div>
 </template>
 
 <script>
 import { getUserList } from "@/api/api";
+import AuthorityCom from "@/components/authorityCom.vue";
+import UserCom from "@/components/userCom.vue"
 
 export default {
   data() {
     return {
-      users: []
+      users: [],
+      authorityUser: null,
+      contentUser: null
     };
   },
   methods: {
+    setAuthority(index) {
+      this.authorityUser = { ...this.users[index] };
+    },
+    chgUserContent(index){
+      this.contentUser = { ...this.users[index] };
+    },
     getUserList() {
       getUserList({}).then(res => {
         let { flag, data, errMsg } = res;
@@ -62,8 +76,12 @@ export default {
       return "padding-top:2px;padding-bottom:2px;";
     }
   },
-  mounted(){
-      this.getUserList();
+  components: {
+    AuthorityCom,
+    UserCom
+  },
+  mounted() {
+    this.getUserList();
   }
 };
 </script>
