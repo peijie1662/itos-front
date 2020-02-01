@@ -22,14 +22,29 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     //如果无登录信息则转向登录页面，否则继续加载组件.
-    let userinfo = JSON.parse(sessionStorage.getItem('userinfo'));
-    if (!userinfo && to.path != '/login') {
+    let userInfo = JSON.parse(sessionStorage.getItem('userinfo'));
+    if (!userInfo && to.path != '/login') {
       next({ path: '/login' })
     } else {
+      //按照用户权限设置菜单 
+      var power = userInfo.authority;
+      let rs = router.options.routes;
+      for (let i in rs) {
+        if ("children" in rs[i]) {
+          for (let m in rs[i].children) {
+            let r = rs[i].children[m];
+            if (power.indexOf(r.meta.funId) < 0) {
+              r.meta.dis = true;
+            } else {
+              r.meta.dis = false;
+            }
+          }
+        }
+      }
       next()
     }
   }
-});
+})
 
 new Vue({
   el: '#app',

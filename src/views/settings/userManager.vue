@@ -26,7 +26,15 @@
               size="mini"
               @click="setAuthority(scope.$index, scope.row)"
             >权限</el-button>
-            <el-button type="danger" plain size="mini" @click="del(scope.$index, scope.row)">删除</el-button>
+            <el-popconfirm title="确定要删除该用户吗？" @onConfirm="delUser(scope.$index, scope.row)">
+              <el-button
+                type="danger"
+                plain
+                size="mini"
+                slot="reference"
+                style="margin-left:10px;"
+              >删除</el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -37,9 +45,9 @@
 </template>
 
 <script>
-import { getUserList } from "@/api/api";
+import { getUserList, delUser } from "@/api/api";
 import AuthorityCom from "@/components/authorityCom.vue";
-import UserCom from "@/components/userCom.vue"
+import UserCom from "@/components/userCom.vue";
 
 export default {
   data() {
@@ -50,10 +58,26 @@ export default {
     };
   },
   methods: {
+    delUser(index) {
+      let me = this;
+      delUser({
+        userId: me.users[index].userId
+      }).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          this.$$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.getUserList();
+        }
+      });
+    },
     setAuthority(index) {
       this.authorityUser = { ...this.users[index] };
     },
-    chgUserContent(index){
+    chgUserContent(index) {
       this.contentUser = { ...this.users[index] };
     },
     getUserList() {

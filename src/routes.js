@@ -34,11 +34,11 @@ let routes = [
         children: [
             {
                 path: '/manual_task_input', component: ManualTaskInput, name: '任务登记',
-                meta: { funId: '1001', dis: false }
+                meta: { funId: '1001', dis: true }
             },
             {
                 path: '/manual_task_query', component: ManualTaskQuery, name: '任务查询',
-                meta: { funId: '1002', dis: false }
+                meta: { funId: '1002', dis: true }
             }
         ]
     },
@@ -51,11 +51,11 @@ let routes = [
         children: [
             {
                 path: '/dispatch_client', component: DispatchClient, name: '执行终端',
-                meta: { funId: '2001', dis: false }
+                meta: { funId: '2001', dis: true }
             },
             {
                 path: '/dispatch_task_input', component: DispatchTaskInput, name: '任务查看',
-                meta: { funId: '2002', dis: false }
+                meta: { funId: '2002', dis: true }
             }
         ]
     },
@@ -68,15 +68,15 @@ let routes = [
         children: [
             {
                 path: '/compose_detail', component: ComposeDetail, name: '组合模版',
-                meta: { funId: '3001', dis: false }
+                meta: { funId: '3001', dis: true }
             },
             {
                 path: '/compose_control_center', component: ComposeControlCenter, name: '控制中心',
-                meta: { funId: '3002', dis: false }
+                meta: { funId: '3002', dis: true }
             },
             {
                 path: '/compose_maintancer', component: ComposeMaintance, name: '组合维护',
-                meta: { funId: '3003', dis: false }
+                meta: { funId: '3003', dis: true }
             }
         ]
     },
@@ -88,15 +88,15 @@ let routes = [
         iconCls: 'el-icon-edit-outline',
         children: [{
             path: '/model_list', component: ModelList, name: '模版设置',
-            meta: { funId: '4001', dis: false }
+            meta: { funId: '4001', dis: true }
         },
         {
             path: '/smart_tips', component: SmartTips, name: '智能提示',
-            meta: { funId: '4002', dis: false }
+            meta: { funId: '4002', dis: true }
         },
         {
             path: '/user_manager', component: UserManager, name: '用户管理',
-            meta: { funId: '4003', dis: false }
+            meta: { funId: '4003', dis: true }
         }        
         ]
     },
