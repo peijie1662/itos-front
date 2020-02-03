@@ -51,7 +51,7 @@ export const updateTaskStatus = params => { return axios.post(`${base}/task/upda
 //任务状态-MODIFY
 export const modifyTask = params => { return axios.post(`${base}/task/modify`, params).then(res => res.data); };
 //任务状态-SWAP
-export const swapTask = params => { return axios.post(`${base}/task/swap`, params).then(res => res.data); };
+export const swapTask = params => { return axios.post(`${base}/manualtask/swap`, params).then(res => res.data); };
 
 //智能提示列表
 export const getSmartTipsList = params => { return axios.post(`${base}/smarttips/list`, params).then(res => res.data); };
@@ -70,6 +70,8 @@ export const updateAuthority = params => { return axios.post(`${base}/user/autho
 export const updateContent = params => { return axios.post(`${base}/user/content`, params).then(res => res.data); };
 //删除用户
 export const delUser = params => { return axios.post(`${base}/user/delete`, params).then(res => res.data); };
+//新用户
+export const addUser = params => { return axios.post(`${base}/user/add`, params).then(res => res.data); };
 
 //设备号关联信息
 export const machineNameAssociate = params => { return axios.post(`${base}/associate/machinename`, params).then(res => res.data); };

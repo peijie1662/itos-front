@@ -2,7 +2,7 @@
   <div>
     <div class="header">
       <el-button type="primary" size="mini" style="margin-left:20px;" @click="getUserList">查询</el-button>
-      <el-button type="primary" size="mini" style="margin-left:20px;" @click="getUserList">添加</el-button>
+      <el-button type="primary" size="mini" style="margin-left:20px;" @click="addUser">添加</el-button>
     </div>
     <div class="content">
       <el-table :data="users" :header-cell-style="headerCellStyle" :cell-style="cellStyle" border>
@@ -41,6 +41,7 @@
     </div>
     <AuthorityCom :user="authorityUser" @updateUserSuccess="getUserList"></AuthorityCom>
     <UserCom :user="contentUser" @updateUserSuccess="getUserList"></UserCom>
+    <NewUserCom :user="newUser" @updateUserSuccess="getUserList"></NewUserCom>
   </div>
 </template>
 
@@ -48,16 +49,21 @@
 import { getUserList, delUser } from "@/api/api";
 import AuthorityCom from "@/components/authorityCom.vue";
 import UserCom from "@/components/userCom.vue";
+import NewUserCom from "@/components/newUserCom.vue";
 
 export default {
   data() {
     return {
       users: [],
       authorityUser: null,
-      contentUser: null
+      contentUser: null,
+      newUser: null
     };
   },
   methods: {
+    addUser(){
+      this.newUser = {}; 
+    },
     delUser(index) {
       let me = this;
       delUser({
@@ -102,7 +108,8 @@ export default {
   },
   components: {
     AuthorityCom,
-    UserCom
+    UserCom,
+    NewUserCom
   },
   mounted() {
     this.getUserList();
