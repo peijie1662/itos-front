@@ -1,11 +1,33 @@
 <template>
   <div>
     <div class="header">
-      <el-button type="primary" size="mini" style="margin-left:20px;" @click="getUserList">查询</el-button>
-      <el-button type="primary" size="mini" style="margin-left:20px;" @click="addUser">添加</el-button>
+      <div
+        style="width:350px;margin-top:20px;margin-left:20px;border-right: 2px solid #c0c4cc;float:left;"
+      >
+        <el-checkbox v-model="selAdmin" @change="filter">管理员</el-checkbox>
+        <el-checkbox v-model="selSd" @change="filter">胜达同事</el-checkbox>
+        <el-checkbox v-model="selNbct" @change="filter">NBCT同事</el-checkbox>
+      </div>
+      <el-button
+        type="primary"
+        size="mini"
+        style="margin-left:50px;margin-top:15px;"
+        @click="getUserList"
+      >查询</el-button>
+      <el-button
+        type="primary"
+        size="mini"
+        style="margin-left:20px;margin-top:15px;"
+        @click="addUser"
+      >添加</el-button>
     </div>
     <div class="content">
-      <el-table :data="users" :header-cell-style="headerCellStyle" :cell-style="cellStyle" border>
+      <el-table
+        :data="finUsers"
+        :header-cell-style="headerCellStyle"
+        :cell-style="cellStyle"
+        border
+      >
         <el-table-column prop="userId" label="ID" width="80"></el-table-column>
         <el-table-column prop="userName" label="姓名" width="80"></el-table-column>
         <el-table-column prop="department" label="部门" width="150"></el-table-column>
@@ -54,15 +76,29 @@ import NewUserCom from "@/components/newUserCom.vue";
 export default {
   data() {
     return {
+      selSd: true,
+      selNbct: true,
+      selAdmin: true,
       users: [],
+      finUsers: [],
       authorityUser: null,
       contentUser: null,
       newUser: null
     };
   },
   methods: {
-    addUser(){
-      this.newUser = {}; 
+    filter() {
+      let me = this;
+      me.finUsers = me.users.filter(item => {
+        return (
+          (me.selAdmin && item.role == "ADMIN") ||
+          (me.selSd && item.department == "SD") ||
+          (me.selNbct && item.department == "NBCT")
+        );
+      });
+    },
+    addUser() {
+      this.newUser = {};
     },
     delUser(index) {
       let me = this;
@@ -81,10 +117,10 @@ export default {
       });
     },
     setAuthority(index) {
-      this.authorityUser = { ...this.users[index] };
+      this.authorityUser = { ...this.finUsers[index] };
     },
     chgUserContent(index) {
-      this.contentUser = { ...this.users[index] };
+      this.contentUser = { ...this.finUsers[index] };
     },
     getUserList() {
       getUserList({}).then(res => {
@@ -96,6 +132,7 @@ export default {
           });
         } else {
           this.users = data;
+          this.filter();
         }
       });
     },
