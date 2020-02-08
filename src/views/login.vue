@@ -4,8 +4,14 @@
     <div class="animatediv">
       <p class="animatetitle" style="margin-top:100px;margin-left:100px;">IT Operations System(ITOS)</p>
       <p class="animatetitle-01" style="margin-top:50px;margin-left:100px;">NBCT资讯科技部运维系统</p>
-      <p class="animatetitle-02" style="margin-top:20px;margin-left:100px;">. 使用内容感知，智能提示，图文混排提升输入体验。</p>
-      <p class="animatetitle-03" style="margin-top:20px;margin-left:100px;">. 任务管理，任务调度，任务终端，组成灵活可靠的任务系统。</p>
+      <p
+        class="animatetitle-02"
+        style="margin-top:20px;margin-left:100px;"
+      >. 使用内容感知，智能提示，图文混排提升输入体验。</p>
+      <p
+        class="animatetitle-03"
+        style="margin-top:20px;margin-left:100px;"
+      >. 任务管理，任务调度，任务终端，组成灵活可靠的任务系统。</p>
       <p class="animatetitle-04" style="margin-top:20px;margin-left:100px;">. 文档存储，分类查阅，方便的资料查询中心。</p>
     </div>
     <!-- 右边登录窗口 -->
@@ -99,8 +105,13 @@ export default {
                 type: "error"
               });
             } else {
-              sessionStorage.setItem("userinfo", JSON.stringify(data[0]));
-              this.$router.push({ path: "/home" });
+              let user = data[0];
+              sessionStorage.setItem("userinfo", JSON.stringify(user));
+              if (user.firstPage) {
+                this.$router.push({ path: user.firstPage });
+              } else {
+                this.$router.push({ path: "/home" });
+              }
             }
           });
         } else {
@@ -174,7 +185,7 @@ div {
 
   .animatetitle {
     margin: 0;
-    font-family:  Wawati SC;
+    font-family: Wawati SC;
     font-size: 35px;
     line-height: 35px;
 
@@ -241,7 +252,7 @@ div {
       background: #03a9f4;
       animation-delay: 8s;
     }
-  }    
+  }
 }
 
 @keyframes fadeIn {

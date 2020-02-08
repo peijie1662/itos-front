@@ -6,21 +6,30 @@
           <el-col :span="10" class="logo" :class="isCollapse?'logo-collapse-width':'logo-width'"></el-col>
           <el-col :span="10">
             <div class="tools" @click.prevent="collapse">
-              <i class="el-icon-menu" style="font-size:30px;margin-top:15px;">
+              <i class="el-icon-menu" style="font-size:35px;margin-top:15px;">
                 <span style="margin-left:10px;font-size:20px;">IT Operation System 资讯科技部运维系统</span>
-                <i class="iconfont icon-icon_crab_line icon" style="font-size:20px;"></i>
+                <i
+                  class="iconfont icon-icon_crab_line icon"
+                  style="font-size:20px;margin-left:10px;"
+                ></i>
               </i>
             </div>
           </el-col>
           <el-col :span="4" class="userinfo">
-            <div class="headertag">部门:{{userInfo.department}} / 工号:{{userInfo.workId}} / 用户:{{userInfo.userName}}</div>
+            <div
+              class="headertag"
+            >部门:{{userInfo.department}} / 工号:{{userInfo.workId}} / 用户:{{userInfo.userName}}</div>
             <el-dropdown trigger="hover">
               <span class="el-dropdown-link userinfo-inner">
-                <img src="../assets/face/man.png" />
+                <el-image :src="face_url" fit="contain" :lazy="true" class="face">
+                  <div slot="error" class="image-slot">
+                    <img src="../assets/face/man.png" style="height:45px;width:45px;" />
+                  </div>
+                </el-image>
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="toggleIM">我的消息</el-dropdown-item>
-                <el-dropdown-item>设置</el-dropdown-item>
+                <el-dropdown-item @click.native="showSetup">设置</el-dropdown-item>
                 <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -98,25 +107,38 @@
         </el-tabs>
       </div>
     </el-collapse-transition>
+    <UserSetupCom :user="setupUser" @updateFaceSuccess="chgFaceSuccess"></UserSetupCom>
   </div>
 </template>
 
 <script>
-import { WS_URL } from "@/api/api";
+import { STATIC_URL, WS_URL } from "@/api/api";
+import UserSetupCom from "@/components/userSetupCom";
 
 export default {
   data() {
     return {
       userInfo: {},
+      setupUser: null,
       showIM: false,
       isCollapse: false,
       path: WS_URL,
       socket: "",
       online_users: [],
-      sys_logs: []
+      sys_logs: [],
+      face_url: ""
     };
   },
   methods: {
+    chgFaceSuccess() {
+      this.face_url =
+        STATIC_URL +
+        "/user_face/" +
+        this.userInfo.userId +
+        ".jpg" +
+        "?" +
+        Math.random(100);
+    },
     onSubmit() {
       console.log("submit!");
     },
@@ -144,6 +166,9 @@ export default {
     },
     toggleIM() {
       this.showIM = !this.showIM;
+    },
+    showSetup() {
+      this.setupUser = { ...this.userInfo };
     },
     init() {
       if (typeof WebSocket === "undefined") {
@@ -188,15 +213,29 @@ export default {
     }
     //2.WS连接
     this.init();
+    //3.用户头像
+    this.face_url = STATIC_URL + "user_face/" + this.userInfo.userId + ".jpg";
   },
   destroyed() {
     this.socket.close();
+  },
+  components: {
+    UserSetupCom
   }
 };
 </script>
 
 <style scoped lang="scss">
 $color-primary: #20a0ff; //#18c79c
+
+.face {
+  width: 45px;
+  height: 45px;
+  background: #f5f7fa;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: 5px;
+}
 
 .leftfloat {
   display: block;
@@ -214,7 +253,7 @@ $color-primary: #20a0ff; //#18c79c
 .headertag {
   position: absolute;
   top: 12px;
-  right: 130px;
+  right: 110px;
   color: white;
 }
 
@@ -247,13 +286,6 @@ $color-primary: #20a0ff; //#18c79c
       .userinfo-inner {
         cursor: pointer;
         color: #fff;
-        img {
-          width: 40px;
-          height: 40px;
-          border-radius: 20px;
-          margin: 10px 20px 10px 10px;
-          float: right;
-        }
       }
     }
     .logo {
@@ -265,11 +297,6 @@ $color-primary: #20a0ff; //#18c79c
       border-color: rgba(238, 241, 146, 0.3);
       border-right-width: 1px;
       border-right-style: solid;
-      img {
-        width: 40px;
-        float: left;
-        margin: 10px 10px 10px 18px;
-      }
       .txt {
         color: #fff;
       }

@@ -7,6 +7,7 @@ export const WS_URL = "ws://10.170.59.44:7857/ws";
 export const STATIC_URL = `${base}/static/`
 export const UPLOAD_TASK_URL = `${base}/task/uploadfile`
 export const UPLOAD_MODEL_URL = `${base}/model/uploadfile`
+export const UPLOAD_FACE_URL = `${base}/user/face`
 
 export const login = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 
@@ -72,6 +73,10 @@ export const updateContent = params => { return axios.post(`${base}/user/content
 export const delUser = params => { return axios.post(`${base}/user/delete`, params).then(res => res.data); };
 //新用户
 export const addUser = params => { return axios.post(`${base}/user/add`, params).then(res => res.data); };
+//用户首页
+export const updateFirstPage = params => { return axios.post(`${base}/user/firstpage`, params).then(res => res.data); };
+//新用户
+export const updatePassword = params => { return axios.post(`${base}/user/password`, params).then(res => res.data); };
 
 //设备号关联信息
 export const machineNameAssociate = params => { return axios.post(`${base}/associate/machinename`, params).then(res => res.data); };
