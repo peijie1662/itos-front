@@ -7,10 +7,11 @@
           <el-col :span="10">
             <div class="tools" @click.prevent="collapse">
               <i class="el-icon-menu" style="font-size:35px;margin-top:15px;">
-                <span style="margin-left:10px;font-size:20px;">IT Operation System 资讯科技部运维系统</span>
+                <span style="margin-left:10px;font-size:20px;">IT OPERATION AND MAINTENANCE SYSTEM</span>
+                <span style="margin-left:5px;font-size:15px;">资讯科技部运维系统</span>
                 <i
                   class="iconfont icon-icon_crab_line icon"
-                  style="font-size:20px;margin-left:10px;"
+                  style="font-size:15px;margin-left:5px;"
                 ></i>
               </i>
             </div>
@@ -211,10 +212,15 @@ export default {
     if (userInfo) {
       this.userInfo = JSON.parse(userInfo);
     }
-    //2.WS连接
+    //2.用户头像
+    this.face_url =
+      STATIC_URL +
+      "user_face/" +
+      this.userInfo.userId +
+      ".jpg?" +
+      Math.random(100);    
+    //3.WS连接
     this.init();
-    //3.用户头像
-    this.face_url = STATIC_URL + "user_face/" + this.userInfo.userId + ".jpg";
   },
   destroyed() {
     this.socket.close();

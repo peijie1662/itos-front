@@ -11,6 +11,7 @@ import ComposeDetail from './views/task/composeDetail.vue'
 import ComposeControlCenter from './views/task/composeControlCenter.vue'
 import ComposeMaintance from './views/task/composeMaintance.vue'
 import UserManager from './views/settings/userManager.vue'
+import firstPage from './views/settings/firstPage.vue'
 
 let routes = [
     {
@@ -25,6 +26,19 @@ let routes = [
         name: '',
         hidden: true
     },
+    {
+        path: '/',
+        component: Home,
+        name: '',
+        iconCls: 'el-icon-view',
+        leaf: true,
+        children: [
+            {
+                path: '/first_page', component: firstPage, name: '运维动态',
+                meta: { funId: '0001', dis: true }
+            }
+        ]
+    },    
     {
         path: '/',
         component: Home,
@@ -47,7 +61,7 @@ let routes = [
         component: Home,
         name: '系统任务',
         funId: '2000',
-        iconCls: 'el-icon-edit-outline',
+        iconCls: 'el-icon-monitor',
         children: [
             {
                 path: '/dispatch_client', component: DispatchClient, name: '执行终端',
@@ -64,7 +78,7 @@ let routes = [
         component: Home,
         name: '组合任务',
         funId: '3000',
-        iconCls: 'el-icon-edit-outline',
+        iconCls: 'el-icon-document-copy',
         children: [
             {
                 path: '/compose_detail', component: ComposeDetail, name: '组合模版',
@@ -85,7 +99,7 @@ let routes = [
         component: Home,
         name: '系统设置',
         funId: '4000',
-        iconCls: 'el-icon-edit-outline',
+        iconCls: 'el-icon-setting',
         children: [{
             path: '/model_list', component: ModelList, name: '模版设置',
             meta: { funId: '4001', dis: true }
@@ -93,11 +107,20 @@ let routes = [
         {
             path: '/smart_tips', component: SmartTips, name: '智能提示',
             meta: { funId: '4002', dis: true }
-        },
-        {
-            path: '/user_manager', component: UserManager, name: '用户管理',
-            meta: { funId: '4003', dis: true }
-        }        
+        }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '',
+        iconCls: 'el-icon-user',
+        leaf: true,
+        children: [
+            {
+                path: '/user_manager', component: UserManager, name: '用户管理',
+                meta: { funId: '4003', dis: true }
+            }
         ]
     },
     {

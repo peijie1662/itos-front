@@ -81,5 +81,11 @@ export const updatePassword = params => { return axios.post(`${base}/user/passwo
 //设备号关联信息
 export const machineNameAssociate = params => { return axios.post(`${base}/associate/machinename`, params).then(res => res.data); };
 
+//值班表
+export const dutyList = params => { return axios.post(`${base}/page/duty/list`, params).then(res => res.data); };
+//添加值班
+export const addDuty = params => { return axios.post(`${base}/page/duty/add`, params).then(res => res.data); };
+//删除值班
+export const delDuty = params => { return axios.post(`${base}/page/duty/delete`, params).then(res => res.data); };
 
 

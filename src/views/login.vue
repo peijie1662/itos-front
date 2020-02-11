@@ -2,7 +2,7 @@
   <div style="position:relative;">
     <!-- 左边简介 -->
     <div class="animatediv">
-      <p class="animatetitle" style="margin-top:100px;margin-left:100px;">IT Operations System(ITOS)</p>
+      <p class="animatetitle" style="margin-top:100px;margin-left:100px;">IT Operation And Maintenance System</p>
       <p class="animatetitle-01" style="margin-top:50px;margin-left:100px;">NBCT资讯科技部运维系统</p>
       <p
         class="animatetitle-02"
@@ -27,8 +27,7 @@
         <canvas id="canvas" style="margin-left: 30px;"></canvas>
         <section class="title">
           <i class="iconfont icon-icon_crab_coloured icon" style="color:#85b84f;font-size:30px;"></i>
-          <h3>资讯科技部运维系统</h3>
-          <h5>IT Operations System(ITOS)</h5>
+          <h3>资讯科技部运维系统</h3>ITOMS
         </section>
         <el-form-item prop="account">
           <el-input type="text" v-model="ruleForm2.userId" auto-complete="off" placeholder="账号"></el-input>

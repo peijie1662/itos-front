@@ -51,8 +51,8 @@ export const TASKHANDLERS = [
     label: '徐梓磊'
   },
   {
-    value: 'HMH',
-    label: '黄鸣皓'
+    value: 'WMH',
+    label: '王鸣浩'
   },
   {
     value: 'LSH',
