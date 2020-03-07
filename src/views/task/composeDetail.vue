@@ -29,9 +29,7 @@
       <draggable tag="ul" v-model="candidateModels" group="{name:'mygroup'}" class="ul">
         <li v-for="item in candidateModels" :key="item.modelId" class="li">
           <div style="position:relative;height:100%;text-align:center;">
-            <div :style="topTriangleStyle(item)"></div>
-            <span>{{item.abs}}</span>
-            <div :style="bottomTriangleStyle(item)"></div>
+            <sampleModelCom :mmodel="item"></sampleModelCom>
           </div>
         </li>
       </draggable>
@@ -40,9 +38,7 @@
       <draggable tag="ul" v-model="step01" group="{name:'mygroup'}" class="ul">
         <li v-for="item in step01" :key="item.modelId" class="li">
           <div style="position:relative;height:100%;text-align:center;">
-            <div :style="topTriangleStyle(item)"></div>
-            <span>{{item.abs}}</span>
-            <div :style="bottomTriangleStyle(item)"></div>
+            <sampleModelCom :mmodel="item"></sampleModelCom>
           </div>
         </li>
       </draggable>
@@ -51,9 +47,7 @@
       <draggable tag="ul" v-model="step02" group="{name:'mygroup'}" class="ul">
         <li v-for="item in step02" :key="item.modelId" class="li">
           <div style="position:relative;height:100%;text-align:center;">
-            <div :style="topTriangleStyle(item)"></div>
-            <span>{{item.abs}}</span>
-            <div :style="bottomTriangleStyle(item)"></div>
+            <sampleModelCom :mmodel="item"></sampleModelCom>
           </div>
         </li>
       </draggable>
@@ -62,9 +56,7 @@
       <draggable tag="ul" v-model="step03" group="{name:'mygroup'}" class="ul">
         <li v-for="item in step03" :key="item.modelId" class="li">
           <div style="position:relative;height:100%;text-align:center;">
-            <div :style="topTriangleStyle(item)"></div>
-            <span>{{item.abs}}</span>
-            <div :style="bottomTriangleStyle(item)"></div>
+            <sampleModelCom :mmodel="item"></sampleModelCom>
           </div>
         </li>
       </draggable>
@@ -74,13 +66,13 @@
  
 <script>
 import draggable from "vuedraggable";
-import { getCategoryColor } from "@/api/data";
 import {
   getComposeModelList,
   getNotComposeModelList,
   getComposeModelDetail,
   saveComposeModelDetail
 } from "@/api/api";
+import sampleModelCom from "@/components/sampleModelCom.vue";
 
 export default {
   data() {
@@ -96,38 +88,6 @@ export default {
     };
   },
   methods: {
-    topTriangleStyle(model) {
-      let mstyle = {
-        width: "0",
-        height: "0",
-        borderTop: "30px solid red",
-        borderRight: "30px solid transparent",
-        borderTopRadius: "5px"
-      };
-      if (model.invalid) {
-        mstyle.borderTop = "30px solid " + getCategoryColor(null);
-      } else {
-        mstyle.borderTop = "30px solid " + getCategoryColor(model.category);
-      }
-      return mstyle;
-    },
-    bottomTriangleStyle(model) {
-      let mstyle = {
-        width: "0",
-        height: "0",
-        borderBottom: "30px solid red",
-        borderLeft: "30px solid transparent",
-        position: "absolute",
-        bottom: "0px",
-        right: "0px"
-      };
-      if (model.invalid) {
-        mstyle.borderBottom = "30px solid " + getCategoryColor(null);
-      } else {
-        mstyle.borderBottom = "30px solid " + getCategoryColor(model.category);
-      }
-      return mstyle;
-    },
     selectOneModel: async function() {
       let me = this;
       //1.读非组合模版
@@ -269,7 +229,8 @@ export default {
     }
   },
   components: {
-    draggable
+    draggable,
+    sampleModelCom
   },
   mounted() {
     this.loadComposeModels();
