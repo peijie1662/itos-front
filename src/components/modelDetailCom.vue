@@ -100,7 +100,8 @@
 
 <script>
 import { updateModel, deleteModel, UPLOAD_MODEL_URL } from "@/api/api";
-import { insertContent, modelUploadDom } from "@/api/util";
+import { insertContent } from "@/api/util";
+import { modelUploadDom } from "@/api/data";
 
 export default {
   data() {

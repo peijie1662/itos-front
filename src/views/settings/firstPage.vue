@@ -2,14 +2,20 @@
   <div>
     <div class="block">
       <el-tabs v-model="activeName">
-        <!-- 值班签到 -->
-        <el-tab-pane label="运维动态" name="statistics"></el-tab-pane>
+        <!-- 运维动态 -->
+        <el-tab-pane label="运维动态" name="statistics">
+          <div class="first-tab"></div>
+        </el-tab-pane>
         <!-- 值班签到 -->
         <el-tab-pane label="值班签到" name="duty">
-          <div style="width:1000px;height:680px;">
+          <div class="first-tab">
             <el-calendar>
               <template slot="dateCell" slot-scope="{date, data}">
-                <div class="duty-tag" @click="setDuty(data.day)">
+                <div
+                  class="duty-tag"
+                  :class="data.day == today? 'duty-today':''"
+                  @click="setDuty(data.day)"
+                >
                   <div>
                     <span>{{ data.day.split('-').slice(1).join('-') }}</span>
                   </div>
@@ -36,7 +42,8 @@ export default {
       activeName: "duty",
       dutys: "",
       users: [],
-      userInfo: ""
+      userInfo: "",
+      today: "2020-02-13"
     };
   },
   methods: {
@@ -66,7 +73,7 @@ export default {
             me.$message.error(errMsg);
           } else {
             me.$message.success("你的值班信息已添加。");
-            me.getDutyList()
+            me.getDutyList();
           }
         });
       }
@@ -133,13 +140,23 @@ export default {
 </script>
 
 <style scoped>
+.first-tab {
+  width: 1000px;
+  height: 680px;
+}
+
 .duty-tag {
   color: black;
+  padding: 0px;
   height: 100%;
 }
 
 .duty-tag :hover {
   color: #1989fa;
+}
+
+.duty-today {
+  background: #d9ecff;
 }
 
 .block {
