@@ -23,7 +23,7 @@
         <div class="content">
           <el-image :src="face_url" fit="contain" class="face">
             <div slot="error" class="image-slot">
-              <img src="../assets/face/man.png" style="width:100px;height:100px;" />
+              <img src="@/assets/face/man.png" style="width:100px;height:100px;" />
             </div>
           </el-image>
           <el-upload

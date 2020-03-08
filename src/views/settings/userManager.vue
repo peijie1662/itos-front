@@ -69,9 +69,9 @@
 
 <script>
 import { getUserList, delUser } from "@/api/api";
-import AuthorityCom from "@/components/authorityCom.vue";
-import UserCom from "@/components/userCom.vue";
-import NewUserCom from "@/components/newUserCom.vue";
+import AuthorityCom from "@/components/user/authorityCom.vue";
+import UserCom from "@/components/user/userCom.vue";
+import NewUserCom from "@/components/user/newUserCom.vue";
 
 export default {
   data() {

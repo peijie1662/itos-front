@@ -21,8 +21,8 @@
 
 <script>
 import { getModelList } from "@/api/api";
-import modelCom from "@/components/modelCom.vue";
-import newModelCom from "@/components/newModelCom.vue";
+import modelCom from "@/components/model/modelCom.vue";
+import newModelCom from "@/components/model/newModelCom.vue";
 
 export default {
   data() {

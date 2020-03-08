@@ -28,36 +28,28 @@
       <span class="blocktag">候选模版</span>
       <draggable tag="ul" v-model="candidateModels" group="{name:'mygroup'}" class="ul">
         <li v-for="item in candidateModels" :key="item.modelId" class="li">
-          <div style="position:relative;height:100%;text-align:center;">
-            <sampleModelCom :mmodel="item"></sampleModelCom>
-          </div>
+          <sampleModelCom :mmodel="item"></sampleModelCom>
         </li>
       </draggable>
       <!-- STEP01 -->
       <span class="blocktag">STEP-1</span>
       <draggable tag="ul" v-model="step01" group="{name:'mygroup'}" class="ul">
         <li v-for="item in step01" :key="item.modelId" class="li">
-          <div style="position:relative;height:100%;text-align:center;">
-            <sampleModelCom :mmodel="item"></sampleModelCom>
-          </div>
+          <sampleModelCom :mmodel="item"></sampleModelCom>
         </li>
       </draggable>
       <!-- STEP02 -->
       <span class="blocktag">STEP-2</span>
       <draggable tag="ul" v-model="step02" group="{name:'mygroup'}" class="ul">
         <li v-for="item in step02" :key="item.modelId" class="li">
-          <div style="position:relative;height:100%;text-align:center;">
-            <sampleModelCom :mmodel="item"></sampleModelCom>
-          </div>
+          <sampleModelCom :mmodel="item"></sampleModelCom>
         </li>
       </draggable>
       <!-- STEP03 -->
       <span class="blocktag">STEP-3</span>
       <draggable tag="ul" v-model="step03" group="{name:'mygroup'}" class="ul">
         <li v-for="item in step03" :key="item.modelId" class="li">
-          <div style="position:relative;height:100%;text-align:center;">
-            <sampleModelCom :mmodel="item"></sampleModelCom>
-          </div>
+          <sampleModelCom :mmodel="item"></sampleModelCom>
         </li>
       </draggable>
     </div>
@@ -72,7 +64,7 @@ import {
   getComposeModelDetail,
   saveComposeModelDetail
 } from "@/api/api";
-import sampleModelCom from "@/components/sampleModelCom.vue";
+import sampleModelCom from "@/components/model/sampleModelCom.vue";
 
 export default {
   data() {

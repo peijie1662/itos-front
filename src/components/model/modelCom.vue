@@ -46,7 +46,7 @@
 <script>
 import { saveOnceTask, chgModelStatus } from "@/api/api";
 import { getCategoryColor } from "@/api/data";
-import modelDetailCom from "@/components/modelDetailCom.vue";
+import modelDetailCom from "@/components/model/modelDetailCom.vue";
 
 export default {
   data() {

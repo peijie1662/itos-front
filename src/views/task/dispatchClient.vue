@@ -2,7 +2,8 @@
   <div>
     <div class="header">
       <div style="margin-top:10px;">
-        <el-button type="primary" size="mini">登记终端</el-button>
+        <el-button type="primary" size="mini" @click="addClient">登记</el-button>
+        <el-button type="primary" size="mini" @click="loadData">刷新</el-button>
       </div>
     </div>
     <div class="content">
@@ -19,20 +20,22 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="serviceName" label="服务名" width="120"></el-table-column>
+        <el-table-column label="服务名" width="120">
+          <template slot-scope="scope">
+            <i class="el-icon-sunny" style="color:green;" v-if="scope.row.onLine"></i>
+            <i class="el-icon-moon" style="color:#F56C6C;" v-else></i>
+            <span style="margin-left:5px;">{{scope.row.serviceName}}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column prop="description" label="描述" width="360"></el-table-column>
         <el-table-column prop="ip" label="IP" width="120"></el-table-column>
         <el-table-column prop="activeTimeStr" label="活动时间" width="160"></el-table-column>
 
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button
-              type="primary"
-              plain
-              size="mini"
-              @click="updateClient(scope.$index, scope.row)"
-            >修改</el-button>
-            <el-popconfirm title="确定要删除该用户吗？" @onConfirm="delClient(scope.$index, scope.row)">
+            <el-button type="primary" plain size="mini" @click="chgClient(scope.$index)">修改</el-button>
+            <el-popconfirm title="确定要删除该终端吗？" @onConfirm="delClient(scope.row)">
               <el-button
                 type="danger"
                 plain
@@ -44,23 +47,61 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 登记终端 -->
+      <newClientCom :nclient="newClient" :mmodel="models" @updateClientSuccess="loadData"></newClientCom>
+      <!-- 修改终端 -->
+      <updateClientCom :uclient="updateClient" :mmodel="models" @updateClientSuccess="loadData"></updateClientCom>
     </div>
   </div>
 </template>
 
 <script>
-import { getClientList, getNotComposeModelList } from "@/api/api";
+import {
+  getClientList,
+  getNotComposeModelList,
+  deleteClient,
+  serverReloadClient
+} from "@/api/api";
 import { localDateToStr } from "@/api/util";
-import sampleModelCom from "@/components/sampleModelCom.vue";
+import sampleModelCom from "@/components/model/sampleModelCom";
+import newClientCom from "@/components/client/newClientCom";
+import updateClientCom from "@/components/client/updateClientCom";
 
 export default {
   data() {
     return {
+      newClient: null,
+      updateClient: null,
       models: [],
       clients: []
     };
   },
   methods: {
+    addClient() {
+      this.newClient = {};
+    },
+    delClient(row) {
+      let me = this;
+      deleteClient({ serviceName: row.serviceName }).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          this.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          serverReloadClient({}).then(res => {
+            let { flag } = res;
+            if (flag) {
+              me.loadData();
+            }
+          });
+        }
+      });
+    },
+    chgClient(index) {
+      this.updateClient = { ...this.clients[index] };
+    },
     loadData: async function() {
       let me = this;
       await me.loadNotComposeModelList();
@@ -113,8 +154,6 @@ export default {
         });
       });
     },
-    delClient() {},
-    updateClient() {},
     headerCellStyle() {
       return "padding:0;";
     },
@@ -123,7 +162,9 @@ export default {
     }
   },
   components: {
-    sampleModelCom
+    sampleModelCom,
+    newClientCom,
+    updateClientCom
   },
   mounted() {
     this.loadData();

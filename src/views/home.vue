@@ -24,7 +24,7 @@
               <span class="el-dropdown-link userinfo-inner">
                 <el-image :src="face_url" fit="contain" :lazy="true" class="face">
                   <div slot="error" class="image-slot">
-                    <img src="../assets/face/man.png" style="height:45px;width:45px;" />
+                    <img src="@/assets/face/man.png" style="height:45px;width:45px;" />
                   </div>
                 </el-image>
               </span>
@@ -114,7 +114,7 @@
 
 <script>
 import { STATIC_URL, WS_URL } from "@/api/api";
-import UserSetupCom from "@/components/userSetupCom";
+import UserSetupCom from "@/components/user/userSetupCom.vue";
 
 export default {
   data() {

@@ -7,7 +7,7 @@
           v-model="selComposeModel"
           @change="selectOneModel"
           size="mini"
-          style="width:250px;margin-left:10px;"
+          style="width:200px;margin-left:10px;"
           placeholder="请选择"
         >
           <el-option

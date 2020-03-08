@@ -187,7 +187,7 @@ export default {
 
 <style scoped>
 .content {
-  min-height: 400px;
+  height: 450px;
   border: 1px solid #c0c4cc;
   border-radius: 5px;
   padding: 10px;

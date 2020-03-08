@@ -14,6 +14,16 @@ export const login = params => { return axios.post(`${base}/login`, params).then
 //------------------------------------------终端管理
 //终端列表
 export const getClientList = params => { return axios.post(`${base}/dispatchclient/list`, params).then(res => res.data); };
+//登记终端
+export const addClient = params => { return axios.post(`${base}/dispatchclient/add`, params).then(res => res.data); };
+//修改终端
+export const updateClient = params => { return axios.post(`${base}/dispatchclient/update`, params).then(res => res.data); };
+//删除终端
+export const deleteClient = params => { return axios.post(`${base}/dispatchclient/delete`, params).then(res => res.data); };
+//通知服务端重载终端
+export const serverReloadClient = params => { return axios.post(`${base}/dispatchclient/reload`, params).then(res => res.data); };
+//所有终端任务列表
+export const getDispatchTaskAll = params => { return axios.post(`${base}/dispatchclient/alltask`, params).then(res => res.data); };
 
 //------------------------------------------模版管理
 //任务模版列表
@@ -42,10 +52,6 @@ export const getComposeTaskByModel = params => { return axios.post(`${base}/comp
 export const startComposeTask = params => { return axios.post(`${base}/composetask/startcomposetask`, params).then(res => res.data); };
 //读取组合任务的子任务
 export const getTaskInCompose = params => { return axios.post(`${base}/composetask/gettaskincompose`, params).then(res => res.data); };
-
-//------------------------------------------系统任务
-//下发终端任务列表
-export const getDispatchTaskAll = params => { return axios.post(`${base}/dispatchtask/all`, params).then(res => res.data); };
 
 //------------------------------------------人工任务
 //人工执行任务列表

@@ -1,8 +1,10 @@
 <template>
   <div>
-    <div :style="topTriangleStyle()"></div>
-    <span>{{mmodel.abs}}</span>
-    <div :style="bottomTriangleStyle()"></div>
+    <div style="position:relative;text-align:center;width:120px;height:100px;">
+      <div :style="topTriangleStyle()"></div>
+      <span>{{mmodel.abs}}</span>
+      <div :style="bottomTriangleStyle()"></div>
+    </div>
   </div>
 </template>
 
@@ -23,7 +25,8 @@ export default {
       if (this.mmodel.invalid) {
         mstyle.borderTop = "30px solid " + getCategoryColor(null);
       } else {
-        mstyle.borderTop = "30px solid " + getCategoryColor(this.mmodel.category);
+        mstyle.borderTop =
+          "30px solid " + getCategoryColor(this.mmodel.category);
       }
       return mstyle;
     },
@@ -40,7 +43,8 @@ export default {
       if (this.mmodel.invalid) {
         mstyle.borderBottom = "30px solid " + getCategoryColor(null);
       } else {
-        mstyle.borderBottom = "30px solid " + getCategoryColor(this.mmodel.category);
+        mstyle.borderBottom =
+          "30px solid " + getCategoryColor(this.mmodel.category);
       }
       return mstyle;
     }
