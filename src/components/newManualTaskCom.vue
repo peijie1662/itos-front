@@ -68,9 +68,9 @@
           >
             <el-option
               v-for="item in handlers"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
             ></el-option>
           </el-select>
           <el-upload
@@ -120,9 +120,10 @@ import {
   UPLOAD_TASK_URL,
   getSmartTipsList,
   addManualTask,
-  machineNameAssociate
+  machineNameAssociate,
+  getUserList
 } from "@/api/api";
-import { TASKHANDLERS, getTaskIconInContent, taskUploadDom } from "@/api/data";
+import { getTaskIconInContent, taskUploadDom } from "@/api/data";
 import { insertContent, generateUUID } from "@/api/util";
 
 export default {
@@ -132,7 +133,7 @@ export default {
       userInfo: "",
       dialogVisible: false,
       task: "",
-      handlers: TASKHANDLERS,
+      handlers: [],
       //智能提示
       showTips: false,
       all_tips: [],
@@ -235,7 +236,7 @@ export default {
         } else {
           me.$refs.content.innerHTML = "";
           me.dialogVisible = false;
-          me.task.taskId = generateUUID();//这里ID要改变，否则再触发就重复了
+          me.task.taskId = generateUUID(); //这里ID要改变，否则再触发就重复了
           me.$emit("taskUpdateOk");
         }
       });
@@ -296,10 +297,25 @@ export default {
         loc.remove();
         me.showTips = true;
       }
+    },
+    loadUserList() {
+      let me = this;
+      getUserList({}).then(res => {
+        let { flag, data, errMsg } = res;
+        if (!flag) {
+          me.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.handlers = data;
+        }
+      });
     }
   },
   mounted() {
     this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
+    this.loadUserList();
   }
 };
 </script>

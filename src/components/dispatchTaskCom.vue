@@ -2,8 +2,10 @@
   <div>
     <div class="outer" @mouseleave="showNextStatus = false">
       <!-- 图标 -->
-      <div class="task_icon">
+      <div class="task_icon" :style="isExpired()?'color:black':'color:green'">
         <i :class="task.icon.icon" :style="task.icon.iconclass" style="font-size:40px;"></i>
+        <span style="margin-left:80px;">计划:{{task.planDtStr}}</span>
+        <span style="margin-left:20px;">过期:{{task.expiredTimeStr}}</span>
       </div>
       <!-- 状态 -->
       <div
@@ -68,62 +70,12 @@
   </div>
 </template>
 
-<style scoped>
-.outer {
-  position: relative;
-}
-
-.task_icon {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-}
-
-.task_status {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-}
-
-.task_next_status {
-  position: absolute;
-  right: 5px;
-  top: 50px;
-  border: 2px dashed #20a0ff;
-  border-radius: 2px;
-  background: white;
-}
-
-.task_abs {
-  text-align: left;
-  line-height: 50px;
-  border-bottom: 1px solid #c0c4cc;
-  height: 50px;
-  background: #e9ebec;
-}
-
-.task_content {
-  text-align: left;
-  border-bottom: 1px solid #c0c4cc;
-  min-height: 50px;
-  overflow-x: auto;
-}
-
-.task_handler {
-  text-align: left;
-  border-bottom: 1px solid #c0c4cc;
-  min-height: 20px;
-  margin-top: 5px;
-}
-</style>
-
 <script>
 import { getTaskLog } from "@/api/api";
-import { localDateToStr } from "@/api/util";
+import { localDateToStr,localDateToDate } from "@/api/util";
 import {
   getTaskIconById,
   getTaskStatusById,
-  getUserNameById,
   listIsEmpty
 } from "@/api/data";
 import processingCom from "@/components/commonStatusCom.vue";
@@ -148,6 +100,11 @@ export default {
     };
   },
   methods: {
+    isExpired(){
+      let dt1 = localDateToDate(this.task.expiredTime);
+      let dt2 = new Date();
+      return dt1 < dt2;
+    },
     updateTaskSuccess() {
       this.$emit("updateTaskSuccess");
     },
@@ -200,13 +157,9 @@ export default {
         this.task.nextSta = this.task.sta.next.map(item => {
           return getTaskStatusById(item);
         });
-        this.task.handlers = newVal.handler
-          ? newVal.handler
-              .map(h => {
-                return getUserNameById(h);
-              })
-              .join(",")
-          : "";
+        this.task.handlers = newVal.handler;
+        this.task.planDtStr = localDateToStr(this.task.planDt);
+        this.task.expiredTimeStr = localDateToStr(this.task.expiredTime);
         this.loadData();
       },
       deep: true,
@@ -222,4 +175,53 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.outer {
+  position: relative;
+}
+
+.task_icon {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
+.task_status {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+.task_next_status {
+  position: absolute;
+  right: 5px;
+  top: 50px;
+  border: 2px dashed #20a0ff;
+  border-radius: 2px;
+  background: white;
+}
+
+.task_abs {
+  text-align: left;
+  line-height: 50px;
+  border-bottom: 1px solid #c0c4cc;
+  height: 50px;
+  background: #e9ebec;
+}
+
+.task_content {
+  text-align: left;
+  border-bottom: 1px solid #c0c4cc;
+  min-height: 50px;
+  overflow-x: auto;
+}
+
+.task_handler {
+  text-align: left;
+  border-bottom: 1px solid #c0c4cc;
+  min-height: 20px;
+  margin-top: 5px;
+}
+</style>
 

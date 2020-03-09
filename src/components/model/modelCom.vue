@@ -16,7 +16,7 @@
       <!-- 生成按钮 -->
       <div v-show="taskModel.category != 'COMPOSE'">
         <div style="position: absolute;bottom: 2px;left: 2px;">
-          <i class="el-icon-circle-plus-outline small-btn" @click="crtDialogVisible = true"></i>
+          <i class="el-icon-circle-plus-outline small-btn" @click="newOnce"></i>
         </div>
         <div style="position: absolute;bottom: 2px;left: 22px;">
           <i
@@ -31,7 +31,7 @@
     <el-dialog title="临时创建新任务" :visible.sync="crtDialogVisible" width="30%">
       <div>
         <span>输入任务执行时间：</span>
-        <el-time-picker v-model="planDt"></el-time-picker>
+        <el-date-picker type="datetime" v-model="planDt"></el-date-picker>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="crtDialogVisible = false" size="small">取 消</el-button>
@@ -75,6 +75,10 @@ export default {
     };
   },
   methods: {
+    newOnce() {
+      this.planDt = new Date();
+      this.crtDialogVisible = true;
+    },
     modelDetail() {
       this.detailModel = { ...this.taskModel };
     },

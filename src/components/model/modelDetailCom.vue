@@ -39,13 +39,7 @@
           <div v-show="taskModel.category != 'COMPOSE'">
             <div class="dialogLine">
               <span class="dialogtitle" style="left:20px;">执行时间</span>
-            </div>
-            <div>
-              <el-input
-                type="textarea"
-                :autosize="{ minRows: 2, maxRows: 4}"
-                v-model="taskModel.planDates"
-              ></el-input>
+              <el-input size="mini" style="left:120px;width:200px;" v-model="taskModel.planDates"></el-input>
             </div>
             <div class="dialogLine" v-if="taskModel.cycle == 'PERDAY'">
               <span class="dialogtitle" style="font-size:10px;left:20px;">每日任务时间格式：</span>
@@ -72,6 +66,11 @@
                 style="font-size:10px;left:150px;"
               >单位秒,如"600"表示"下一次任务在10分钟后"</span>
             </div>
+          </div>
+          <!-- 过期时间 -->
+          <div class="dialogLine">
+            <span class="dialogtitle" style="left:20px;">过期时间(秒)</span>
+            <el-input v-model="taskModel.expired" size="mini" style="left:120px;width:200px;"></el-input>
           </div>
         </div>
         <div style="overflow:hidden;">

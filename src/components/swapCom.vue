@@ -34,8 +34,7 @@
 </style>
 
 <script>
-import { swapTask } from "@/api/api";
-import { TASKHANDLERS } from "@/api/data";
+import { swapTask, getUserList } from "@/api/api";
 
 export default {
   data() {
@@ -44,7 +43,8 @@ export default {
       dialogVisible: false,
       task: "",
       allVal: [],
-      selVal: []
+      selVal: [],
+      handlers: []
     };
   },
   props: ["ttask"],
@@ -55,10 +55,10 @@ export default {
           this.task = newVal;
           this.task.title = `${newVal.newStatus.desc} (${newVal.newStatus.id})`;
           this.dialogVisible = true;
-          this.allVal = TASKHANDLERS.map(item => {
+          this.allVal = this.handlers.map(item => {
             return {
-              key: item.value,
-              label: item.label
+              key: item.userId,
+              label: item.userName
             };
           });
           this.selVal = newVal.handler;
@@ -87,10 +87,25 @@ export default {
           me.dialogVisible = false;
         }
       });
+    },
+    loadUserList() {
+      let me = this;
+      getUserList({}).then(res => {
+        let { flag, data, errMsg } = res;
+        if (!flag) {
+          me.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.handlers = data;
+        }
+      });
     }
   },
   mounted() {
     this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
+    this.loadUserList();
   }
 };
 </script>

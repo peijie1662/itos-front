@@ -42,22 +42,11 @@ export const CYCLES = [
   {
     value: "CIRCULAR",
     label: "循环任务"
+  },
+  {
+    value: "NONE",
+    label: "无任务周期" 
   }
-]
-
-export const TASKHANDLERS = [
-  {
-    value: 'XZL',
-    label: '徐梓磊'
-  },
-  {
-    value: 'WMH',
-    label: '王鸣浩'
-  },
-  {
-    value: 'LSH',
-    label: '李绍红'
-  },
 ]
 
 //任务对象标记，此标记与类别无关，只与内容有关。
@@ -234,11 +223,6 @@ export const getTaskIconById = function (id) {
     }
   }
   return icon;
-}
-
-//根据ID寻找姓名
-export const getUserNameById = function (id) {
-  return valueToLabel(TASKHANDLERS, id);
 }
 
 export const valueToLabel = (data, value) => {

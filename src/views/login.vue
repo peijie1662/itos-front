@@ -207,7 +207,7 @@ div {
       animation-delay: 2s;
     }
   }
-
+  
   .animatetitle-02 {
     margin: 10px 0 0 0;
     font-family: Lato, sans-serif;
