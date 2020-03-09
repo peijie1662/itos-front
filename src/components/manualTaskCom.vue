@@ -158,7 +158,7 @@ export default {
         this.task.nextSta = this.task.sta.next.map(item => {
           return getTaskStatusById(item);
         });
-        this.task.handlers = newVal.handler;
+        this.task.handlers = newVal.handler.join(",");
         this.task.planDtStr = localDateToStr(this.task.planDt);
         this.task.expiredTimeStr = localDateToStr(this.task.expiredTime);
         this.loadData();
