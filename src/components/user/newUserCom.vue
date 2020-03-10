@@ -15,7 +15,7 @@
               style="margin-left:20px;width:200px;"
             >
               <el-option
-                v-for="item in [{value:'SD',label:'胜达'},{value:'ITD',label:'NBCT'}]"
+                v-for="item in [{value:'SD',label:'胜达'},{value:'NBCT',label:'NBCT'}]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"

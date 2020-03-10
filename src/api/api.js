@@ -1,10 +1,9 @@
 import axios from 'axios'
 
-let base = 'http://10.170.59.44:7856';
+let base = process.env.VUE_APP_BASEURL;
+export const WS_URL = process.env.VUE_APP_WS;
 
-export const WS_URL = "ws://10.170.59.44:7857/ws";
-
-export const STATIC_URL = `${base}/static/`
+export const STATIC_URL = `${base}/itosfile/`
 export const UPLOAD_TASK_URL = `${base}/task/uploadfile`
 export const UPLOAD_MODEL_URL = `${base}/model/uploadfile`
 export const UPLOAD_FACE_URL = `${base}/user/face`

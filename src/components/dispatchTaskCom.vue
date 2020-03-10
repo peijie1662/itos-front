@@ -4,8 +4,11 @@
       <!-- 图标 -->
       <div class="task_icon" :style="isExpired()?'color:black':'color:green'">
         <i :class="task.icon.icon" :style="task.icon.iconclass" style="font-size:40px;"></i>
-        <span style="margin-left:80px;">计划:{{task.planDtStr}}</span>
-        <span style="margin-left:20px;">过期:{{task.expiredTimeStr}}</span>
+      </div>
+      <!-- 标题内容 -->
+      <div class="task_title">
+        <span style="margin-right:20px;">计划:{{task.planDtStr}}</span>
+        <span>过期:{{task.expiredTimeStr}}</span>
       </div>
       <!-- 状态 -->
       <div
@@ -72,12 +75,8 @@
 
 <script>
 import { getTaskLog } from "@/api/api";
-import { localDateToStr,localDateToDate } from "@/api/util";
-import {
-  getTaskIconById,
-  getTaskStatusById,
-  listIsEmpty
-} from "@/api/data";
+import { localDateToStr, localDateToDate } from "@/api/util";
+import { getTaskIconById, getTaskStatusById, listIsEmpty } from "@/api/data";
 import processingCom from "@/components/commonStatusCom.vue";
 import doneCom from "@/components/commonStatusCom.vue";
 import cancelCom from "@/components/commonStatusCom.vue";
@@ -100,7 +99,7 @@ export default {
     };
   },
   methods: {
-    isExpired(){
+    isExpired() {
       let dt1 = localDateToDate(this.task.expiredTime);
       let dt2 = new Date();
       return dt1 < dt2;
@@ -185,6 +184,12 @@ export default {
   position: absolute;
   top: 2px;
   left: 2px;
+}
+
+.task_title {
+  position: absolute;
+  top: 20px;
+  right: 250px;
 }
 
 .task_status {

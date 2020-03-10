@@ -176,7 +176,7 @@ export default {
         alert("您的浏览器不支持socket");
       } else {
         // 实例化socket
-        this.socket = new WebSocket(this.path);
+        this.socket = new WebSocket(process.env.VUE_APP_WS);
         // 监听socket连接
         this.socket.onopen = this.open;
         // 监听socket错误信息

@@ -107,7 +107,7 @@ export default {
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          this.$$message({
+          this.$message({
             message: errMsg,
             type: "error"
           });
@@ -126,7 +126,7 @@ export default {
       getUserList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$$message({
+          this.$message({
             message: errMsg,
             type: "error"
           });
