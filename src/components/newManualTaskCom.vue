@@ -41,7 +41,7 @@
             :key="index"
             type="success"
             @close="handleClose(tag)"
-            style="margin-top:5px;"
+            style="margin-top:5px;white-space: pre-wrap;"
           >{{tag.name}}</el-alert>
         </div>
         <!-- 智能提示 -->
@@ -96,23 +96,6 @@
     </el-dialog>
   </div>
 </template>
-
-<style scoped>
-.tags {
-  height: 50px;
-  border: 1px solid #c0c4cc;
-  border-radius: 5px;
-  overflow: auto;
-  margin-bottom: 10px;
-}
-
-.content {
-  height: 200px;
-  border: 1px solid #c0c4cc;
-  border-radius: 5px;
-  overflow: auto;
-}
-</style>
 
 <script>
 import {
@@ -195,42 +178,50 @@ export default {
         }).then(res => {
           let { flag, data } = res;
           if (flag) {
+            //不要重复加入提示
+            let hasItem = me.tags.some(item => {
+              return item.name.indexOf(machineName) >= 0;
+            });
             let m = machineName.toUpperCase();
-            if (
-              m.startsWith("H") ||
-              m.startsWith("F-H") ||
-              m.startsWith("D") ||
-              m.startsWith("F-D") ||
-              m.startsWith("P") ||
-              m.startsWith("F-P")
-            ) {
-              me.tags.push({
-                name:
-                  data.machineName +
-                  " 用户:" +
-                  data.userName +
-                  ", 位置:" +
-                  data.location +
-                  ",型号:" +
-                  data.modelName +
-                  ", IP:" +
-                  data.ip,
-                type: "success"
-              });
-            } else {
-              me.tags.push({
-                name:
-                  data.machineName +
-                  ", 司机:" +
-                  data.driverName +
-                  ", 电话:" +
-                  data.driverPhone +
-                  ", IP:" +
-                  data.machineIp +
-                  ", 编号:" +
-                  data.machineNo,
-                type: "success"
-              });
+            if (!hasItem) {
+              if (
+                m.startsWith("H") ||
+                m.startsWith("F-H") ||
+                m.startsWith("D") ||
+                m.startsWith("F-D") ||
+                m.startsWith("P") ||
+                m.startsWith("F-P")
+              ) {
+                me.tags.push({
+                  name:
+                    "设备:" +
+                    data.machineName +
+                    "     用户:" +
+                    data.userName +
+                    "     位置:" +
+                    data.location +
+                    "\n型号:" +
+                    data.modelName +
+                    "     IP:" +
+                    data.ip,
+                  type: "success"
+                });
+              } else {
+                me.tags.push({
+                  name:
+                    "设备:" +
+                    data.machineName +
+                    "     司机:" +
+                    data.driverName +
+                    "     电话:" +
+                    data.driverPhone +
+                    "\nIP:" +
+                    data.machineIp +
+                    "     编号:" +
+                    data.machineNo,
+                  type: "success"
+                });
+              }
             }
           }
         });
@@ -239,6 +230,14 @@ export default {
     saveTask() {
       let me = this;
       me.task.content = me.$refs.content.innerHTML;
+      //在内容中加入提示
+      let tagHtml = "";
+      me.tags.forEach(item => {
+        tagHtml +=
+          "<div style ='width:70%;font-size:8px;color:gray;white-space: pre-wrap;border:1px dashed gray;margin:5px;'>" +
+          item.name +
+          "</div>";
+      });
       let icon = getTaskIconInContent(me.task.content);
       addManualTask({
         taskId: me.task.taskId,
@@ -247,7 +246,7 @@ export default {
         phone: me.task.phone,
         location: me.task.location,
         customer: me.task.customer,
-        content: me.task.content,
+        content: me.task.content + tagHtml,
         oper: me.userInfo.userId,
         handler: me.task.handler ? me.task.handler.join(",") : ""
       }).then(res => {
@@ -263,6 +262,7 @@ export default {
           me.task.taskId = generateUUID(); //这里ID要改变，否则再触发就重复了
           me.$emit("taskUpdateOk");
         }
+        me.tags = [];
       });
     },
     selTip(e) {
@@ -343,3 +343,20 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.tags {
+  height: 50px;
+  border: 1px solid #c0c4cc;
+  border-radius: 5px;
+  overflow: auto;
+  margin-bottom: 10px;
+}
+
+.content {
+  height: 200px;
+  border: 1px solid #c0c4cc;
+  border-radius: 5px;
+  overflow: auto;
+}
+</style>
