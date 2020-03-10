@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-let base = process.env.VUE_APP_BASEURL;
-export const WS_URL = process.env.VUE_APP_WS;
+let base = 'http://169.169.41.26:7856';
+export const WS_URL = 'ws://169.169.41.26:7857/ws';
 
 export const STATIC_URL = `${base}/itosfile/`
 export const UPLOAD_TASK_URL = `${base}/task/uploadfile`

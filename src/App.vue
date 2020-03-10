@@ -7,10 +7,18 @@
 </template>
 
 <script>
-console.info(process.env.VUE_APP_WS)
 export default {
   name: "app",
-  components: {}
+  mounted(){
+    this.timer =
+      setInterval(() => {
+        console.info("hahah");
+      },
+      5000);
+    this.$once("hook:beforeDestroy", () => {
+      clearInterval(this.timer);
+    });
+  }
 };
 </script>
 

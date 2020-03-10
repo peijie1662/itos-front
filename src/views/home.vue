@@ -176,7 +176,7 @@ export default {
         alert("您的浏览器不支持socket");
       } else {
         // 实例化socket
-        this.socket = new WebSocket(process.env.VUE_APP_WS);
+        this.socket = new WebSocket(WS_URL);
         // 监听socket连接
         this.socket.onopen = this.open;
         // 监听socket错误信息
@@ -218,7 +218,7 @@ export default {
       "user_face/" +
       this.userInfo.userId +
       ".jpg?" +
-      Math.random(100);    
+      Math.random(100);
     //3.WS连接
     this.init();
   },

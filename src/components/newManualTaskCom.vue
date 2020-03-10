@@ -36,14 +36,13 @@
         ></div>
         <!-- 智能提示标签 -->
         <div>
-          <el-tag
+          <el-alert
             v-for="(tag,index) in tags"
             :key="index"
-            closable
-            :type="tag.type"
+            type="success"
             @close="handleClose(tag)"
-            style="margin:5px;"
-          >{{tag.name}}</el-tag>
+            style="margin-top:5px;"
+          >{{tag.name}}</el-alert>
         </div>
         <!-- 智能提示 -->
         <div
@@ -194,20 +193,45 @@ export default {
         machineNameAssociate({
           machineName
         }).then(res => {
-          if (res) {
-            me.tags.push({
-              name:
-                res.machineName +
-                ", 司机:" +
-                res.driverName +
-                ", 电话:" +
-                res.driverPhone +
-                ", IP:" +
-                res.machineIp +
-                ", 编号:" +
-                res.machineNo,
-              type: "success"
-            });
+          let { flag, data } = res;
+          if (flag) {
+            let m = machineName.toUpperCase();
+            if (
+              m.startsWith("H") ||
+              m.startsWith("F-H") ||
+              m.startsWith("D") ||
+              m.startsWith("F-D") ||
+              m.startsWith("P") ||
+              m.startsWith("F-P")
+            ) {
+              me.tags.push({
+                name:
+                  data.machineName +
+                  " 用户:" +
+                  data.userName +
+                  ", 位置:" +
+                  data.location +
+                  ",型号:" +
+                  data.modelName +
+                  ", IP:" +
+                  data.ip,
+                type: "success"
+              });
+            } else {
+              me.tags.push({
+                name:
+                  data.machineName +
+                  ", 司机:" +
+                  data.driverName +
+                  ", 电话:" +
+                  data.driverPhone +
+                  ", IP:" +
+                  data.machineIp +
+                  ", 编号:" +
+                  data.machineNo,
+                type: "success"
+              });
+            }
           }
         });
       }
