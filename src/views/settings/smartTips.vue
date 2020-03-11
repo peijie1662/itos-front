@@ -2,7 +2,6 @@
   <div>
     <div class="header">
       <el-button type="primary" icon="el-icon-edit"  size="middle" @click="addSmarttips">添加智能提示</el-button>
-      
     </div>
 
     <div class="content">
