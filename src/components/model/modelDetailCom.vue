@@ -27,12 +27,12 @@
             :show-file-list="false"
             :on-success="handlerSuccess"
             style="margin-top:5px;margin-left:360px;"
-            :disabled="taskModel.category == 'CMD' || taskModel.category == 'PROCEDURE'"
+            :disabled="taskModel.category == 'CMD' || taskModel.category == 'PROCEDURE' || taskModel.category == 'CUSTOM'"
           >
             <el-button
               size="mini"
               type="primary"
-              :disabled="taskModel.category == 'CMD' || taskModel.category == 'PROCEDURE'"
+              :disabled="taskModel.category == 'CMD' || taskModel.category == 'PROCEDURE' || taskModel.category == 'CUSTOM'"
             >图文上传</el-button>
           </el-upload>
           <!-- 执行时间 -->

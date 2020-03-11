@@ -19,6 +19,11 @@ export const CATEGORYS = [
     color: "#E6A23C"
   },
   {
+    value: "CUSTOM",
+    label: "自定义任务",
+    color: "#b848ff"
+  },  
+  {
     value: "COMPOSE",
     label: "组合任务",
     color: "#F56C6C"
