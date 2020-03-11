@@ -7,16 +7,14 @@
 
     <div class="content">
       <el-table :data="list" border style="width: 100%">
-        <el-table-column label="序号" width="150">
-          <template slot-scope="scope">{{scope.$index+1}}</template>
-        </el-table-column>
+        <el-table-column prop="tipId" label="编号" width="150"></el-table-column>
         <el-table-column prop="preReg" label="正则表达式" width="200"></el-table-column>
         <el-table-column prop="nextWord" label="提示词" width="500"></el-table-column>
 
         <el-table-column label="操作" width="250">
-          <template>
-            <el-button type="success" icon="el-icon-edit" size="middle" @click="updateSmarttips()">修改</el-button>
-            <el-button  type="danger" icon="el-icon-delete" size="middle" @click="deleteSmarttips(userinfo)">删除</el-button>
+          <template slot-scope="scope">
+            <el-button type="success" icon="el-icon-edit" size="middle" @click="updateSmarttips(scope.$index, scope.row)">修改</el-button>
+            <el-button  type="danger" icon="el-icon-delete" size="middle" @click="deleteSmarttips(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -63,16 +61,16 @@ export default {
         type: "warning"
       })
         .then(() => {
-          let params = { oper: this.userinfo.userId };
+          let params = { tipId: this.userinfo.tipId };
          deleteSmarttips(params).then(res => {
-            let { flag, data, errMsg } = res;
+            let { flag,  errMsg } = res;
             if (!flag) {
               this.$message({
                 message: errMsg,
                 type: "error"
               });
             } else {
-              this.list = data;
+              getSmartTipsList()
             }
           });
         })
