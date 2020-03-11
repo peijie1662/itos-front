@@ -13,24 +13,27 @@
         <el-table-column prop="nextWord" label="提示词" width="500"></el-table-column>
 
         <el-table-column label="操作" width="250">
-          <template>
-            <el-button type="success" icon="el-icon-edit" size="middle" @click="updateSmarttips()">修改</el-button>
-            <el-button  type="danger" icon="el-icon-delete" size="middle" @click="deleteSmarttips(userinfo)">删除</el-button>
+          <template slot-scope="scope">
+            <el-button type="success" icon="el-icon-edit" size="middle" @click="updateSmarttips(scope.$index)">修改</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="middle" @click="deleteSmarttips(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <updateSmartTip :utip = "utip"></updateSmartTip>
   </div>
 </template>
 
 <script>
-import { getSmartTipsList , deleteSmarttips , updateSmarttips } from "@/api/api";
+import { getSmartTipsList , deleteSmarttips } from "@/api/api";
+import updateSmartTip from "@/components/smarttip/updateSmartTip";
 
 export default {
   data() {
     return {
       userinfo: "",
-      list: []
+      list: [],
+      utip: null
     };
   },
   methods: {
@@ -39,7 +42,7 @@ export default {
       getSmartTipsList(params).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$$message({
+          this.$message({
             message: errMsg,
             type: "error"
           });
@@ -52,26 +55,10 @@ export default {
       
      
     },
-    updateSmarttips(index, row) {
-      let params = { 
-        preReg: row.preReg,
-        nextWord: row.nextWord,
-        oper: row.oper,
-        tipId: row.tipId,
-      }
-      updateSmarttips(params).then(res =>{
-        let { flag,  errMsg } = res;
-            if (!flag) {
-              this.$message({
-                message: errMsg,
-                type: "error"
-              });
-            } else {
-              this.getSmartTipsList()
-            }
-      });
+    updateSmarttips(index){
+      this.utip = {...this.list[index]}
     },
-    deleteSmarttips(index, row) {
+    deleteSmarttips(row) {
         this.$confirm("是否删除此条记录?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -80,7 +67,7 @@ export default {
         .then(() => {
           let params = { tipId: row.tipId };
          deleteSmarttips(params).then(res => {
-            let { flag, data, errMsg } = res;
+            let { flag, errMsg } = res;
             if (!flag) {
               this.$message({
                 message: errMsg,
@@ -99,10 +86,9 @@ export default {
         });
     },
   },
-
-  
-
-  components: {},
+  components: {
+    updateSmartTip
+  },
   mounted() {
     this.getSmartTipsList();
     this.userinfo = JSON.parse(sessionStorage.getItem("userinfo"));
