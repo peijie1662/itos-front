@@ -6,9 +6,7 @@
 
     <div class="content">
       <el-table :data="list" border style="width: 100%">
-        <el-table-column label="序号" width="150">
-          <template slot-scope="scope">{{scope.$index+1}}</template>
-        </el-table-column>
+        <el-table-column prop="tipId" label="编号" width="150"></el-table-column>
         <el-table-column prop="preReg" label="正则表达式" width="200"></el-table-column>
         <el-table-column prop="nextWordStr" label="提示词" width="500"></el-table-column>
 
