@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { getSmartTipsList , deleteSmarttips} from "@/api/api";
+import { getSmartTipsList , deleteSmarttips , updateSmarttips } from "@/api/api";
 
 export default {
   data() {
@@ -51,17 +51,33 @@ export default {
       
      
     },
-    updateSmarttips() {
-
+    updateSmarttips(index, row) {
+      let params = { 
+        preReg: row.preReg,
+        nextWord: row.nextWord,
+        oper: row.oper,
+        tipId: row.tipId,
+      }
+      updateSmarttips(params).then(res =>{
+        let { flag,  errMsg } = res;
+            if (!flag) {
+              this.$message({
+                message: errMsg,
+                type: "error"
+              });
+            } else {
+              this.getSmartTipsList()
+            }
+      });
     },
-    deleteSmarttips() {
+    deleteSmarttips(index, row) {
         this.$confirm("是否删除此条记录?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          let params = { tipId: this.userinfo.tipId };
+          let params = { tipId: row.tipId };
          deleteSmarttips(params).then(res => {
             let { flag,  errMsg } = res;
             if (!flag) {
@@ -70,7 +86,7 @@ export default {
                 type: "error"
               });
             } else {
-              getSmartTipsList()
+              this.getSmartTipsList()
             }
           });
         })
