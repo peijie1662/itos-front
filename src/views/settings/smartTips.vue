@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header">
-      <el-button type="primary" icon="el-icon-edit"  size="middle" @click="addSmarttips">添加智能提示</el-button>
+      <el-button type="primary" icon="el-icon-edit" size="middle" @click="addSmarttips">添加智能提示</el-button>
     </div>
 
     <div class="content">
@@ -10,22 +10,32 @@
           <template slot-scope="scope">{{scope.$index+1}}</template>
         </el-table-column>
         <el-table-column prop="preReg" label="正则表达式" width="200"></el-table-column>
-        <el-table-column prop="nextWord" label="提示词" width="500"></el-table-column>
+        <el-table-column prop="nextWordStr" label="提示词" width="500"></el-table-column>
 
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
-            <el-button type="success" icon="el-icon-edit" size="middle" @click="updateSmarttips(scope.$index)">修改</el-button>
-            <el-button type="danger" icon="el-icon-delete" size="middle" @click="deleteSmarttips(scope.row)">删除</el-button>
+            <el-button
+              type="success"
+              icon="el-icon-edit"
+              size="middle"
+              @click="updateSmarttips(scope.$index)"
+            >修改</el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="middle"
+              @click="deleteSmarttips(scope.row)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <updateSmartTip :utip = "utip"></updateSmartTip>
+    <updateSmartTip :utip="utip"></updateSmartTip>
   </div>
 </template>
 
 <script>
-import { getSmartTipsList , deleteSmarttips } from "@/api/api";
+import { getSmartTipsList, deleteSmarttips } from "@/api/api";
 import updateSmartTip from "@/components/smarttip/updateSmartTip";
 
 export default {
@@ -48,25 +58,25 @@ export default {
           });
         } else {
           this.list = data;
+          this.list.forEach(item => {
+            item.nextWordStr = item.nextWord.join(",")
+          })
         }
       });
     },
-    addSmarttips() {
-      
-     
-    },
-    updateSmarttips(index){
-      this.utip = {...this.list[index]}
+    addSmarttips() {},
+    updateSmarttips(index) {
+      this.utip = { ...this.list[index] };
     },
     deleteSmarttips(row) {
-        this.$confirm("是否删除此条记录?", "提示", {
+      this.$confirm("是否删除此条记录?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
           let params = { tipId: row.tipId };
-         deleteSmarttips(params).then(res => {
+          deleteSmarttips(params).then(res => {
             let { flag, errMsg } = res;
             if (!flag) {
               this.$message({
@@ -74,7 +84,7 @@ export default {
                 type: "error"
               });
             } else {
-              this.getSmartTipsList()
+              this.getSmartTipsList();
             }
           });
         })
@@ -84,7 +94,7 @@ export default {
             message: "已取消删除"
           });
         });
-    },
+    }
   },
   components: {
     updateSmartTip
