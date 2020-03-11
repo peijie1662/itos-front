@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-let base = 'http://localhost:7856';
-export const WS_URL = 'ws://localhost:7857/ws';
+let base = 'http://10.170.59.44:7856';
+export const WS_URL = 'ws://10.170.59.44:7857/ws';
 
 export const STATIC_URL = `${base}/itosfile/`
 export const UPLOAD_TASK_URL = `${base}/task/uploadfile`
