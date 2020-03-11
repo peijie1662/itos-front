@@ -57,7 +57,7 @@ export default {
         } else {
           this.list = data;
           this.list.forEach(item => {
-            item.nextWordStr = item.nextWord.join(",")
+            item.nextWordStr = item.nextWord.join(" ")
           })
         }
       });
