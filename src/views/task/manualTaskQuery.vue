@@ -36,7 +36,16 @@
           </template>
         </el-table-column>
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column prop="abs" label="任务简介" width="100"></el-table-column>
+
+        <el-table-column label="任务简介" width="200">
+          <template slot-scope="scope">
+            <span style="white-space:nowrap;">{{scope.row.abs}}</span>
+          </template>
+        </el-table-column>
+
+
+
+
         <el-table-column prop="status" label="状态" width="120">
           <template slot-scope="scope">
             <i
@@ -52,7 +61,7 @@
             <span style="white-space:nowrap;">{{scope.row.content}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="handlerStr" label="执行人" width="120"></el-table-column>
+        <el-table-column prop="handlerStr" label="执行人" width="80"></el-table-column>
         <el-table-column prop="planDtStr" label="登记时间" width="200"></el-table-column>
       </el-table>
     </div>
