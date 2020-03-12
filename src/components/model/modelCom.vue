@@ -9,7 +9,7 @@
       </div>
       <!-- 简介 -->
       <div style="text-align: center;">
-        <span style="line-height:50px;font-size:18px;">{{taskModel.abs}}</span>
+        <span style="line-height:50px;font-size:12px;">{{taskModel.abs}}</span>
       </div>
       <!-- 底部三角 -->
       <div :style="bottomTriangleStyle"></div>

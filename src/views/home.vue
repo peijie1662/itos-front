@@ -188,7 +188,7 @@ export default {
       }
     },
     open() {
-      console.log("socket连接成功");
+      this.userInfo.scenes = ['SYSLOG','ONLINEUSER'];
       this.socket.send("USERLOGIN^" + JSON.stringify(this.userInfo));
     },
     error() {
@@ -196,11 +196,13 @@ export default {
     },
     getMessage(msg) {
       console.log(msg.data);
-
       this.sys_logs.push(msg.data);
+      
+      
+
     },
-    send() {
-      this.socket.send("hello world!");
+    send(msg) {
+      this.socket.send(msg);
     },
     close() {
       console.log("socket已经关闭");

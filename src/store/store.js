@@ -6,12 +6,20 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        clients: []
+        clients: [],//所有终端
+        users: []//在线用户
     },
     mutations: {
         update_clients(state, clients) {
             state.clients = clients;
+        },
+        update_users(state, users) {
+            state.users = users;
         }
+    },
+    getters:{
+        clients : (state) => state.clients,
+        users : (state) => state.users,
     },
     actions: {
         updateClients(context) {
