@@ -4,7 +4,6 @@
       <div style="position:relative;overflow:hidden;">
         <!-- 用户内容 -->
         <div class="content" style="float:left;">
-     
           <!-- 1.编号 -->
           <div>
             <span>编号</span>
@@ -29,7 +28,7 @@
           <div>
             <span>提示词</span>
             <el-input
-              v-model="cur.nextword"
+              v-model="curTips.nextword"
               placeholder="请输入"
               size="mini"
               style="margin-left:20px;margin-top:10px;width:200px;"
@@ -81,7 +80,7 @@ export default {
         }
       });
     },
-    
+  },
   props: ["utip"],
   watch: {
     user: {
