@@ -5,7 +5,7 @@
         type="primary" 
         icon="el-icon-edit" 
         size="middle" 
-        @click="addSmartTips"
+        @click="addSmartTips()"
       >添加智能提示</el-button>
     </div>
 
@@ -40,13 +40,15 @@
 <script>
 import { getSmartTipsList, deleteSmarttips } from "@/api/api";
 import updateSmartTip from "@/components/smarttip/updateSmartTip";
+import addSmarttips from "@/components/smarttip/addSmartTips";
 
 export default {
   data() {
     return {
       userinfo: "",
       list: [],
-      utip: null
+      utip: null,
+      newTip: null
     };
   },
   methods: {
@@ -67,8 +69,8 @@ export default {
         }
       });
     },
-    addSmartTips() {
-
+    addSmarttips() {
+      this.newTip = {};
     },
     updateSmarttips(index) {
       this.utip = { ...this.list[index] };

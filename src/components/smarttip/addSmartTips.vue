@@ -43,7 +43,7 @@
           style="float:right;margin-left:10px;"
           @click="dialogVisible=false"
         >取消</el-button>
-        <el-button type="success" size="mini" style="float:right;" @click="saveSmartTips">保存</el-button>
+        <el-button type="success" size="mini" style="float:right;" @click="saveSmarttips">保存</el-button>
       </div>
     </el-dialog>
   </div>
@@ -51,7 +51,7 @@
 
 <script>
 
-import { addSmartTips } from "@/api/api";
+import { addSmarttips } from "@/api/api";
 
 export default {
   data() {
@@ -62,10 +62,9 @@ export default {
     };
   },
   methods: {
-    saveSmartTips() {
+    saveSmarttips() {
       let me = this;
-      me.curUser.authority = me.$refs.tree.getCheckedKeys().join(",");
-      addSmartTips({
+      addSmarttips({
         ...me.curTips
       }).then(res => {
         let { flag, errMsg } = res;
