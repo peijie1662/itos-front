@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import routes from "@/routes";
+
 import { addSmartTips } from "@/api/api";
 
 export default {
@@ -67,7 +67,7 @@ export default {
       let me = this;
       me.curUser.authority = me.$refs.tree.getCheckedKeys().join(",");
       addSmartTips({
-        ...me.curUser
+        ...me.curTips
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
@@ -81,34 +81,13 @@ export default {
         }
       });
     },
-    getAuthority() {
-      this.authority = routes
-        .filter(item => {
-          return !item.hidden;
-        })
-        .map(item => {
-          let r = {};
-          r.id = item.funId;
-          r.label = item.name;
-          if (item.children) {
-            r.children = item.children.map(child => {
-              return {
-                id: child.meta.funId,
-                label: child.name
-              };
-            });
-          }
-          return r;
-        });
-    }
-  },
-  props: ["user"],
+    
+  props: ["utip"],
   watch: {
     user: {
       handler(newVal) {
         if (newVal != null) {
-          this.curUser = newVal;
-          this.getAuthority();
+          this.curTips = newVal;
           this.dialogVisible = true;
         }
       },
