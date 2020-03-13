@@ -5,7 +5,7 @@
         type="primary" 
         icon="el-icon-edit" 
         size="middle" 
-        @click="addSmartTips()"
+        @click="addSmarttips"
       >添加智能提示</el-button>
     </div>
 
