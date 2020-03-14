@@ -103,7 +103,7 @@
             <div v-for="(item,index) in online_users" :key="index">{{item}}</div>
           </el-tab-pane>
           <el-tab-pane label="系统日志" name="sys_log">
-            <div v-for="(item,index) in sys_logs" :key="index">{{item}}</div>
+            <div v-for="(item,index) in sysLog" :key="index">{{item}}</div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -115,8 +115,8 @@
 <script>
 import { STATIC_URL, WS_URL } from "@/api/api";
 import UserSetupCom from "@/components/user/userSetupCom.vue";
-import socket from "@/api/socket";
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters,mapMutations } from "vuex";
+import { userOnline, enterScene, leaveScene } from "@/api/store_socket";
 
 export default {
   data() {
@@ -126,12 +126,11 @@ export default {
       isCollapse: false,
       path: WS_URL,
       online_users: [],
-      sys_logs: [],
       face_url: ""
     };
   },
   methods: {
-    ...mapMutations(["update_userInfo"]),
+    ...mapMutations(['update_sysLog']),
     chgFaceSuccess() {
       this.face_url =
         STATIC_URL +
@@ -173,34 +172,35 @@ export default {
       this.setupUser = { ...this.userInfo };
     },
     handlerSysLog(content) {
-      console.info("SYSLOG:" + content);
+      console.info("SYSLOG数据:" + content);
+      this.update_sysLog(content);
     },
     handlerOnlineUser(content) {
-      console.info("ONLINEUSER:" + content);
+      console.info("ONLINEUSER数据:" + content);
     }
   },
   computed: {
-    ...mapGetters(["userInfo"])
+    ...mapGetters(["userInfo","sysLog"])
   },
   mounted() {
-    //2.用户头像
+    //用户头像
     this.face_url =
       STATIC_URL +
       "user_face/" +
       this.userInfo.userId +
       ".jpg?" +
       Math.random(100);
-    //3.socket登录信息
-    socket.setReceiveHandler([
+    //同步用户登录信息到后台
+    userOnline();
+    //进入场景
+    enterScene([
       { scene: "SYSLOG", sceneFun: this.handlerSysLog },
       { scene: "ONLINEUSER", sceneFun: this.onlineUser }
     ]);
-    this.userInfo.scene = ["SYSLOG", "ONLINEUSER"];
-    socket.send("USERLOGIN^" + JSON.stringify(this.userInfo));
-    this.update_userInfo(this.userInfo)
   },
   destroyed() {
-    socket.close();
+    //退出场景
+    leaveScene(["SYSLOG", "ONLINEUSER"]);
   },
   components: {
     UserSetupCom
@@ -231,6 +231,8 @@ $color-primary: #20a0ff; //#18c79c
   border-radius: 5px;
   background: rgba($color: white, $alpha: 0.8);
   padding: 5px;
+  font-size: 8px;
+  overflow: auto;
 }
 
 .headertag {

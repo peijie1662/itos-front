@@ -20,28 +20,41 @@ export default {
             socket.onclose = this.close;
         }
     },
-    innerSetReceiveHandler(handlers) {//重置数据接收处理函数
+    inner_addRcvHandler(handlers) {//重置数据接收处理函数
         if (handlers) {
             handlers.forEach(item => {
                 recieveHandler[item.scene] = item.sceneFun
             });
         }
     },
-    setReceiveHandler(handlers) {//重置数据接收处理函数
+    inner_delRcvHandler(scene) {//重置数据接收处理函数
+        if (scene) {
+            scene.forEach(item => {
+                delete recieveHandler[item]
+            });
+        }
+    },
+    setReceiveHandler(handlers) {//重置数据接收处理函数(数组)
         recieveHandler = [];
         if (socket.readyState == WebSocket.OPEN) {
-            this.innerSetReceiveHandler(handlers)
+            this.inner_addRcvHandler(handlers)
         } else if (socket.readyState == WebSocket.CONNECTING) {
             setTimeout(() => {
-                this.innerSetReceiveHandler(handlers)
+                this.inner_addRcvHandler(handlers)
             }, 1000)
         }
     },
-    addReceiveHandler(handler) {//添加数据接收处理函数
-        recieveHandler[handler.scene] = handler.sceneFun
+    addReceiveHandler(handlers) {//添加数据接收处理函数(数组)
+        if (socket.readyState == WebSocket.OPEN) {
+            this.inner_addRcvHandler(handlers)
+        } else if (socket.readyState == WebSocket.CONNECTING) {
+            setTimeout(() => {
+                this.inner_addRcvHandler(handlers)
+            }, 1000)
+        }
     },
-    delReceiveHandler(scene) {//删除数据接收处理函数
-        delete recieveHandler[scene]
+    delReceiveHandler(scene) {//删除数据接收处理函数(数组)
+        this.inner_delRcvHandler(scene)
     },
     open() {
         console.log("socket已经连接");
@@ -50,7 +63,7 @@ export default {
         console.log("连接错误");
     },
     getMessage(msg) {
-        console.log(msg.data);
+        console.log("入口数据：" + msg.data);
         let { header, content } = JSON.parse(msg.data);
         let rcvFun = recieveHandler[header]
         if (rcvFun) {

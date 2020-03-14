@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import socket from "@/api/socket";
+
 export default {
   name: "app",
   created() {
@@ -19,8 +21,8 @@ export default {
           JSON.parse(sessionStorage.getItem("store"))
         )
       );
-      let route = sessionStorage.getItem("curRoute")
-      if (route && route != '/login') {
+      let route = sessionStorage.getItem("curRoute");
+      if (route && route != "/login") {
         this.$router.push(route);
       }
     }
@@ -29,8 +31,9 @@ export default {
       sessionStorage.setItem("store", JSON.stringify(this.$store.state));
       sessionStorage.setItem("curRoute", this.$router.currentRoute.path);
     });
+    //初始化WebSocket
+    socket.init()
   },
-  destroyed() {},
   mounted() {
     this.timer = setInterval(() => {
       //console.info("hahah");
@@ -38,6 +41,10 @@ export default {
     this.$once("hook:beforeDestroy", () => {
       clearInterval(this.timer);
     });
+  },
+  destroyed() {
+    //关闭WebSocket
+    socket.close();
   }
 };
 </script>

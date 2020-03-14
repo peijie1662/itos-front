@@ -123,6 +123,7 @@ import miniCom from "@/components/miniModelAndTaskCom.vue";
 import { localDateToStr } from "@/api/util";
 import { getTaskStatusById, countStepTime } from "@/api/data";
 import { mapGetters } from "vuex";
+import { enterScene, leaveScene } from "@/api/store_socket";
 
 export default {
   data() {
@@ -346,13 +347,23 @@ export default {
           me.composeModels = data;
         }
       });
+    },
+    //处理控制中心场景数据
+    handlerControlCenter(content) {
+      console.info("CONTROLCENTER数据：" + content);
+      this.selectOneTask();
     }
-
-    //TODO 切换场景，并处理数据 
-    //this.selectOneTask();
   },
   mounted() {
     this.loadComposeModels();
+    //进入场景
+    enterScene([
+      { scene: "CONTROLCENTER", sceneFun: this.handlerControlCenter }
+    ]);
+  },
+  destroyed() {
+    //退出场景
+    leaveScene(["CONTROLCENTER"]);
   },
   components: {
     miniCom
