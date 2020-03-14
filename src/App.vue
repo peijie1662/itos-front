@@ -9,12 +9,32 @@
 <script>
 export default {
   name: "app",
-  mounted(){
-    this.timer =
-      setInterval(() => {
-        console.info("hahah");
-      },
-      5000);
+  created() {
+    //在页面加载时读取sessionStorage里的状态信息
+    if (sessionStorage.getItem("store")) {
+      this.$store.replaceState(
+        Object.assign(
+          {},
+          this.$store.state,
+          JSON.parse(sessionStorage.getItem("store"))
+        )
+      );
+      let route = sessionStorage.getItem("curRoute")
+      if (route && route != '/login') {
+        this.$router.push(route);
+      }
+    }
+    //在页面刷新时将vuex里的信息保存到sessionStorage里
+    window.addEventListener("beforeunload", () => {
+      sessionStorage.setItem("store", JSON.stringify(this.$store.state));
+      sessionStorage.setItem("curRoute", this.$router.currentRoute.path);
+    });
+  },
+  destroyed() {},
+  mounted() {
+    this.timer = setInterval(() => {
+      //console.info("hahah");
+    }, 5000);
     this.$once("hook:beforeDestroy", () => {
       clearInterval(this.timer);
     });

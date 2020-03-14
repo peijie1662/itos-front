@@ -35,6 +35,7 @@
 <script>
 import { dutyList, addDuty, delDuty, getUserList } from "@/api/api";
 import { valueToLabel } from "@/api/data";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -42,9 +43,11 @@ export default {
       activeName: "duty",
       dutys: "",
       users: [],
-      userInfo: "",
-      today: "2020-02-13"
+      today: "2020-02-13"   //TODO
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   methods: {
     setDuty(date) {
@@ -130,11 +133,9 @@ export default {
       }
     }
   },
-  computed: {},
   mounted: async function() {
     await this.getUserList();
     await this.getDutyList();
-    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
   }
 };
 </script>

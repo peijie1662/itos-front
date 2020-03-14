@@ -35,14 +35,17 @@
 <script>
 import { getSmartTipsList, deleteSmarttips } from "@/api/api";
 import updateSmartTip from "@/components/smarttip/updateSmartTip";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      userinfo: "",
       list: [],
       utip: null
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   methods: {
     getSmartTipsList() {
@@ -57,8 +60,8 @@ export default {
         } else {
           this.list = data;
           this.list.forEach(item => {
-            item.nextWordStr = item.nextWord.join(" ")
-          })
+            item.nextWordStr = item.nextWord.join(" ");
+          });
         }
       });
     },
@@ -99,7 +102,6 @@ export default {
   },
   mounted() {
     this.getSmartTipsList();
-    this.userinfo = JSON.parse(sessionStorage.getItem("userinfo"));
   }
 };
 </script>

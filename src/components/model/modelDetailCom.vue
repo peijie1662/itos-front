@@ -101,15 +101,18 @@
 import { updateModel, deleteModel, UPLOAD_MODEL_URL } from "@/api/api";
 import { insertContent } from "@/api/util";
 import { modelUploadDom } from "@/api/data";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
       uploadUrl: UPLOAD_MODEL_URL,
-      userInfo: "",
       dialogVisible: false,
       taskModel: ""
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   props: ["tmodel"],
   watch: {
@@ -176,9 +179,6 @@ export default {
         }
       });
     }
-  },
-  mounted() {
-    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
   }
 };
 </script>

@@ -127,17 +127,20 @@
 import { UPLOAD_MODEL_URL, addModel } from "@/api/api";
 import { CATEGORYS, CYCLES, modelUploadDom } from "@/api/data";
 import { insertContent, generateUUID } from "@/api/util";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
       uploadUrl: UPLOAD_MODEL_URL,
-      userInfo: "",
       categorys: CATEGORYS,
       cycles: CYCLES,
       dialogVisible: false,
       taskModel: ""
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   props: ["tmodel"],
   watch: {
@@ -183,9 +186,6 @@ export default {
         }
       });
     }
-  },
-  mounted() {
-    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
   }
 };
 </script>

@@ -107,7 +107,6 @@ import { updateContent } from "@/api/api";
 export default {
   data() {
     return {
-      userInfo: "",
       dialogVisible: false,
       curUser: ""
     };

@@ -56,7 +56,8 @@
 
 <script>
 import QRCode from "qrcode";
-import { login } from "@/api/api";
+import { APP_URL,login } from "@/api/api";
+import {mapMutations} from 'vuex'
 
 export default {
   data() {
@@ -76,9 +77,10 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(['update_userInfo']),
     useqrcode() {
       var canvas = document.getElementById("canvas");
-      QRCode.toCanvas(canvas, "http://10.170.59.44:8080/", function(error) {
+      QRCode.toCanvas(canvas, APP_URL, function(error) {
         if (error) {
           console.info(error);
         } else {
@@ -105,7 +107,7 @@ export default {
               });
             } else {
               let user = data[0];
-              sessionStorage.setItem("userinfo", JSON.stringify(user));
+              this.update_userInfo(user);          
               if (user.firstPage) {
                 this.$router.push({ path: user.firstPage });
               } else {

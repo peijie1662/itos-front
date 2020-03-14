@@ -115,22 +115,23 @@
 <script>
 import { STATIC_URL, WS_URL } from "@/api/api";
 import UserSetupCom from "@/components/user/userSetupCom.vue";
+import socket from "@/api/socket";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   data() {
     return {
-      userInfo: {},
       setupUser: null,
       showIM: false,
       isCollapse: false,
       path: WS_URL,
-      socket: "",
       online_users: [],
       sys_logs: [],
       face_url: ""
     };
   },
   methods: {
+    ...mapMutations(["update_userInfo"]),
     chgFaceSuccess() {
       this.face_url =
         STATIC_URL +
@@ -171,49 +172,17 @@ export default {
     showSetup() {
       this.setupUser = { ...this.userInfo };
     },
-    init() {
-      if (typeof WebSocket === "undefined") {
-        alert("您的浏览器不支持socket");
-      } else {
-        // 实例化socket
-        this.socket = new WebSocket(WS_URL);
-        // 监听socket连接
-        this.socket.onopen = this.open;
-        // 监听socket错误信息
-        this.socket.onerror = this.error;
-        // 监听socket消息
-        this.socket.onmessage = this.getMessage;
-        //关闭
-        this.socket.onclose = this.close;
-      }
+    handlerSysLog(content) {
+      console.info("SYSLOG:" + content);
     },
-    open() {
-      this.userInfo.scenes = ['SYSLOG','ONLINEUSER'];
-      this.socket.send("USERLOGIN^" + JSON.stringify(this.userInfo));
-    },
-    error() {
-      console.log("连接错误");
-    },
-    getMessage(msg) {
-      console.log(msg.data);
-      this.sys_logs.push(msg.data);
-      
-      
-
-    },
-    send(msg) {
-      this.socket.send(msg);
-    },
-    close() {
-      console.log("socket已经关闭");
+    handlerOnlineUser(content) {
+      console.info("ONLINEUSER:" + content);
     }
   },
+  computed: {
+    ...mapGetters(["userInfo"])
+  },
   mounted() {
-    //1.用户信息
-    var userInfo = sessionStorage.getItem("userinfo");
-    if (userInfo) {
-      this.userInfo = JSON.parse(userInfo);
-    }
     //2.用户头像
     this.face_url =
       STATIC_URL +
@@ -221,11 +190,17 @@ export default {
       this.userInfo.userId +
       ".jpg?" +
       Math.random(100);
-    //3.WS连接
-    this.init();
+    //3.socket登录信息
+    socket.setReceiveHandler([
+      { scene: "SYSLOG", sceneFun: this.handlerSysLog },
+      { scene: "ONLINEUSER", sceneFun: this.onlineUser }
+    ]);
+    this.userInfo.scene = ["SYSLOG", "ONLINEUSER"];
+    socket.send("USERLOGIN^" + JSON.stringify(this.userInfo));
+    this.update_userInfo(this.userInfo)
   },
   destroyed() {
-    this.socket.close();
+    socket.close();
   },
   components: {
     UserSetupCom

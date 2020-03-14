@@ -6,20 +6,25 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        clients: [],//所有终端
-        users: []//在线用户
+        userInfo: "",//用户信息
+        clientList: [],//所有终端
+        userList: []//在线用户列表
     },
     mutations: {
-        update_clients(state, clients) {
-            state.clients = clients;
+        update_clientList(state, clientList) {
+            state.clientList = clientList;
         },
-        update_users(state, users) {
-            state.users = users;
+        update_userList(state, userList) {
+            state.userList = userList;
+        },
+        update_userInfo(state, userInfo) {
+            state.userInfo = userInfo
         }
     },
-    getters:{
-        clients : (state) => state.clients,
-        users : (state) => state.users,
+    getters: {
+        userInfo: (state) => {
+            return state.userInfo
+        }
     },
     actions: {
         updateClients(context) {
@@ -31,7 +36,7 @@ const store = new Vuex.Store({
                         type: "error"
                     });
                 } else {
-                    context.commit('update_clients', data)
+                    context.commit('update_clientList', data)
                 }
             });
         }

@@ -40,14 +40,17 @@
 
 <script>
 import { modifyTask } from "@/api/api";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      userInfo: "",
       dialogVisible: false,
       task: ""
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   props: ["ttask"],
   watch: {
@@ -89,9 +92,6 @@ export default {
         }
       });
     }
-  },
-  mounted() {
-    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
   }
 };
 </script>
