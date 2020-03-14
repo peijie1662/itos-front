@@ -34,7 +34,8 @@
               style="margin-left:20px;margin-top:10px;width:200px;"
             ></el-input>
           </div>
-         
+        </div>
+      </div>
       <!-- 按钮 -->
       <div style="overflow:hidden;margin-top:10px;">
         <el-button
@@ -50,7 +51,6 @@
 </template>
 
 <script>
-
 import { addSmarttips } from "@/api/api";
 
 export default {
@@ -78,9 +78,9 @@ export default {
           me.$emit("updateSmartTipsSuccess");
         }
       });
-    },
+    }
   },
-  props: ["utip"],
+  props: ["ntip"],
   watch: {
     user: {
       handler(newVal) {
