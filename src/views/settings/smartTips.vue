@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="header">
-      <el-button type="primary" icon="el-icon-edit" size="middle" @click="addSmarttips">添加智能提示</el-button>
+      <el-button 
+        type="primary" 
+        icon="el-icon-edit" 
+        size="middle" 
+        @click="addSmarttips"
+      >添加智能提示</el-button>
     </div>
 
     <div class="content">
@@ -29,19 +34,22 @@
       </el-table>
     </div>
     <updateSmartTip :utip="utip"></updateSmartTip>
+    <addSmartTips :ntip="ntip"></addSmartTips>
   </div>
 </template>
 
 <script>
 import { getSmartTipsList, deleteSmarttips } from "@/api/api";
 import updateSmartTip from "@/components/smarttip/updateSmartTip";
+import addSmartTips from "@/components/smarttip/addSmartTips";
 import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
       list: [],
-      utip: null
+      utip: null,
+      ntip: null
     };
   },
   computed: {
@@ -65,7 +73,9 @@ export default {
         }
       });
     },
-    addSmarttips() {},
+    addSmarttips() {
+      this.ntip = {};
+    },
     updateSmarttips(index) {
       this.utip = { ...this.list[index] };
     },
@@ -98,7 +108,8 @@ export default {
     }
   },
   components: {
-    updateSmartTip
+    updateSmartTip,
+    addSmartTips
   },
   mounted() {
     this.getSmartTipsList();
