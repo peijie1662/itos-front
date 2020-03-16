@@ -40,7 +40,7 @@
 <script>
 import { getSmartTipsList, deleteSmarttips } from "@/api/api";
 import updateSmartTip from "@/components/smarttip/updateSmartTip";
-import addSmarttips from "@/components/smarttip/addSmartTips";
+
 
 export default {
   data() {
@@ -48,7 +48,7 @@ export default {
       userinfo: "",
       list: [],
       utip: null,
-      newTip: null
+     
     };
   },
   methods: {
@@ -70,7 +70,7 @@ export default {
       });
     },
     addSmarttips() {
-      this.newTip = {};
+      
     },
     updateSmarttips(index) {
       this.utip = { ...this.list[index] };
