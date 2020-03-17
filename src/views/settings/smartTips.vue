@@ -2,16 +2,18 @@
   <div>
     <div class="header">
       <el-button 
+        style="margin-left:20px;margin-top:15px;"
         type="primary" 
         icon="el-icon-edit" 
-        size="middle" 
+        size="mini" 
         @click="addSmarttips"
       >添加智能提示</el-button>
     </div>
 
     <div class="content">
       <el-table :data="list" border style="width: 100%">
-        <el-table-column prop="tipId" label="编号" width="150"></el-table-column>
+        <el-table-column label="序号" width="50" type="index"> 
+        </el-table-column>
         <el-table-column prop="preReg" label="正则表达式" width="200"></el-table-column>
         <el-table-column prop="nextWordStr" label="提示词" width="500"></el-table-column>
 
@@ -20,13 +22,13 @@
             <el-button
               type="success"
               icon="el-icon-edit"
-              size="middle"
+              size="mini"
               @click="updateSmarttips(scope.$index)"
             >修改</el-button>
             <el-button
               type="danger"
               icon="el-icon-delete"
-              size="middle"
+              size="mini"
               @click="deleteSmarttips(scope.row)"
             >删除</el-button>
           </template>
