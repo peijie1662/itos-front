@@ -96,9 +96,9 @@ export default {
       });
     }
   },
-  props: ["utip"],
+  props: ["ntip"],
   watch: {
-    utip: {
+    ntip: {
       handler(newVal) {
         if (newVal != null) {
           this.tip = newVal;
