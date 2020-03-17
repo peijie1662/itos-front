@@ -41,7 +41,7 @@
 <script>
 import { getSmartTipsList, deleteSmarttips } from "@/api/api";
 import updateSmartTip from "@/components/smarttip/updateSmartTip";
-
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -106,8 +106,7 @@ export default {
     }
   },
   components: {
-    updateSmartTip,
-    addSmartTips
+    updateSmartTip
   },
   mounted() {
     this.getSmartTipsList();
