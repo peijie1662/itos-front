@@ -115,7 +115,7 @@
 <script>
 import { STATIC_URL, WS_URL } from "@/api/api";
 import UserSetupCom from "@/components/user/userSetupCom.vue";
-import { mapGetters,mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import { userOnline, enterScene, leaveScene } from "@/api/store_socket";
 
 export default {
@@ -130,7 +130,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['update_sysLog']),
+    ...mapMutations(["update_sysLog"]),
     chgFaceSuccess() {
       this.face_url =
         STATIC_URL +
@@ -180,7 +180,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["userInfo","sysLog"])
+    ...mapGetters(["userInfo", "sysLog"])
   },
   mounted() {
     //用户头像

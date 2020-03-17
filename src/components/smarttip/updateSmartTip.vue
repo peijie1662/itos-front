@@ -78,6 +78,7 @@ export default {
       me.$refs.form.validate(valid => {
         if (valid) {
           let params = { ...me.tip };
+          params.nextWord = params.nextWord || [];
           params.nextWord = params.nextWord.join(",");
           updateSmarttips(params).then(res => {
             let { flag, errMsg } = res;
