@@ -22,7 +22,7 @@ export const CATEGORYS = [
     value: "CUSTOM",
     label: "自定义任务",
     color: "#b848ff"
-  },  
+  },
   {
     value: "COMPOSE",
     label: "组合任务",
@@ -34,23 +34,58 @@ export const CATEGORYS = [
 export const CYCLES = [
   {
     value: "PERDAY",
-    label: "每日任务"
+    label: "每日任务",
+    comment: "'HHMM',如'1530'表示'15:30'"
   },
   {
     value: "PERWEEK",
-    label: "每周任务"
+    label: "每周任务",
+    comment: "'D,HHMM',如'1,1530'表示'周一15:30'"
   },
   {
     value: "PERMONTH",
-    label: "每月任务"
+    label: "每月任务",
+    comment: "'W,D,HHMM',如'2,3,1530'表示'第二周周一15:30'"
   },
   {
     value: "CIRCULAR",
-    label: "循环任务"
+    label: "循环任务",
+    comment: "单位秒,如'600'表示'下一次任务在10分钟后'"
   },
   {
     value: "NONE",
-    label: "无任务周期" 
+    label: "无任务周期",
+    comment: ""
+  }
+]
+
+export const EXPIREDCALLBACKS = [
+  {
+    value: "DONE",
+    label: "超时转为完成"
+  },
+  {
+    value: "CANCEL",
+    label: "超时转为取消"
+  },
+  {
+    value: "NONE",
+    label: "超时不作任何处理"
+  }
+]
+
+export const EXPIREDNOTIFIES = [
+  {
+    value: "SMS",
+    label: "短信"
+  },
+  {
+    value: "ITOSMES",
+    label: "ITOS消息"
+  },
+  {
+    value: "BIGHORN",
+    label: "大喇叭"
   }
 ]
 
@@ -235,6 +270,16 @@ export const valueToLabel = (data, value) => {
   data.forEach(item => {
     if (item.value == value) {
       result = item.label;
+    }
+  });
+  return result;
+}
+
+export const valueToComment = (data, value) => {
+  let result = "";
+  data.forEach(item => {
+    if (item.value == value) {
+      result = item.comment;
     }
   });
   return result;

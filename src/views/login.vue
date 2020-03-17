@@ -2,7 +2,10 @@
   <div style="position:relative;">
     <!-- 左边简介 -->
     <div class="animatediv">
-      <p class="animatetitle" style="margin-top:100px;margin-left:100px;">IT Operation And Maintenance System</p>
+      <p
+        class="animatetitle"
+        style="margin-top:100px;margin-left:100px;"
+      >IT Operation And Maintenance System</p>
       <p class="animatetitle-01" style="margin-top:50px;margin-left:100px;">NBCT资讯科技部运维系统</p>
       <p
         class="animatetitle-02"
@@ -56,8 +59,8 @@
 
 <script>
 import QRCode from "qrcode";
-import { APP_URL,login } from "@/api/api";
-import {mapMutations} from 'vuex'
+import { APP_URL, login } from "@/api/api";
+import { mapMutations } from "vuex";
 
 export default {
   data() {
@@ -77,7 +80,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['update_userInfo']),
+    ...mapMutations(["update_userInfo"]),
     useqrcode() {
       var canvas = document.getElementById("canvas");
       QRCode.toCanvas(canvas, APP_URL, function(error) {
@@ -107,7 +110,7 @@ export default {
               });
             } else {
               let user = data[0];
-              this.update_userInfo(user);          
+              this.update_userInfo(user);
               if (user.firstPage) {
                 this.$router.push({ path: user.firstPage });
               } else {
@@ -209,7 +212,7 @@ div {
       animation-delay: 2s;
     }
   }
-  
+
   .animatetitle-02 {
     margin: 10px 0 0 0;
     font-family: Lato, sans-serif;
