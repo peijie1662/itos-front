@@ -47,11 +47,11 @@
 import { saveOnceTask, chgModelStatus } from "@/api/api";
 import { getCategoryColor } from "@/api/data";
 import modelDetailCom from "@/components/model/modelDetailCom.vue";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      userInfo: "",
       crtDialogVisible: false,
       planDt: new Date(),
       detailModel: null,
@@ -73,6 +73,9 @@ export default {
         right: "0px"
       }
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   methods: {
     newOnce() {
@@ -165,9 +168,6 @@ export default {
       deep: true,
       immediate: true
     }
-  },
-  mounted() {
-    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
   },
   components: {
     modelDetailCom

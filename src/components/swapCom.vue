@@ -35,17 +35,20 @@
 
 <script>
 import { swapTask, getUserList } from "@/api/api";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      userInfo: "",
       dialogVisible: false,
       task: "",
       allVal: [],
       selVal: [],
       handlers: []
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   props: ["ttask"],
   watch: {
@@ -104,7 +107,6 @@ export default {
     }
   },
   mounted() {
-    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
     this.loadUserList();
   }
 };

@@ -34,6 +34,7 @@
       </el-table>
     </div>
     <updateSmartTip :utip="utip"></updateSmartTip>
+    <addSmartTips :ntip="ntip"></addSmartTips>
   </div>
 </template>
 
@@ -41,15 +42,16 @@
 import { getSmartTipsList, deleteSmarttips } from "@/api/api";
 import updateSmartTip from "@/components/smarttip/updateSmartTip";
 
-
 export default {
   data() {
     return {
-      userinfo: "",
       list: [],
       utip: null,
      
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   methods: {
     getSmartTipsList() {
@@ -64,8 +66,8 @@ export default {
         } else {
           this.list = data;
           this.list.forEach(item => {
-            item.nextWordStr = item.nextWord.join(" ")
-          })
+            item.nextWordStr = item.nextWord.join(" ");
+          });
         }
       });
     },
@@ -104,11 +106,11 @@ export default {
     }
   },
   components: {
-    updateSmartTip
+    updateSmartTip,
+    addSmartTips
   },
   mounted() {
     this.getSmartTipsList();
-    this.userinfo = JSON.parse(sessionStorage.getItem("userinfo"));
   }
 };
 </script>

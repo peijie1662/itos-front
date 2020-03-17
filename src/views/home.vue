@@ -103,7 +103,7 @@
             <div v-for="(item,index) in online_users" :key="index">{{item}}</div>
           </el-tab-pane>
           <el-tab-pane label="系统日志" name="sys_log">
-            <div v-for="(item,index) in sys_logs" :key="index">{{item}}</div>
+            <div v-for="(item,index) in sysLog" :key="index">{{item}}</div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -115,22 +115,22 @@
 <script>
 import { STATIC_URL, WS_URL } from "@/api/api";
 import UserSetupCom from "@/components/user/userSetupCom.vue";
+import { mapGetters,mapMutations } from "vuex";
+import { userOnline, enterScene, leaveScene } from "@/api/store_socket";
 
 export default {
   data() {
     return {
-      userInfo: {},
       setupUser: null,
       showIM: false,
       isCollapse: false,
       path: WS_URL,
-      socket: "",
       online_users: [],
-      sys_logs: [],
       face_url: ""
     };
   },
   methods: {
+    ...mapMutations(['update_sysLog']),
     chgFaceSuccess() {
       this.face_url =
         STATIC_URL +
@@ -171,61 +171,36 @@ export default {
     showSetup() {
       this.setupUser = { ...this.userInfo };
     },
-    init() {
-      if (typeof WebSocket === "undefined") {
-        alert("您的浏览器不支持socket");
-      } else {
-        // 实例化socket
-        this.socket = new WebSocket(WS_URL);
-        // 监听socket连接
-        this.socket.onopen = this.open;
-        // 监听socket错误信息
-        this.socket.onerror = this.error;
-        // 监听socket消息
-        this.socket.onmessage = this.getMessage;
-        //关闭
-        this.socket.onclose = this.close;
-      }
+    handlerSysLog(content) {
+      console.info("SYSLOG数据:" + content);
+      this.update_sysLog(content);
     },
-    open() {
-      this.userInfo.scenes = ['SYSLOG','ONLINEUSER'];
-      this.socket.send("USERLOGIN^" + JSON.stringify(this.userInfo));
-    },
-    error() {
-      console.log("连接错误");
-    },
-    getMessage(msg) {
-      console.log(msg.data);
-      this.sys_logs.push(msg.data);
-      
-      
-
-    },
-    send(msg) {
-      this.socket.send(msg);
-    },
-    close() {
-      console.log("socket已经关闭");
+    handlerOnlineUser(content) {
+      console.info("ONLINEUSER数据:" + content);
     }
   },
+  computed: {
+    ...mapGetters(["userInfo","sysLog"])
+  },
   mounted() {
-    //1.用户信息
-    var userInfo = sessionStorage.getItem("userinfo");
-    if (userInfo) {
-      this.userInfo = JSON.parse(userInfo);
-    }
-    //2.用户头像
+    //用户头像
     this.face_url =
       STATIC_URL +
       "user_face/" +
       this.userInfo.userId +
       ".jpg?" +
       Math.random(100);
-    //3.WS连接
-    this.init();
+    //同步用户登录信息到后台
+    userOnline();
+    //进入场景
+    enterScene([
+      { scene: "SYSLOG", sceneFun: this.handlerSysLog },
+      { scene: "ONLINEUSER", sceneFun: this.onlineUser }
+    ]);
   },
   destroyed() {
-    this.socket.close();
+    //退出场景
+    leaveScene(["SYSLOG", "ONLINEUSER"]);
   },
   components: {
     UserSetupCom
@@ -256,6 +231,8 @@ $color-primary: #20a0ff; //#18c79c
   border-radius: 5px;
   background: rgba($color: white, $alpha: 0.8);
   padding: 5px;
+  font-size: 8px;
+  overflow: auto;
 }
 
 .headertag {

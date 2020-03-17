@@ -5,7 +5,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import routes from './routes'
 import './assets/iconfont/iconfont.css'
-import store from '@/store/store'
+import store from '@/api/store'
 
 Vue.use(VueRouter)
 Vue.use(ElementUI)
@@ -19,12 +19,12 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   //登录动作删除原用户
   if (to.path == '/login') {
-    sessionStorage.removeItem('userinfo');
+    store.commit('update_userInfo',null)
     next()
   } else {
     //如果无登录信息则转向登录页面，否则继续加载组件.
-    let userInfo = JSON.parse(sessionStorage.getItem('userinfo'));
-    if (!userInfo && to.path != '/login') {
+    let userInfo = store.state.userInfo;
+    if (!userInfo && to.path != '/login' && router.currentRoute.path != "/login") {
       next({ path: '/login' })
     } else {
       //按照用户权限设置菜单 

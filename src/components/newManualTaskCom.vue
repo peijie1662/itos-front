@@ -107,12 +107,12 @@ import {
 } from "@/api/api";
 import { getTaskIconInContent, taskUploadDom } from "@/api/data";
 import { insertContent, generateUUID } from "@/api/util";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
       uploadUrl: UPLOAD_TASK_URL,
-      userInfo: "",
       dialogVisible: false,
       task: "",
       handlers: [],
@@ -123,6 +123,9 @@ export default {
       cur_index: 0,
       tags: []
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   props: ["ttask"],
   watch: {
@@ -338,7 +341,6 @@ export default {
     }
   },
   mounted() {
-    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
     this.loadUserList();
   }
 };

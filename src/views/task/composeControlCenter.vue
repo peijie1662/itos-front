@@ -122,11 +122,12 @@ import {
 import miniCom from "@/components/miniModelAndTaskCom.vue";
 import { localDateToStr } from "@/api/util";
 import { getTaskStatusById, countStepTime } from "@/api/data";
+import { mapGetters } from "vuex";
+import { enterScene, leaveScene } from "@/api/store_socket";
 
 export default {
   data() {
     return {
-      userInfo: "",
       composeModels: [], //组合模版
       selComposeModel: "", //选中组合模版
       composeTasks: [], //组合任务
@@ -155,6 +156,9 @@ export default {
       path: WS_URL,
       socket: ""
     };
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   },
   methods: {
     selectOneModel: async function() {
@@ -344,44 +348,22 @@ export default {
         }
       });
     },
-    initWebsocket() {
-      if (typeof WebSocket === "undefined") {
-        alert("您的浏览器不支持socket");
-      } else {
-        // 实例化socket
-        this.socket = new WebSocket(this.path);
-        // 监听socket连接
-        this.socket.onopen = this.open;
-        // 监听socket错误信息
-        this.socket.onerror = this.error;
-        // 监听socket消息
-        this.socket.onmessage = this.getMessage;
-        //关闭
-        this.socket.onclose = this.close;
-      }
-    },
-    open() {
-      console.log("socket连接成功");
-      this.socket.send("USERLOGIN^" + JSON.stringify(this.userInfo));
-    },
-    error() {
-      console.log("连接错误");
-    },
-    getMessage(msg) {
-      console.log(msg.data);
+    //处理控制中心场景数据
+    handlerControlCenter(content) {
+      console.info("CONTROLCENTER数据：" + content);
       this.selectOneTask();
-    },
-    send() {
-      this.socket.send("hello world!");
-    },
-    close() {
-      console.log("socket已经关闭");
     }
   },
   mounted() {
     this.loadComposeModels();
-    this.userInfo = JSON.parse(sessionStorage.getItem("userinfo"));
-    this.initWebsocket();
+    //进入场景
+    enterScene([
+      { scene: "CONTROLCENTER", sceneFun: this.handlerControlCenter }
+    ]);
+  },
+  destroyed() {
+    //退出场景
+    leaveScene(["CONTROLCENTER"]);
   },
   components: {
     miniCom
@@ -423,7 +405,7 @@ export default {
 }
 
 .blocksubtag {
-  background: #E4E7ED;
+  background: #e4e7ed;
   color: #409eff;
   display: block;
   width: 250px;
