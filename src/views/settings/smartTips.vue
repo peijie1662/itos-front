@@ -41,13 +41,14 @@
 <script>
 import { getSmartTipsList, deleteSmarttips } from "@/api/api";
 import updateSmartTip from "@/components/smarttip/updateSmartTip";
+import addSmartTips from "@/components/smarttip/addSmartTips";
 import { mapGetters } from "vuex";
 export default {
   data() {
     return {
       list: [],
       utip: null,
-     
+      ntip: null
     };
   },
   computed: {
@@ -55,8 +56,7 @@ export default {
   },
   methods: {
     getSmartTipsList() {
-      let params = { oper: this.userinfo.userId };
-      getSmartTipsList(params).then(res => {
+      getSmartTipsList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
           this.$message({
@@ -72,7 +72,7 @@ export default {
       });
     },
     addSmarttips() {
-      this.utip = { ...this.list };
+      this.ntip = {};
     },
     updateSmarttips(index) {
       this.utip = { ...this.list[index] };
@@ -106,7 +106,8 @@ export default {
     }
   },
   components: {
-    updateSmartTip
+    updateSmartTip,
+    addSmartTips
   },
   mounted() {
     this.getSmartTipsList();

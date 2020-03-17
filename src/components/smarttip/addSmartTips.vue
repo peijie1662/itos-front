@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="修改智能提示" width="500px" :visible.sync="dialogVisible">
+    <el-dialog title="添加智能提示" width="500px" :visible.sync="dialogVisible">
       <el-form ref="form" :model="tip" label-width="100px">
         <!-- 正则表达式 -->
         <el-form-item
@@ -42,9 +42,8 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
-import { updateSmarttips } from "@/api/api";
+import { addSmarttips } from "@/api/api";
 
 export default {
   data() {
@@ -79,7 +78,7 @@ export default {
         if (valid) {
           let params = { ...me.tip };
           params.nextWord = params.nextWord.join(",");
-          updateSmarttips(params).then(res => {
+          addSmarttips(params).then(res => {
             let { flag, errMsg } = res;
             if (!flag) {
               this.$message({
