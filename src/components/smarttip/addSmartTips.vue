@@ -102,6 +102,7 @@ export default {
       handler(newVal) {
         if (newVal != null) {
           this.tip = newVal;
+          this.tip.nextWord = [];
           this.dialogVisible = true;
         }
       },

@@ -33,8 +33,8 @@
         </el-table-column>
       </el-table>
     </div>
-    <updateSmartTip :utip="utip"></updateSmartTip>
-    <addSmartTips :ntip="ntip"></addSmartTips>
+    <updateSmartTip :utip="utip" @tipUpdateSucess="getSmartTipsList"></updateSmartTip>
+    <addSmartTips :ntip="ntip" @tipUpdateSucess="getSmartTipsList"></addSmartTips>
   </div>
 </template>
 
