@@ -72,7 +72,7 @@ export default {
       });
     },
     addSmarttips() {
-      
+      this.utip = { ...this.list };
     },
     updateSmarttips(index) {
       this.utip = { ...this.list[index] };
