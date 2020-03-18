@@ -127,7 +127,7 @@ import {
 } from "@/api/data";
 import { mapGetters } from "vuex";
 
-export default {
+export default { 
   data() {
     return {
       uploadUrl: UPLOAD_MODEL_URL,

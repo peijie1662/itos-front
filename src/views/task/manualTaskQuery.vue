@@ -36,16 +36,11 @@
           </template>
         </el-table-column>
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-
         <el-table-column label="任务简介" width="200">
           <template slot-scope="scope">
             <span style="white-space:nowrap;">{{scope.row.abs}}</span>
           </template>
         </el-table-column>
-
-
-
-
         <el-table-column prop="status" label="状态" width="120">
           <template slot-scope="scope">
             <i
