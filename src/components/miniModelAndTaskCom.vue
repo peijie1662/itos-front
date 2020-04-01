@@ -55,12 +55,12 @@
       <!-- 内容第2行 执行者 -->
       <div class="block">
         <span class="block-tag">Terminal:</span>
-        <span :style="task.sta.hoverclass" class="block-txt" style="width:60px;">RDS-01</span>
+        <span :style="task.sta.hoverclass" class="block-txt" style="width:60px;">{{task.terminal}}</span>
       </div>
       <!-- 内容第3行 执行IP -->
       <div class="block">
         <span class="block-tag">IP:</span>
-        <span :style="task.sta.hoverclass" class="block-txt" style="width:100px;">169.169.41.226</span>
+        <span :style="task.sta.hoverclass" class="block-txt" style="width:100px;">{{task.ip}}</span>
       </div>
       <!-- 内容第4行 开始时间-->
       <div class="block">

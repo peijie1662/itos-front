@@ -19,6 +19,11 @@ export const CATEGORYS = [
     color: "#E6A23C"
   },
   {
+    value: "APPSERVER",
+    label: "调用其它服务执行任务",
+    color: "#E6A23C"
+  },  
+  {
     value: "CUSTOM",
     label: "自定义任务",
     color: "#b848ff"

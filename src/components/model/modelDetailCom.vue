@@ -1,6 +1,11 @@
 <template>
   <div>
-    <el-dialog title="任务模版" width="500px" :visible.sync="dialogVisible">
+    <el-dialog
+      title="任务模版"
+      width="500px"
+      :close-on-click-modal="false"
+      :visible.sync="dialogVisible"
+    >
       <div>
         <!-- 详情内容 -->
         <div class="subcontent">
@@ -127,7 +132,7 @@ import {
 } from "@/api/data";
 import { mapGetters } from "vuex";
 
-export default { 
+export default {
   data() {
     return {
       uploadUrl: UPLOAD_MODEL_URL,
@@ -145,7 +150,8 @@ export default {
       return this.taskModel.category
         ? this.taskModel.category == "CMD" ||
             this.taskModel.category == "PROCEDURE" ||
-            this.taskModel.category == "CUSTOM"
+            this.taskModel.category == "CUSTOM" ||
+            this.taskModel.category == "APPSERVER"
         : true;
     },
     //显示底部时间周期框
@@ -196,6 +202,9 @@ export default {
         me.taskModel.category == "COMMON" || me.taskModel.category == "COMPOSE"
           ? me.$refs.content.innerHTML
           : me.$refs.content.textContent;
+      me.taskModel.expired = me.taskModel.expired
+        ? parseInt(me.taskModel.expired)
+        : 24 * 60 * 60;
       updateModel({
         ...me.taskModel
       }).then(res => {

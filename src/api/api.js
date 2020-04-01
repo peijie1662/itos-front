@@ -1,5 +1,9 @@
 import axios from 'axios'
 
+//let base = 'http://169.169.41.26:7856';
+//export const WS_URL = 'ws://169.169.41.26:7857/ws';
+//export const APP_URL = "http://169.169.41.26:8081/";
+
 let base = 'http://10.170.59.44:7856';
 export const WS_URL = 'ws://10.170.59.44:7857/ws';
 export const APP_URL = "http://10.170.59.44:8081/";

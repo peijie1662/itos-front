@@ -4,7 +4,7 @@
       <div style="margin-top:10px;">
         <span>组合模版</span>
         <el-select
-          v-model="selComposeModel"
+          v-model="selComposeModelId"
           @change="selectOneModel"
           size="mini"
           style="width:200px;margin-left:10px;"
@@ -14,7 +14,7 @@
             v-for="item in composeModels"
             :key="item.modelId"
             :label="item.abs"
-            :value="item"
+            :value="item.modelId"
           >
             <span style="float: left">{{ item.abs }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.category }}</span>
@@ -29,7 +29,7 @@
         <el-divider direction="vertical"></el-divider>
         <span>组合任务</span>
         <el-select
-          v-model="selComposeTask"
+          v-model="selComposeTaskId"
           @change="selectOneTask"
           size="mini"
           style="width:250px;margin-left:10px;"
@@ -39,7 +39,7 @@
             v-for="item in composeTasks"
             :key="item.taskId"
             :label="item.abs"
-            :value="item"
+            :value="item.taskId"
             style="height:120px;"
           >
             <div
@@ -70,7 +70,7 @@
         <el-button
           type="primary"
           size="mini"
-          @click="startComposeTask"
+          @click="composeTaskReport"
           style="margin-left:10px;"
         >任务报告</el-button>
       </div>
@@ -129,9 +129,9 @@ export default {
   data() {
     return {
       composeModels: [], //组合模版
-      selComposeModel: "", //选中组合模版
+      selComposeModelId: "", //选中组合模版
       composeTasks: [], //组合任务
-      selComposeTask: "", //选中组合任务
+      selComposeTaskId: "", //选中组合任务
       //
       notComposeModels: [], //组合模版的备选子模版
       subTasks: [], //子任务
@@ -158,9 +158,24 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["userInfo"])
+    ...mapGetters(["userInfo"]),
+    selComposeModel() {
+      let me = this;
+      return me.composeModels.filter(item => {
+        return item.modelId == me.selComposeModelId;
+      })[0]||"";
+    },
+    selComposeTask(){
+      let me = this;
+      return me.composeTasks.filter(item => {
+        return item.taskId == me.selComposeTaskId;
+      })[0]||"";      
+    }
   },
   methods: {
+    composeTaskReport(){
+      //TODO 报表
+    },
     selectOneModel: async function() {
       await this.loadComposeTasks();
     },

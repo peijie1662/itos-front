@@ -1,6 +1,11 @@
 <template>
   <div>
-    <el-dialog title="任务模版" width="550px" :visible.sync="dialogVisible">
+    <el-dialog
+      title="任务模版"
+      width="550px"
+      :close-on-click-modal="false"
+      :visible.sync="dialogVisible"
+    >
       <div>
         <!-- 详情内容 -->
         <div class="subcontent">
@@ -172,7 +177,8 @@ export default {
       return this.taskModel.category
         ? this.taskModel.category == "CMD" ||
             this.taskModel.category == "PROCEDURE" ||
-            this.taskModel.category == "CUSTOM"
+            this.taskModel.category == "CUSTOM" ||
+            this.taskModel.category == "APPSERVER"
         : true;
     },
     //显示底部时间周期框
@@ -225,6 +231,9 @@ export default {
         me.taskModel.category == "COMMON" || me.taskModel.category == "COMPOSE"
           ? me.$refs.content.innerHTML
           : me.$refs.content.textContent;
+      me.taskModel.expired = me.taskModel.expired
+        ? parseInt(me.taskModel.expired)
+        : 24 * 60 * 60;
       addModel({ ...me.taskModel }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
