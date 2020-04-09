@@ -10,7 +10,7 @@
             :options="paths"
             :props="{ expandTrigger: 'hover' }"
             size="mini"
-            style="margin-top:30px;margin-left:70px;"
+            style="margin-top:30px;margin-left:50px;"
           ></el-cascader>
           <el-button
             size="mini"

@@ -4,15 +4,19 @@
       <div style="margin-top:10px;">
         <span>选择组合任务模版</span>
         <el-select
-          v-model="selComposeModel"
+          v-model="selComposeModelId"
           @change="selectOneModel"
           size="mini"
           style="width:200px;margin-left:10px;"
           placeholder="请选择"
         >
-          <el-option v-for="item in models" :key="item.modelId" :label="item.abs" :value="item">
-            <span style="float: left">{{ item.abs }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.category }}</span>
+          <el-option
+            v-for="item in models"
+            :key="item.modelId"
+            :label="item.abs"
+            :value="item.modelId"
+          >
+            <span>{{ item.abs }}</span>
           </el-option>
         </el-select>
         <el-button
@@ -25,7 +29,23 @@
     </div>
     <div class="content">
       <!-- 候选模版 -->
-      <span class="blocktag">候选模版</span>
+      <div>
+        <span class="blocktag">候选模版</span>
+        <el-select
+          v-model="filterGp"
+          @change="selectOneModel"
+          size="mini"
+          style="width:400px;margin-left:10px;"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="gp in gps"
+            :key="gp.groupId"
+            :label="gp.groupName +' - '+ gp.groupDesc"
+            :value="gp.groupId"
+          ></el-option>
+        </el-select>
+      </div>
       <draggable tag="ul" v-model="candidateModels" group="{name:'mygroup'}" class="ul">
         <li v-for="item in candidateModels" :key="item.modelId" class="li">
           <sampleModelCom :mmodel="item"></sampleModelCom>
@@ -62,7 +82,8 @@ import {
   getComposeModelList,
   getNotComposeModelList,
   getComposeModelDetail,
-  saveComposeModelDetail
+  saveComposeModelDetail,
+  getGroupList
 } from "@/api/api";
 import sampleModelCom from "@/components/model/sampleModelCom.vue";
 
@@ -70,27 +91,40 @@ export default {
   data() {
     return {
       models: [],
-      selComposeModel: "", //选中组合模版
+      selComposeModelId: "", //选中组合模版
       details: [], //模版详细信息
       oriModels: [], //原始
       candidateModels: [], //候选模版
       step01: [], //第1层次模版
       step02: [], //第2层次模版
-      step03: [] //第3层次模版
+      step03: [], //第3层次模版
+      //
+      gps: [], //分组
+      filterGp: [] //选中组
     };
   },
   methods: {
     selectOneModel: async function() {
       let me = this;
+      //0.读模版分组信息
+      await me.loadGroupList();
       //1.读非组合模版
       await me.loadNoComposeTasks();
       //2.读组合模版详细信息
       await me.loadComposeDetail();
       //3.生成候选模版
       me.candidateModels = me.oriModels.filter(c => {
-        return !me.details.some(d => {
+        let notInCompose = !me.details.some(d => {
           return d.modelId == c.modelId;
         });
+        if (notInCompose) {
+          return (
+            me.filterGp.indexOf(c.groupId) >= 0 ||
+            (me.filterGp.indexOf("XXX") >= 0 && !c.groupId)
+          );
+        } else {
+          return false;
+        }
       });
       //4.生成各层模版
       me.step01 = me.oriModels.filter(c => {
@@ -106,6 +140,29 @@ export default {
       me.step03 = me.oriModels.filter(c => {
         return me.details.some(d => {
           return d.modelId == c.modelId && d.composeLevel == 3;
+        });
+      });
+    },
+    loadGroupList() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getGroupList({}).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            this.$message({
+              message: errMsg,
+              type: "error"
+            });
+            reject();
+          } else {
+            me.gps = data;
+            me.gps.push({
+              groupId: "XXX",
+              groupName: "NOGROUP",
+              groupDesc: "不分组模版"
+            });
+            resolve();
+          }
         });
       });
     },
@@ -127,7 +184,7 @@ export default {
       return new Promise((resolve, reject) => {
         let me = this;
         getComposeModelDetail({
-          composeId: me.selComposeModel.modelId
+          composeId: me.selComposeModelId
         }).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
@@ -177,7 +234,7 @@ export default {
       if (l1 > 0) {
         me.step01.forEach(item => {
           params.push({
-            composeId: me.selComposeModel.modelId,
+            composeId: me.selComposeModelId,
             composeLevel: 1,
             modelId: item.modelId
           });
@@ -186,7 +243,7 @@ export default {
       if (l2 > 0) {
         me.step02.forEach(item => {
           params.push({
-            composeId: me.selComposeModel.modelId,
+            composeId: me.selComposeModelId,
             composeLevel: 2,
             modelId: item.modelId
           });
@@ -195,14 +252,14 @@ export default {
       if (l3 > 0) {
         me.step03.forEach(item => {
           params.push({
-            composeId: me.selComposeModel.modelId,
+            composeId: me.selComposeModelId,
             composeLevel: 3,
             modelId: item.modelId
           });
         });
       }
       saveComposeModelDetail({
-        composeId: me.selComposeModel.modelId,
+        composeId: me.selComposeModelId,
         details: params
       }).then(res => {
         let { flag, errMsg } = res;
@@ -234,7 +291,7 @@ export default {
 .blocktag {
   background: #909399;
   color: white;
-  display: block;
+  display: inline-block;
   width: 100px;
   height: 20px;
   text-align: center;

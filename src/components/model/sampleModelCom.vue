@@ -2,7 +2,7 @@
   <div>
     <div style="position:relative;text-align:center;width:120px;height:100px;">
       <div :style="topTriangleStyle()"></div>
-      <span>{{mmodel.abs}}</span>
+      <span class="title">{{mmodel.abs}}</span>
       <div :style="bottomTriangleStyle()"></div>
     </div>
   </div>
@@ -51,3 +51,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+
+.title{
+  font-size: 8px;
+}
+
+</style>

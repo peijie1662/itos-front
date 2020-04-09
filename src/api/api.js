@@ -4,8 +4,11 @@ import axios from 'axios'
 //export const WS_URL = 'ws://169.169.41.26:7857/ws';
 //export const APP_URL = "http://169.169.41.26:8081/";
 
+//后台URL
 let base = 'http://10.170.59.44:7856';
+//Websocket的URL
 export const WS_URL = 'ws://10.170.59.44:7857/ws';
+//移动App的URL
 export const APP_URL = "http://10.170.59.44:8081/";
 
 export const STATIC_URL = `${base}/itosfile/`
@@ -44,6 +47,14 @@ export const chgModelStatus = params => { return axios.post(`${base}/model/statu
 export const getComposeModelList = params => { return axios.post(`${base}/model/composelist`, params).then(res => res.data); };
 //非组合任务模版
 export const getNotComposeModelList = params => { return axios.post(`${base}/model/notcomposelist`, params).then(res => res.data); };
+//添加分组
+export const addModelGroup = params => { return axios.post(`${base}/model/addgroup`, params).then(res => res.data); };
+//分组列表
+export const getGroupList = params => { return axios.post(`${base}/model/grouplist`, params).then(res => res.data); };
+//删除分组
+export const delModelGroup = params => { return axios.post(`${base}/model/delgroup`, params).then(res => res.data); };
+//更新分组
+export const updateModelGroup = params => { return axios.post(`${base}/model/updategroup`, params).then(res => res.data); };
 
 //------------------------------------------组合任务
 //组合任务模版详细信息

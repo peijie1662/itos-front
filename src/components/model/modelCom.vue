@@ -13,17 +13,22 @@
       </div>
       <!-- 底部三角 -->
       <div :style="bottomTriangleStyle"></div>
-      <!-- 生成按钮 -->
-      <div v-show="taskModel.category != 'COMPOSE'">
-        <div style="position: absolute;bottom: 2px;left: 2px;">
+
+      <div style="position: absolute;bottom: 2px;left: 2px;">
+        <!-- 生成按钮 -->
+        <div v-if="taskModel.category != 'COMPOSE'" style="float:left;">
           <i class="el-icon-circle-plus-outline small-btn" @click="newOnce"></i>
         </div>
-        <div style="position: absolute;bottom: 2px;left: 22px;">
+        <!-- 有效按钮 -->
+        <div v-if="taskModel.category != 'COMPOSE'" style="float:left;">
           <i
-            :class="[taskModel.invalid?'el-icon-document-delete':'el-icon-document-checked']"
-            class="small-btn"
+            :class="[taskModel.invalid?'el-icon-document-delete':'el-icon-document-checked','small-btn']"
             @click="chgInvalidStatus"
           ></i>
+        </div>
+        <!-- 分组按钮 -->
+        <div style="float:left;">
+          <i class="el-icon-paperclip small-btn"></i>
         </div>
       </div>
     </div>
@@ -39,7 +44,9 @@
       </span>
     </el-dialog>
     <!-- 模版详情 -->
-    <modelDetailCom :tmodel="detailModel" @modelUpdateOk="modelUpdateOk"></modelDetailCom>
+    <model-detail-com :tmodel="detailModel" @modelUpdateOk="modelUpdateOk"></model-detail-com>
+    <!-- 分组窗口 -->
+    
   </div>
 </template>
 
