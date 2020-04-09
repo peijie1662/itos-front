@@ -11,15 +11,10 @@
         >
           <el-input v-model="client.description" size="mini"></el-input>
         </el-form-item>
-        <el-form-item
-          label="任务KEY"
-          prop="modelKey"
-          :rules="[
-      { required: true, message: '请选择任务KEY', trigger: 'blur' }]"
-        >
+        <el-form-item label="任务KEY">
           <el-cascader
             v-model="client.modelKey"
-            :options="gpList"
+            :options="gps"
             :props="{multiple: true,emitPath:false}"
             clearable
             style="width:100%;"
@@ -46,13 +41,12 @@
 </template>
 
 <script>
-import { updateClient, serverReloadClient, getGroupList } from "@/api/api";
+import { updateClient, serverReloadClient } from "@/api/api";
 
 export default {
   data() {
     return {
       client: "",
-      gpList: [],
       dialogVisible: false
     };
   },
@@ -61,7 +55,7 @@ export default {
       let me = this;
       me.$refs.form.validate(valid => {
         if (valid) {
-          me.client.modelKey = me.client.modelKey.join(",");
+          me.client.modelKeyStr = me.client.modelKey.join(",");
           updateClient(me.client).then(res => {
             let { flag, errMsg } = res;
             if (!flag) {
@@ -70,70 +64,26 @@ export default {
                 type: "error"
               });
             } else {
-              me.dialogVisible = false;
               serverReloadClient({}).then(res => {
                 let { flag } = res;
                 if (flag) {
                   me.$emit("updateClientSuccess");
                 }
+                me.dialogVisible = false;
               });
             }
           });
-        } else {
-          return false;
         }
       });
     },
-    loadGroupList() {
-      return new Promise((resolve, reject) => {
-        let me = this;
-        getGroupList({}).then(res => {
-          let { flag, data, errMsg } = res;
-          if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
-            reject();
-          } else {
-            me.gpList = data;
-            me.gpList.forEach(gp => {
-              gp.value = gp.groupId;
-              gp.label = gp.groupDesc;
-              gp.children = [];
-            });
-            resolve();
-          }
-        });
-      });
-    }
   },
-  props: ["uclient", "mmodel"],
+  props: ["uclient", "gps"],
   watch: {
     uclient: {
       handler(newVal) {
         if (newVal != null) {
           this.client = newVal;
           this.dialogVisible = true;
-        }
-      },
-      deep: true,
-      immediate: true
-    },
-    mmodel: {
-      handler: async function(newVal) {
-        let me = this;
-        if (newVal != null) {
-          //1.载入组
-          await me.loadGroupList();
-          //2.组合
-          me.gpList.forEach(gp => {
-            newVal.forEach(m => {
-              if (m.groupId == gp.groupId) {
-                gp.children.push({ value: m.modelId, label: m.abs });
-              }
-            });
-          });
         }
       },
       deep: true,

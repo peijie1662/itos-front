@@ -50,7 +50,7 @@
       <!-- 登记终端 -->
       <newClientCom :nclient="newClient" :mmodel="models" @updateClientSuccess="loadData"></newClientCom>
       <!-- 修改终端 -->
-      <updateClientCom :uclient="updateClient" :mmodel="models" @updateClientSuccess="loadData"></updateClientCom>
+      <updateClientCom :uclient="updateClient" :gps="gpList" @updateClientSuccess="loadData"></updateClientCom>
     </div>
   </div>
 </template>
@@ -60,7 +60,8 @@ import {
   getClientList,
   getNotComposeModelList,
   deleteClient,
-  serverReloadClient
+  serverReloadClient,
+  getGroupList
 } from "@/api/api";
 import { localDateToStr } from "@/api/util";
 import sampleModelCom from "@/components/model/sampleModelCom";
@@ -73,7 +74,8 @@ export default {
       newClient: null,
       updateClient: null,
       models: [],
-      clients: []
+      clients: [],
+      gpList: []
     };
   },
   methods: {
@@ -106,6 +108,7 @@ export default {
       let me = this;
       await me.loadNotComposeModelList();
       await me.loadClientList();
+      await me.loadGroupList();
       me.clients = me.clients.map(item => {
         item.models = [];
         item.modelKey.forEach(key => {
@@ -116,6 +119,44 @@ export default {
         });
         item.activeTimeStr = localDateToStr(item.activeTime);
         return item;
+      });
+    },
+    loadGroupList() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getGroupList({}).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            this.$message({
+              message: errMsg,
+              type: "error"
+            });
+            reject();
+          } else {
+            me.gpList = data;
+            me.gpList.push({
+              groupId: "XXX",
+              groupName: "NOGROUP",
+              groupDesc: "不分组模版"
+            });
+            me.gpList.forEach(gp => {
+              gp.value = gp.groupId;
+              gp.label = gp.groupDesc;
+              gp.children = [];
+            });
+            me.gpList.forEach(gp => {
+              me.models.forEach(m => {
+                if (
+                  m.groupId == gp.groupId ||
+                  (!m.groupId && gp.groupId == "XXX")
+                ) {
+                  gp.children.push({ value: m.modelId, label: m.abs });
+                }
+              });
+            });
+            resolve();
+          }
+        });
       });
     },
     loadNotComposeModelList() {
