@@ -71,6 +71,7 @@
 
 <script>
 import draggable from "vuedraggable";
+import { localDateToDate } from "@/api/util";
 import {
   getModelList,
   getGroupList,
@@ -188,6 +189,9 @@ export default {
             reject();
           } else {
             me.modelList = data;
+            me.modelList.forEach(m => {
+              m.startDate = localDateToDate(m.startDate)
+            })
             resolve();
           }
         });

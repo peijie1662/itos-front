@@ -2,7 +2,7 @@
   <div>
     <el-dialog
       title="任务模版"
-      width="500px"
+      width="550px"
       :close-on-click-modal="false"
       :visible.sync="dialogVisible"
     >
@@ -50,9 +50,16 @@
           <!-- 过期时间 -->
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">过期时间(秒)</span>
-            <el-input v-model="taskModel.expired" size="mini" style="left:120px;width:200px;"></el-input>
+            <el-input v-model="taskModel.expired" size="mini" style="left:120px;width:80px;"></el-input>
+            <span class="dialogtitle" style="left:220px;">开始时间</span>
+            <el-date-picker
+              v-model="taskModel.startDate"
+              type="datetime"
+              size="mini"
+              placeholder="选择日期时间"
+              style="left:210px;width:180px;"
+            ></el-date-picker>
           </div>
-
           <!-- 过期处理 -->
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">过期处理</span>

@@ -45,8 +45,7 @@
     </el-dialog>
     <!-- 模版详情 -->
     <model-detail-com :tmodel="detailModel" @modelUpdateOk="modelUpdateOk"></model-detail-com>
-    <!-- 分组窗口 -->
-    
+    <!-- 分组窗口 --> 
   </div>
 </template>
 
