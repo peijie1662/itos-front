@@ -1,6 +1,47 @@
 import { STATIC_URL } from "@/api/api"
 import { formatDate, localDateToInt } from "@/api/util"
 
+//日期范围选择
+export const pickerOptions = {
+  shortcuts: [
+    {
+      text: "今天",
+      onClick(picker) {
+        const end = new Date();
+        const start = new Date();
+        picker.$emit("pick", [start, end]);
+      }
+    },    
+    {
+      text: "最近一周",
+      onClick(picker) {
+        const end = new Date();
+        const start = new Date();
+        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+        picker.$emit("pick", [start, end]);
+      }
+    },
+    {
+      text: "最近一个月",
+      onClick(picker) {
+        const end = new Date();
+        const start = new Date();
+        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+        picker.$emit("pick", [start, end]);
+      }
+    },
+    {
+      text: "最近三个月",
+      onClick(picker) {
+        const end = new Date();
+        const start = new Date();
+        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+        picker.$emit("pick", [start, end]);
+      }
+    }
+  ]
+}
+
 //任务类别
 export const CATEGORYS = [
   {
@@ -22,7 +63,7 @@ export const CATEGORYS = [
     value: "APPSERVER",
     label: "调用其它服务执行任务",
     color: "#E6A23C"
-  },  
+  },
   {
     value: "CUSTOM",
     label: "自定义任务",
