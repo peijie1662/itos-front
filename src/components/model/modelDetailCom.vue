@@ -47,17 +47,19 @@
               <span class="dialogContent" style="font-size:10px;left:150px;">"HHMM",如"1530"表示"15:30"</span>
             </div>
           </div>
-          <!-- 过期时间 -->
           <div class="dialogLine">
+            <!-- 过期时间 -->
             <span class="dialogtitle" style="left:20px;">过期时间(秒)</span>
             <el-input v-model="taskModel.expired" size="mini" style="left:120px;width:80px;"></el-input>
-            <span class="dialogtitle" style="left:220px;">开始时间</span>
+            <!-- 开始时间 -->
+            <span class="dialogtitle" style="left:220px;" v-if="isCircular">开始时间</span>
             <el-date-picker
               v-model="taskModel.startDate"
               type="datetime"
               size="mini"
               placeholder="选择日期时间"
               style="left:210px;width:180px;"
+              v-if="isCircular"
             ></el-date-picker>
           </div>
           <!-- 过期处理 -->
@@ -178,6 +180,10 @@ export default {
       return this.taskModel.cycle
         ? valueToComment(this.cycles, this.taskModel.cycle)
         : "";
+    },
+    //是否循环
+    isCircular() {
+      return this.taskModel.cycle == "CIRCULAR";
     }
   },
   props: ["tmodel"],

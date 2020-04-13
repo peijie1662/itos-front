@@ -7,7 +7,7 @@
         <div style="float:left;">
           <i
             :class="task.icon.icon"
-            :style="isExpired()?'color:red':'color:green'"
+            :style="isExpired()?'color:red':'color:#67C23A'"
             style="font-size:30px;background:#e9ebec;"
           ></i>
         </div>
@@ -45,11 +45,11 @@
       <!-- 第2行,登记信息 -->
       <div class="section">
         <!-- 开始执行 -->
-        <div class="sub_section" style="width:200px;">
+        <div class="sub_section" style="width:250px;">
           <span>开始执行：{{task.planDtStr}}</span>
         </div>
         <!-- 过期时间 -->
-        <div class="sub_section" style="width:200px;">
+        <div class="sub_section" style="width:250px;">
           <span>过期时间：{{task.expiredTimeStr}}</span>
         </div>
       </div>
@@ -209,8 +209,8 @@ export default {
 
 .task_next_status {
   position: absolute;
-  right: 5px;
-  top: 50px;
+  right: 3px;
+  top: 35px;
   border: 2px dashed #20a0ff;
   border-radius: 2px;
   background: white;

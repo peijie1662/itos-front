@@ -19,6 +19,10 @@
         @change="loadData"
       ></el-date-picker>
       <el-divider direction="vertical"></el-divider>
+      <!-- 选择终端 //TODO-->
+
+
+      <el-divider direction="vertical"></el-divider>
       <el-button type="primary" @click="loadData" size="mini" style="margin-top:15px;">刷新</el-button>
     </div>
     <div class="content">
@@ -48,7 +52,7 @@ export default {
       finTaskList: [],
       //
       pickerOptions,
-      dateRange: [new Date(),new Date()] //默认当天      
+      dateRange: [new Date(), new Date()] //默认当天
     };
   },
   methods: {

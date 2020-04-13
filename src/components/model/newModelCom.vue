@@ -83,10 +83,11 @@
               <span class="dialogContent" style="font-size:10px;left:150px;">{{comment_content}}</span>
             </div>
           </div>
-          <!-- 过期时间 -->
           <div class="dialogLine">
+            <!-- 过期时间 -->
             <span class="dialogtitle" style="left:20px;">过期时间(秒)</span>
             <el-input v-model="taskModel.expired" size="mini" style="left:120px;width:80px;"></el-input>
+            <!-- 开始时间 -->
             <span class="dialogtitle" style="left:220px;" v-if="isCircular">开始时间</span>
             <el-date-picker
               v-model="taskModel.startDate"
@@ -210,7 +211,6 @@ export default {
     },
     //是否循环
     isCircular() {
-      console.info(this.taskModel.cycle == "CIRCULAR");
       return this.taskModel.cycle == "CIRCULAR";
     }
   },
