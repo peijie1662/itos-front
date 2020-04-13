@@ -1,14 +1,25 @@
 <template>
   <div>
     <div class="header">
-      <div
-        style="width:350px;margin-top:20px;margin-left:20px;border-right: 2px solid #c0c4cc;float:left;"
-      >
-        <el-checkbox v-model="selCheckin" @change="filter">登记</el-checkbox>
-        <el-checkbox v-model="selProcessing" @change="filter">进行中</el-checkbox>
-        <el-checkbox v-model="selDone" @change="filter">完成</el-checkbox>
-        <el-checkbox v-model="selCancel" @change="filter">删除</el-checkbox>
-      </div>
+      <el-checkbox v-model="selCheckin" @change="filter">登记</el-checkbox>
+      <el-checkbox v-model="selProcessing" @change="filter">进行中</el-checkbox>
+      <el-checkbox v-model="selDone" @change="filter">完成</el-checkbox>
+      <el-checkbox v-model="selCancel" @change="filter">删除</el-checkbox>
+      <el-divider direction="vertical"></el-divider>
+      <el-date-picker
+        v-model="dateRange"
+        type="daterange"
+        align="right"
+        unlink-panels
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        size="mini"
+        :picker-options="pickerOptions"
+        @change="loadData"
+      ></el-date-picker>
+      <el-divider direction="vertical"></el-divider>
+      <el-button type="primary" @click="loadData" size="mini" style="margin-top:15px;">刷新</el-button>
     </div>
     <div class="content">
       <!-- 任务列表 -->
@@ -20,6 +31,7 @@
 </template>
 
 <script>
+import { pickerOptions } from "@/api/data";
 import { getDispatchTaskAll } from "@/api/api";
 import taskCom from "@/components/dispatchTaskCom";
 
@@ -33,7 +45,10 @@ export default {
       //
       newTask: null,
       taskList: [],
-      finTaskList: []
+      finTaskList: [],
+      //
+      pickerOptions,
+      dateRange: [new Date(),new Date()] //默认当天      
     };
   },
   methods: {
@@ -53,7 +68,9 @@ export default {
     },
     loadData() {
       let me = this;
-      getDispatchTaskAll({}).then(res => {
+      getDispatchTaskAll({
+        dateRange: me.dateRange
+      }).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
           this.$message({
@@ -68,7 +85,7 @@ export default {
     }
   },
   components: {
-    taskCom,
+    taskCom
   },
   mounted() {
     this.loadData();

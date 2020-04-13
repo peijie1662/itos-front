@@ -1,56 +1,79 @@
 <template>
   <div>
     <div class="outer" @mouseleave="showNextStatus = false">
-      <!-- 图标 -->
-      <div class="task_icon" :style="isExpired()?'color:black':'color:green'">
-        <i :class="task.icon.icon" :style="task.icon.iconclass" style="font-size:40px;"></i>
+      <!-- 第1行，标题 -->
+      <div class="section">
+        <!-- 图标 -->
+        <div style="float:left;">
+          <i
+            :class="task.icon.icon"
+            :style="isExpired()?'color:red':'color:green'"
+            style="font-size:30px;background:#e9ebec;"
+          ></i>
+        </div>
+        <!-- 简介 -->
+        <div style="float:left;margin-left:10px;">
+          <span style="font-size:20px;user-select:none;line-height:30px;">{{task.abs}}</span>
+        </div>
+        <!-- 状态 -->
+        <div
+          style="float:right;"
+          @mouseenter="statusHover = true"
+          @mouseleave="statusHover = false"
+          @click="showNextStatusFun()"
+        >
+          <i
+            v-if="statusHover"
+            :class="task.sta.icon"
+            :style="task.sta.hoverclass"
+            style="font-size:30px;"
+          ></i>
+          <i v-else :class="task.sta.icon" :style="task.sta.iconclass" style="font-size:30px;"></i>
+        </div>
+        <!-- Next状态-->
+        <div v-show="showNextStatus " class="task_next_status">
+          <i
+            v-for="status in task.nextSta"
+            :key="status.id"
+            :class="status.icon"
+            :style="status.iconclass"
+            style="margin-left:1px;font-size:30px;border-radius:2px;"
+            @click="nextStatus(task,status)"
+          ></i>
+        </div>
       </div>
-      <!-- 标题内容 -->
-      <div class="task_title">
-        <span style="margin-right:20px;">电话:{{task.phone}}</span>
-        <span style="margin-right:20px;">地点:{{task.location}}</span>
-        <span>联系人:{{task.customer}}</span>
+      <!-- 第2行,登记信息 -->
+      <div class="section">
+        <!-- 电话 -->
+        <div class="sub_section" style="width:150px;">
+          <span>电话：{{task.phone}}</span>
+        </div>
+        <!-- 位置 -->
+        <div class="sub_section" style="width:200px;">
+          <span>位置：{{task.location}}</span>
+        </div>
+        <!-- 联系人 -->
+        <div class="sub_section" style="width:150px;">
+          <span>联系人：{{task.customer}}</span>
+        </div>
+        <!-- 开始执行 -->
+        <div class="sub_section" style="width:200px;">
+          <span>开始执行：{{task.planDtStr}}</span>
+        </div>
+        <!-- 过期时间 -->
+        <div class="sub_section" style="width:200px;">
+          <span>过期时间：{{task.expiredTimeStr}}</span>
+        </div>
       </div>
-      <!-- 状态 -->
-      <div
-        class="task_status"
-        @mouseenter="statusHover = true"
-        @mouseleave="statusHover = false"
-        @click="showNextStatusFun()"
-      >
-        <i
-          v-if="statusHover"
-          :class="task.sta.icon"
-          :style="task.sta.hoverclass"
-          style="font-size:40px;"
-        ></i>
-        <i v-else :class="task.sta.icon" :style="task.sta.iconclass" style="font-size:40px;"></i>
-      </div>
-      <!-- Next状态-->
-      <div v-show="showNextStatus " class="task_next_status">
-        <i
-          v-for="status in task.nextSta"
-          :key="status.id"
-          :class="status.icon"
-          :style="status.iconclass"
-          style="margin-left:1px;font-size:35px;border-radius:2px;"
-          @click="nextStatus(task,status)"
-        ></i>
-      </div>
-      <!-- 简介 -->
-      <div class="task_abs">
-        <span style="margin-left:50px;font-size:20px;user-select:none;">{{task.abs}}</span>
-      </div>
-      <!-- 内容 -->
-      <div class="task_content" v-html="task.content"></div>
-      <img src="http://" alt />
-      <!-- 处理人 -->
-      <div class="task_handler">
+      <!-- 第3行,内容 -->
+      <div class="section" style="min-height:50px;" v-html="task.content"></div>
+      <!-- 第4行,处理人 -->
+      <div class="section">
         <span style="color:black;background:#e9ebec;">处理人员</span>
         <span style="margin-left:5px;">{{task.handlers}}</span>
       </div>
-      <!-- 处理日志 -->
-      <div style="font-size:10px;">
+      <!-- 第5行,处理日志 -->
+      <div class="section" style="font-size:10px;">
         <div v-for="(item,index) in taskLog" :key="index" style="margin-top:2px;">
           <i :class="item.sta.icon" :style="item.sta.iconclass" style="margin-left:10px;"></i>
           <span>{{item.opDtStr}}</span>
@@ -182,39 +205,27 @@ export default {
   position: relative;
 }
 
-.task_icon {
-  position: absolute;
-  top: 2px;
-  left: 2px;
+.section {
+  overflow: hidden;
+  height: 100%;
+  margin-top: 2px;
+  border: 1px solid #ddd;
 }
 
-.task_title {
-  position: absolute;
-  top: 20px;
-  right: 100px;
-}
-
-.task_status {
-  position: absolute;
-  top: 2px;
-  right: 2px;
+.sub_section {
+  float: left;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  overflow: hidden;
 }
 
 .task_next_status {
   position: absolute;
-  right: 5px;
-  top: 50px;
+  right: 2px;
+  top: 32px;
   border: 2px dashed #20a0ff;
   border-radius: 2px;
   background: white;
-}
-
-.task_abs {
-  text-align: left;
-  line-height: 50px;
-  border-bottom: 1px solid #c0c4cc;
-  height: 50px;
-  background: #e9ebec;
 }
 
 .task_content {

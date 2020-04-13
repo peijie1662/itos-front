@@ -16,6 +16,7 @@
         end-placeholder="结束日期"
         size="mini"
         :picker-options="pickerOptions"
+        @change="loadData"
       ></el-date-picker>
       <el-divider direction="vertical"></el-divider>
       <el-button type="primary" @click="addTask" size="mini" style="margin-top:15px;">登记</el-button>
