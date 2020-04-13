@@ -92,12 +92,7 @@ export default {
             type: "error"
           });
         } else {
-          serverReloadClient({}).then(res => {
-            let { flag } = res;
-            if (flag) {
-              me.loadData();
-            }
-          });
+          me.loadData();
         }
       });
     },
@@ -106,6 +101,7 @@ export default {
     },
     loadData: async function() {
       let me = this;
+      await me.reloadServerClient();
       await me.loadNotComposeModelList();
       await me.loadClientList();
       await me.loadGroupList();
@@ -172,6 +168,22 @@ export default {
             reject();
           } else {
             me.models = data;
+            resolve();
+          }
+        });
+      });
+    },
+    reloadServerClient() {
+      return new Promise((resolve, reject) => {
+        serverReloadClient({}).then(res => {
+          let { flag, errMsg } = res;
+          if (!flag) {
+            this.$message({
+              message: errMsg,
+              type: "error"
+            });
+            reject();
+          } else {
             resolve();
           }
         });

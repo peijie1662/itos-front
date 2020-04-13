@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { updateClient, serverReloadClient } from "@/api/api";
+import { updateClient } from "@/api/api";
 
 export default {
   data() {
@@ -64,18 +64,13 @@ export default {
                 type: "error"
               });
             } else {
-              serverReloadClient({}).then(res => {
-                let { flag } = res;
-                if (flag) {
-                  me.$emit("updateClientSuccess");
-                }
-                me.dialogVisible = false;
-              });
+              me.dialogVisible = false;
+              me.$emit("updateClientSuccess");
             }
           });
         }
       });
-    },
+    }
   },
   props: ["uclient", "gps"],
   watch: {

@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { addClient, serverReloadClient, getGroupList } from "@/api/api";
+import { addClient, getGroupList } from "@/api/api";
 
 export default {
   data() {
@@ -96,12 +96,7 @@ export default {
               });
             } else {
               me.dialogVisible = false;
-              serverReloadClient({}).then(res => {
-                let { flag } = res;
-                if (flag) {
-                  me.$emit("updateClientSuccess");
-                }
-              });
+              me.$emit("updateClientSuccess");
             }
           });
         } else {

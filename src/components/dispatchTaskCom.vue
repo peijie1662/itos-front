@@ -54,7 +54,7 @@
         </div>
       </div>
       <!-- 第3行,内容 -->
-      <div class="section" style="min-height:50px;" v-html="task.content"></div>
+      <div class="section" style="min-height:50px;word-wrap: break-word;">{{task.content}}</div>
       <!-- 第4行,处理人 -->
       <div class="section">
         <span style="color:black;background:#e9ebec;">处理人员</span>
