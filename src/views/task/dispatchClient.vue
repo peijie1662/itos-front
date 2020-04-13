@@ -13,7 +13,7 @@
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item>
                 <div v-for="item in scope.row.models" :key="item.modelId" class="model">
-                  <sampleModelCom :mmodel="item"></sampleModelCom>
+                  <sample-model-com :mmodel="item"></sample-model-com>
                 </div>
               </el-form-item>
             </el-form>
@@ -242,14 +242,12 @@ export default {
 }
 
 .model {
-  width: 120px;
-  height: 100px;
   border: 1px solid #909399;
-  text-align: center;
   border-radius: 5px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
   float: left;
-  margin-left: 10px;
+  margin: 3px;
+  line-height: 20px;
 }
 </style>

@@ -135,8 +135,8 @@ export default {
       this.face_url =
         STATIC_URL +
         "/user_face/" +
-        this.userInfo.userId +
-        ".jpg" +
+        this.userInfo.userId.toLowerCase() +
+        ".JPG" +
         "?" +
         Math.random(100);
     },
@@ -187,8 +187,8 @@ export default {
     this.face_url =
       STATIC_URL +
       "user_face/" +
-      this.userInfo.userId +
-      ".jpg?" +
+      this.userInfo.userId.toLowerCase() +
+      ".JPG?" +
       Math.random(100);
     //同步用户登录信息到后台
     userOnline();

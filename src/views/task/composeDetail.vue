@@ -306,15 +306,12 @@ export default {
   border: 2px dashed #409eff;
   overflow: hidden;
   padding: 10px;
-  width: 70%;
+  width: 90%;
   min-height: 100px;
 }
 
 .li {
-  width: 120px;
-  height: 100px;
   border: 1px solid #909399;
-  position: relative;
   border-radius: 5px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;

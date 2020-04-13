@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="position:relative;text-align:center;width:120px;height:100px;">
+    <div style="position:relative;text-align:center;width:120px;height:80px;">
       <div :style="topTriangleStyle()"></div>
       <span class="title">{{mmodel.abs}}</span>
       <div :style="bottomTriangleStyle()"></div>
@@ -18,15 +18,15 @@ export default {
       let mstyle = {
         width: "0",
         height: "0",
-        borderTop: "30px solid red",
-        borderRight: "30px solid transparent",
+        borderTop: "20px solid red",
+        borderRight: "20px solid transparent",
         borderTopRadius: "5px"
       };
       if (this.mmodel.invalid) {
-        mstyle.borderTop = "30px solid " + getCategoryColor(null);
+        mstyle.borderTop = "20px solid " + getCategoryColor(null);
       } else {
         mstyle.borderTop =
-          "30px solid " + getCategoryColor(this.mmodel.category);
+          "20px solid " + getCategoryColor(this.mmodel.category);
       }
       return mstyle;
     },
@@ -34,17 +34,17 @@ export default {
       let mstyle = {
         width: "0",
         height: "0",
-        borderBottom: "30px solid red",
-        borderLeft: "30px solid transparent",
+        borderBottom: "20px solid red",
+        borderLeft: "20px solid transparent",
         position: "absolute",
         bottom: "0px",
         right: "0px"
       };
       if (this.mmodel.invalid) {
-        mstyle.borderBottom = "30px solid " + getCategoryColor(null);
+        mstyle.borderBottom = "20px solid " + getCategoryColor(null);
       } else {
         mstyle.borderBottom =
-          "30px solid " + getCategoryColor(this.mmodel.category);
+          "20px solid " + getCategoryColor(this.mmodel.category);
       }
       return mstyle;
     }

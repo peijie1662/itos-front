@@ -137,7 +137,7 @@ export default {
           this.face_url =
             STATIC_URL +
             "/user_face/" +
-            this.curUser.userId +
+            this.curUser.userId.toLowerCase() +
             ".jpg" +
             "?" +
             Math.random(100);
@@ -227,8 +227,8 @@ export default {
       this.face_url =
         STATIC_URL +
         "/user_face/" +
-        this.curUser.userId +
-        ".jpg" +
+        this.curUser.userId.toLowerCase() +
+        ".JPG" +
         "?" +
         Math.random(100);
       this.$emit("updateFaceSuccess");
