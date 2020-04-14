@@ -212,6 +212,12 @@ export default {
   border: 1px solid #ddd;
 }
 
+.section-noborder {
+  overflow: hidden;
+  height: 100%;
+  margin-top: 2px;
+}
+
 .sub_section {
   float: left;
   border-bottom: 1px solid #ddd;

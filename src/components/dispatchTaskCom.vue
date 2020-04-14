@@ -43,7 +43,7 @@
         </div>
       </div>
       <!-- 第2行,登记信息 -->
-      <div class="section">
+      <div class="section-noborder">
         <!-- 开始执行 -->
         <div class="sub_section" style="width:250px;">
           <span>开始执行：{{task.planDtStr}}</span>
@@ -198,6 +198,12 @@ export default {
   height: 100%;
   margin-top: 2px;
   border: 1px solid #ddd;
+}
+
+.section-noborder {
+  overflow: hidden;
+  height: 100%;
+  margin-top: 2px;
 }
 
 .sub_section {

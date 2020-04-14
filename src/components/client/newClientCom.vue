@@ -72,6 +72,11 @@ export default {
             reject();
           } else {
             me.gpList = data;
+            me.gpList.push({
+              groupId: "XXX",
+              groupName: "NOGROUP",
+              groupDesc: "不分组模版"
+            });
             me.gpList.forEach(gp => {
               gp.value = gp.groupId;
               gp.label = gp.groupDesc;
@@ -126,7 +131,10 @@ export default {
           //2.组合
           me.gpList.forEach(gp => {
             newVal.forEach(m => {
-              if (m.groupId == gp.groupId) {
+              if (
+                m.groupId == gp.groupId ||
+                (!m.groupId && gp.groupId == "XXX")
+              ) {
                 gp.children.push({ value: m.modelId, label: m.abs });
               }
             });
