@@ -51,7 +51,7 @@
 <script>
 import { pickerOptions } from "@/api/data";
 import { getDispatchTaskAll, getClientList } from "@/api/api";
-import taskCom from "@/components/dispatchTaskCom";
+import taskCom from "@/components/task/dispatchTaskCom";
 
 export default {
   data() {

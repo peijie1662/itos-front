@@ -36,8 +36,8 @@
 <script>
 import { pickerOptions } from "@/api/data";
 import { getManualTaskList } from "@/api/api";
-import taskCom from "@/components/manualTaskCom";
-import newTaskCom from "@/components/newManualTaskCom.vue";
+import taskCom from "@/components/task/manualTaskCom";
+import newTaskCom from "@/components/task/newManualTaskCom.vue";
 
 export default {
   data() {

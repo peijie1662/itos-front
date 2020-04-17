@@ -88,11 +88,11 @@
 
 <script>
 import { getTaskIconById, getTaskStatusById, listIsEmpty } from "@/api/data";
-import processingCom from "@/components/commonStatusCom.vue";
-import doneCom from "@/components/commonStatusCom.vue";
-import cancelCom from "@/components/commonStatusCom.vue";
-import modifyCom from "@/components/modifyCom.vue";
-import swapCom from "@/components/swapCom.vue";
+import processingCom from "@/components/task/commonStatusCom.vue";
+import doneCom from "@/components/task/commonStatusCom.vue";
+import cancelCom from "@/components/task/commonStatusCom.vue";
+import modifyCom from "@/components/task/modifyCom.vue";
+import swapCom from "@/components/task/swapCom.vue";
 
 export default {
   data() {

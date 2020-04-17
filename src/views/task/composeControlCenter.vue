@@ -120,7 +120,7 @@ import {
   getComposeModelDetail,
   composeReport
 } from "@/api/api";
-import miniCom from "@/components/miniModelAndTaskCom.vue";
+import miniCom from "@/components/task/miniModelAndTaskCom.vue";
 import { localDateToStr } from "@/api/util";
 import { getTaskStatusById, countStepTime, composeReportUrl } from "@/api/data";
 import { mapGetters } from "vuex";

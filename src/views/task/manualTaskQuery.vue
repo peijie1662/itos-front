@@ -71,7 +71,7 @@ import { pickerOptions } from "@/api/data";
 import { getManualTaskList } from "@/api/api";
 import { localDateToStr } from "@/api/util";
 import { getTaskStatusById } from "@/api/data";
-import taskCom from "@/components/manualTaskCom";
+import taskCom from "@/components/task/manualTaskCom";
 
 export default {
   data() {

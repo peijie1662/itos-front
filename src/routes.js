@@ -38,7 +38,7 @@ let routes = [
                 meta: { funId: '0001', dis: true }
             }
         ]
-    },    
+    },
     {
         path: '/',
         component: Home,
@@ -53,6 +53,10 @@ let routes = [
             {
                 path: '/manual_task_query', component: ManualTaskQuery, name: '任务查询',
                 meta: { funId: '1002', dis: true }
+            },
+            {
+                path: '/smart_tips', component: SmartTips, name: '智能提示',
+                meta: { funId: '4003', dis: true }
             }
         ]
     },
@@ -97,18 +101,13 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '系统设置',
-        funId: '4000',
+        name: '',
         iconCls: 'el-icon-setting',
+        leaf: true,
         children: [{
             path: '/model_list', component: ModelList, name: '模版设置',
             meta: { funId: '4001', dis: true }
-        },
-        {
-            path: '/smart_tips', component: SmartTips, name: '智能提示',
-            meta: { funId: '4002', dis: true }
-        }
-        ]
+        }]
     },
     {
         path: '/',
@@ -116,12 +115,10 @@ let routes = [
         name: '',
         iconCls: 'el-icon-user',
         leaf: true,
-        children: [
-            {
-                path: '/user_manager', component: UserManager, name: '用户管理',
-                meta: { funId: '4003', dis: true }
-            }
-        ]
+        children: [{
+            path: '/user_manager', component: UserManager, name: '用户管理',
+            meta: { funId: '4002', dis: true }
+        }]
     },
     {
         path: '/404',
