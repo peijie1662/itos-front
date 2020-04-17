@@ -13,7 +13,6 @@
       </div>
       <!-- 底部三角 -->
       <div :style="bottomTriangleStyle"></div>
-
       <div style="position: absolute;bottom: 2px;left: 2px;">
         <!-- 生成按钮 -->
         <div v-if="taskModel.category != 'COMPOSE'" style="float:left;">

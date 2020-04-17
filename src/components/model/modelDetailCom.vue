@@ -12,6 +12,7 @@
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">模版ID</span>
             <span class="dialogContent" style="left:120px;">{{taskModel.modelId}}</span>
+            <i class="el-icon-document-copy copy-tag id-tag" @click="copy('.id-tag',taskModel.modelId)"></i>
           </div>
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">任务类型</span>
@@ -20,10 +21,12 @@
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">任务简介</span>
             <span class="dialogContent" style="left:120px;">{{taskModel.abs}}</span>
+            <i class="el-icon-document-copy copy-tag abs-tag" @click="copy('.abs-tag',taskModel.abs)"></i>
           </div>
           <!-- 任务内容 -->
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">任务内容</span>
+            <i class="el-icon-document-copy copy-tag content-tag" @click="copy('.content-tag',taskModel.comments)"></i>
           </div>
           <div ref="content" contenteditable="true" class="content" v-html="taskModel.comments"></div>
           <el-upload
@@ -140,6 +143,7 @@ import {
   modelUploadDom
 } from "@/api/data";
 import { mapGetters } from "vuex";
+import Clipboard from "clipboard";
 
 export default {
   data() {
@@ -200,6 +204,21 @@ export default {
     }
   },
   methods: {
+    copy(classTag,content) {
+      let clipboard = new Clipboard(classTag, {
+        text: function () {
+          return content;
+        }
+      })
+      clipboard.on('success', () => {
+        this.$message({message: '复制成功', showClose: true, type: 'success'})
+        clipboard.destroy()
+      })
+      clipboard.on('error', () => {
+        this.$message({message: '复制失败,', showClose: true, type: 'error'})
+        clipboard.destroy()
+      })
+    },
     handlerSuccess(res, file) {
       let { flag, errMsg } = res;
       if (flag) {
@@ -263,15 +282,24 @@ export default {
   line-height: 30px;
   background-color: beige;
 }
+
 .dialogtitle {
   font-size: 16px;
   color: #409eff;
   position: absolute;
 }
+
 .dialogContent {
   font-size: 16px;
   position: absolute;
 }
+
+.copy-tag {
+  position: absolute;
+  right: 5px;
+  top: 10px;
+}
+
 .subcontent {
   margin-bottom: 5px;
   padding: 5px;
