@@ -12,6 +12,7 @@ import ComposeControlCenter from './views/task/composeControlCenter.vue'
 import ComposeMaintance from './views/task/composeMaintance.vue'
 import UserManager from './views/settings/userManager.vue'
 import firstPage from './views/settings/firstPage.vue'
+import reportModel from './views/report/reportModel.vue'
 
 let routes = [
     {
@@ -95,6 +96,19 @@ let routes = [
             {
                 path: '/compose_maintancer', component: ComposeMaintance, name: '组合维护',
                 meta: { funId: '3003', dis: true }
+            }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '文档中心',
+        funId: '5000',
+        iconCls: 'el-icon-document-copy',
+        children: [
+            {
+                path: '/report_model', component: reportModel, name: '报告定制',
+                meta: { funId: '5001', dis: true }
             }
         ]
     },
