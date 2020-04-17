@@ -19,9 +19,23 @@
         @change="loadData"
       ></el-date-picker>
       <el-divider direction="vertical"></el-divider>
-      <!-- 选择终端 //TODO-->
-
-
+      <!-- 选择执行终端 -->
+      <el-select
+        v-model="selClientList"
+        multiple
+        collapse-tags
+        style="margin-left: 20px;"
+        placeholder="请选择执行终端"
+        size="mini"
+        @change="loadData"
+      >
+        <el-option
+          v-for="item in clientList"
+          :key="item.serviceName"
+          :label="item.serviceName"
+          :value="item.modelKey"
+        ></el-option>
+      </el-select>
       <el-divider direction="vertical"></el-divider>
       <el-button type="primary" @click="loadData" size="mini" style="margin-top:15px;">刷新</el-button>
     </div>
@@ -36,7 +50,7 @@
 
 <script>
 import { pickerOptions } from "@/api/data";
-import { getDispatchTaskAll } from "@/api/api";
+import { getDispatchTaskAll, getClientList } from "@/api/api";
 import taskCom from "@/components/dispatchTaskCom";
 
 export default {
@@ -52,23 +66,48 @@ export default {
       finTaskList: [],
       //
       pickerOptions,
-      dateRange: [new Date(), new Date()] //默认当天
+      dateRange: [new Date(), new Date()], //默认当天
+      //
+      clientList: [],
+      selClientList: []
     };
   },
   methods: {
     filter() {
       let me = this;
       me.finTaskList = me.taskList.filter(item => {
-        return (
+        let status_flag =
           (me.selCheckin && item.status == "CHECKIN") ||
           (me.selProcessing && item.status == "PROCESSING") ||
           (me.selDone && item.status == "DONE") ||
-          (me.selCancel && item.status == "CANCEL")
-        );
+          (me.selCancel && item.status == "CANCEL");
+        let client_flag = false;
+        if (me.selClientList.length > 0) {
+          me.selClientList.forEach(client => {
+            client_flag = client_flag || client.indexOf(item.modelId) >= 0;
+          });
+        } else {
+          client_flag = true;
+        }
+        return status_flag && client_flag;
       });
     },
     addTask() {
       this.newTask = {};
+    },
+    loadClientList() {
+      let me = this;
+      getClientList({}).then(res => {
+        let { flag, data, errMsg } = res;
+        if (!flag) {
+          this.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.clientList = data;
+        }
+      });
     },
     loadData() {
       let me = this;
@@ -93,6 +132,7 @@ export default {
   },
   mounted() {
     this.loadData();
+    this.loadClientList();
   }
 };
 </script>

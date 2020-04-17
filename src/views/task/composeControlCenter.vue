@@ -117,11 +117,12 @@ import {
   startComposeTask,
   getTaskInCompose,
   getNotComposeModelList,
-  getComposeModelDetail
+  getComposeModelDetail,
+  composeReport
 } from "@/api/api";
 import miniCom from "@/components/miniModelAndTaskCom.vue";
 import { localDateToStr } from "@/api/util";
-import { getTaskStatusById, countStepTime } from "@/api/data";
+import { getTaskStatusById, countStepTime, composeReportUrl } from "@/api/data";
 import { mapGetters } from "vuex";
 import { enterScene, leaveScene } from "@/api/store_socket";
 
@@ -154,27 +155,50 @@ export default {
       },
       //
       path: WS_URL,
-      socket: ""
+      socket: "",
+      //
+      pdfUrl: ""
     };
   },
   computed: {
     ...mapGetters(["userInfo"]),
     selComposeModel() {
       let me = this;
-      return me.composeModels.filter(item => {
-        return item.modelId == me.selComposeModelId;
-      })[0]||"";
+      return (
+        me.composeModels.filter(item => {
+          return item.modelId == me.selComposeModelId;
+        })[0] || ""
+      );
     },
-    selComposeTask(){
+    selComposeTask() {
       let me = this;
-      return me.composeTasks.filter(item => {
-        return item.taskId == me.selComposeTaskId;
-      })[0]||"";      
+      return (
+        me.composeTasks.filter(item => {
+          return item.taskId == me.selComposeTaskId;
+        })[0] || ""
+      );
     }
   },
   methods: {
-    composeTaskReport(){
-      //TODO 报表
+    composeTaskReport() {
+      let me = this;
+      composeReport({
+        composeId: me.selComposeTaskId,
+        composeTask: me.composeTasks.filter(item => {
+          return item.taskId == me.selComposeTaskId;
+        })[0],
+        details: me.details
+      }).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          this.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.download();
+        }
+      });
     },
     selectOneModel: async function() {
       await this.loadComposeTasks();
@@ -362,6 +386,17 @@ export default {
           me.composeModels = data;
         }
       });
+    },
+    download() {
+      const link = document.createElement("a"); // 创建a标签
+      link.download = "report"; // a标签添加属性
+      link.style.display = "none";
+      link.target = "_blank";
+      link.href = composeReportUrl(this.selComposeTaskId);
+      document.body.appendChild(link);
+      link.click(); // 执行下载
+      URL.revokeObjectURL(link.href); // 释放url
+      document.body.removeChild(link); // 释放标签
     },
     //处理控制中心场景数据
     handlerControlCenter(content) {

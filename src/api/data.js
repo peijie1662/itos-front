@@ -11,7 +11,7 @@ export const pickerOptions = {
         const start = new Date();
         picker.$emit("pick", [start, end]);
       }
-    },    
+    },
     {
       text: "最近一周",
       onClick(picker) {
@@ -378,6 +378,11 @@ export const taskUploadDom = function (file, id) {
   } else {
     return `<a href=${url}>${file.name}</a>`;
   }
+}
+
+//组合任务报表
+export const composeReportUrl = function (id) {
+  return STATIC_URL + "pdf/compose/" + id + ".pdf" + "?" + Math.random(100);
 }
 
 //统计每层的开始结束时间
