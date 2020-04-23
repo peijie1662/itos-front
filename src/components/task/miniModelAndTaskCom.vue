@@ -55,7 +55,7 @@
       <!-- 内容第2行 执行者 -->
       <div class="block">
         <span class="block-tag">Terminal:</span>
-        <span :style="task.sta.hoverclass" class="block-txt" style="width:60px;">{{task.terminal}}</span>
+        <span :style="task.sta.hoverclass" class="block-txt" style="width:100px;">{{task.terminal}}</span>
       </div>
       <!-- 内容第3行 执行IP -->
       <div class="block">
@@ -164,7 +164,7 @@ export default {
 
 <style scoped>
 .outer {
-  width: 150px;
+  width: 165px;
   height: 120px;
   border: 1px solid #909399;
   position: relative;
@@ -172,7 +172,7 @@ export default {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
   float: left;
-  margin-left: 10px;
+  margin: 3px;
 }
 .block {
   position: relative;
