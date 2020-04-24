@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import ElementUI from 'element-ui'
+import VCharts from 'v-charts'
 import 'element-ui/lib/theme-chalk/index.css'
 import routes from './routes'
 import './assets/iconfont/iconfont.css'
@@ -10,6 +11,7 @@ import store from '@/api/store'
 
 Vue.use(VueRouter)
 Vue.use(ElementUI)
+Vue.use(VCharts)
 
 const router = new VueRouter({
   //mode: "history",

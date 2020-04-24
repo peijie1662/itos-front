@@ -9,7 +9,7 @@
             <div class="left-pan">
               <!-- 1.1服务台任务 -->
               <div class="left-section-manual">
-                <!-- manual标题 -->
+                <!-- Manual标题 -->
                 <div class="left-section-manual-title">
                   <div style="float: left;line-height:50px;">
                     <i
@@ -24,11 +24,29 @@
                     <i class="iconfont icon-jiantou2 icon" style="font-size:30px;color:white;"></i>
                   </div>
                 </div>
-                <!-- manual内容 -->
+                <!-- Manual内容 -->
+                <div style="overflow:hidden;">
+                  <!-- Manual介绍 -->
+                  <el-card
+                    shadow="hover"
+                    style="width:250px;height:200px;margin-top:20px;margin-left: 20px;
+                      color:#7a8f9a;float:left;"
+                  >
+                    <span>服务台今日任务</span>
+                    <ul>
+                      <li>服务台共登记10个任务,已成功完成8个任务，正在完成2个任务。</li>
+                      <li>普通模版生成7个任务,已成功完成7个任务。</li>
+                    </ul>
+                  </el-card>
+                  <!-- 统计图 -->
+                  <div style="width:400px;overflow:hidden;margin-top:20px;">
+                    <ve-pie :data="manualChartData" :settings="manualChartSettings"></ve-pie>
+                  </div>
+                </div>
               </div>
               <!-- 1.2系统自动任务 -->
               <div class="left-section-auto">
-                <!-- auto标题 -->
+                <!-- Auto标题 -->
                 <div class="left-section-auto-title">
                   <div style="float: left;line-height:50px;">
                     <i
@@ -43,7 +61,21 @@
                     <i class="iconfont icon-jiantou2 icon" style="font-size:30px;color:white;"></i>
                   </div>
                 </div>
-
+                <!-- Auto介绍 -->
+                <el-card
+                  shadow="hover"
+                  style="width:250px;height:200px;margin-top:20px;margin-left: 20px;
+                      color:#7a8f9a;float:left;"
+                >
+                  <span>本周系统任务</span>
+                  <ul>
+                    <li>本周共生成203个任务,已成功完成200个任务，已失败3个任务。</li>
+                  </ul>
+                </el-card>
+                <!-- 统计图 -->
+                <div style="width:450px;overflow:hidden;margin-top:20px;">
+                  <ve-histogram :data="autoChartData" height="270px"/>
+                </div>
               </div>
               <!-- 1.3文档中心 -->
               <div class="left-section-pdf">
@@ -168,7 +200,35 @@ export default {
       activeName: "sitemap",
       dutys: "",
       users: [],
-      today: "2020-02-13" //TODO
+      today: "2020-02-13", //TODO
+      //
+      manualChartSettings: {
+        radius: 60,
+        offsetY: 110
+      },
+      manualChartData: {
+        columns: ["类型", "任务数量"],
+        rows: [
+          { 类型: "龙门吊", 任务数量: 11 },
+          { 类型: "桥吊", 任务数量: 5 },
+          { 类型: "堆高机", 任务数量: 6 },
+          { 类型: "集卡", 任务数量: 31 },
+          { 类型: "电脑", 任务数量: 35 },
+          { 类型: "网络", 任务数量: 2 }
+        ]
+      },
+      autoChartData: {
+        columns: ["日期", "任务", "已完成", "未完成"],
+        rows: [
+          { 日期: "1/1", 任务: 100, 已完成: 88, 未完成: 12 },
+          { 日期: "1/2", 任务: 110, 已完成: 99, 未完成: 11 },
+          { 日期: "1/3", 任务: 99, 已完成: 99, 未完成: 0 },
+          { 日期: "1/4", 任务: 56, 已完成: 56, 未完成: 0 },
+          { 日期: "1/5", 任务: 200, 已完成: 196, 未完成: 4 },
+          { 日期: "1/6", 任务: 123, 已完成: 110, 未完成: 13 },
+          { 日期: "1/6", 任务: 123, 已完成: 110, 未完成: 13 },
+        ]
+      }
     };
   },
   computed: {
@@ -294,11 +354,13 @@ export default {
   height: 300px;
   border: 1px solid #ddd;
   margin-bottom: 5px;
+  overflow: hidden;
 }
 
 .left-section-manual-title {
   height: 50px;
   background: -webkit-linear-gradient(right, #67c23a, white);
+  overflow: hidden;
 }
 
 .left-section-auto {
@@ -306,11 +368,13 @@ export default {
   height: 300px;
   border: 1px solid #ddd;
   margin-bottom: 5px;
+  overflow: hidden;
 }
 
 .left-section-auto-title {
   height: 50px;
-  background: -webkit-linear-gradient(right, #E6A23C, white);
+  background: -webkit-linear-gradient(right, #e6a23c, white);
+  overflow: hidden;
 }
 
 .left-section-pdf {
@@ -325,14 +389,16 @@ export default {
   height: 198px;
   border: 1px solid #ddd;
   float: left;
+  overflow: hidden;
 }
 
 .left-pdf-document {
-  width: 530px;
+  width: 450px;
   height: 198px;
   border: 1px solid #ddd;
   float: left;
   margin-left: 8px;
+  overflow: hidden;
 }
 
 .right-pan {
@@ -392,7 +458,7 @@ export default {
 
 .right-section-others {
   width: 100%;
-  height: 645px;
+  height: 500px;
   border: 1px solid #ddd;
   margin: 3px;
   overflow: hidden;
