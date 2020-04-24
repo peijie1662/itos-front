@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import QRCode from "qrcode";
+//import QRCode from "qrcode";
 import { APP_URL, login } from "@/api/api";
 import { mapMutations } from "vuex";
 
@@ -82,14 +82,7 @@ export default {
   methods: {
     ...mapMutations(["update_userInfo"]),
     useqrcode() {
-      var canvas = document.getElementById("canvas");
-      QRCode.toCanvas(canvas, APP_URL, function(error) {
-        if (error) {
-          console.info(error);
-        } else {
-          console.log("QRCode success!");
-        }
-      });
+      console.info(APP_URL)
     },
     handleSubmit2() {
       this.$refs.ruleForm2.validate(valid => {
@@ -129,7 +122,7 @@ export default {
     }
   },
   mounted() {
-    this.useqrcode();
+    //this.useqrcode();
   }
 };
 </script>
