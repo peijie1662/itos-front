@@ -1,0 +1,191 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "554328",
+      "name": "网络",
+      "font_class": "iconset0280",
+      "unicode": "e6b3",
+      "unicode_decimal": 59059
+    },
+    {
+      "icon_id": "796613",
+      "name": "图书",
+      "font_class": "tushu",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "866367",
+      "name": "图书馆_library12",
+      "font_class": "tushuguanlibrary12",
+      "unicode": "e99c",
+      "unicode_decimal": 59804
+    },
+    {
+      "icon_id": "1962920",
+      "name": "icon_基准利率维护",
+      "font_class": "icon_jizhunlishuaiweihu",
+      "unicode": "e86f",
+      "unicode_decimal": 59503
+    },
+    {
+      "icon_id": "2129871",
+      "name": "后台维护日志",
+      "font_class": "houtaiweihurizhi",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "2551689",
+      "name": "操作-短信",
+      "font_class": "duanxin",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "2727662",
+      "name": "作业组维护",
+      "font_class": "maintain",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "2727681",
+      "name": "任务计划",
+      "font_class": "task-plan",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "4276961",
+      "name": "图书",
+      "font_class": "tushu1",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "5383667",
+      "name": "物资仓库",
+      "font_class": "wuzicangku",
+      "unicode": "e779",
+      "unicode_decimal": 59257
+    },
+    {
+      "icon_id": "5729578",
+      "name": "自动",
+      "font_class": "zidong",
+      "unicode": "e7ee",
+      "unicode_decimal": 59374
+    },
+    {
+      "icon_id": "5738206",
+      "name": "网络-18",
+      "font_class": "wangluo-",
+      "unicode": "ecc7",
+      "unicode_decimal": 60615
+    },
+    {
+      "icon_id": "5738255",
+      "name": "网络-67",
+      "font_class": "wangluo-1",
+      "unicode": "ecdd",
+      "unicode_decimal": 60637
+    },
+    {
+      "icon_id": "7157999",
+      "name": "自动管理",
+      "font_class": "zidongguanli",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "7197934",
+      "name": "短信平台",
+      "font_class": "duanxinpingtai",
+      "unicode": "e6be",
+      "unicode_decimal": 59070
+    },
+    {
+      "icon_id": "7536904",
+      "name": "任务与计划",
+      "font_class": "icon-test",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "8941825",
+      "name": "任务",
+      "font_class": "renwu",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "9113630",
+      "name": "gy库存物资管理",
+      "font_class": "kucunwuziguanli",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "10164907",
+      "name": "图书馆",
+      "font_class": "tushuguan",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
+      "icon_id": "11192573",
+      "name": "物资管理_ico@2x",
+      "font_class": "wuziguanli_icox",
+      "unicode": "e6d0",
+      "unicode_decimal": 59088
+    },
+    {
+      "icon_id": "11855590",
+      "name": "维修单",
+      "font_class": "weixiudan",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "12331685",
+      "name": "维护",
+      "font_class": "weihu",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "12498350",
+      "name": "27营销自动化",
+      "font_class": "yingxiaozidonghua",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "13479202",
+      "name": "短信",
+      "font_class": "B",
+      "unicode": "e708",
+      "unicode_decimal": 59144
+    },
+    {
+      "icon_id": "14137884",
+      "name": "任务",
+      "font_class": "renwu1",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "14269347",
+      "name": "自动巡检",
+      "font_class": "zidongxunjian",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    }
+  ]
+}

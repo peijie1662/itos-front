@@ -40,7 +40,7 @@
           <el-menu
             :default-active="$route.path"
             class="el-menu-vertical-demo"
-            unique-opened
+            :unique-opened = false
             router
             :collapse="isCollapse"
           >

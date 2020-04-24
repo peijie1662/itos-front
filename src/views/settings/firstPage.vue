@@ -1,14 +1,40 @@
 <template>
   <div>
-    <div class="block">
+    <div>
       <el-tabs v-model="activeName">
-        <!-- 运维动态 -->
-        <el-tab-pane label="运维动态" name="statistics">
-          <div class="first-tab"></div>
+        <!-- 网站地图 -->
+        <el-tab-pane label="网站地图" name="sitemap">
+          <div class="first-tab">
+            <!-- 1.左侧面板 -->
+            <div class="left-pan">
+              <!-- 1.1服务台任务 -->
+              <div class="left-section-manual"></div>
+              <!-- 1.2系统自动任务 -->
+              <div class="left-section-auto"></div>
+              <!-- 1.3文档中心 -->
+              <div class="left-section-pdf">
+                <!-- 1.3.1服务台手册 -->
+                <div class="left-manual"></div>
+                <!-- 1.3.2任务文档 -->
+                <div class="left-document"></div>
+              </div>
+            </div>
+            <!-- 2.右侧面板 -->
+            <div class="right-pan">
+              <!-- 2.1短信服务 -->
+              <div class="right-section-sms">短信服务</div>
+              <!-- 2.2备件管理 -->
+              <div class="right-section-store">备件管理</div>
+              <!-- 2.3网络运维 -->
+              <div class="right-section-network">网络运维</div>
+              <!-- 2.4其它 -->
+              <div class="right-section-others">其它</div>
+            </div>
+          </div>
         </el-tab-pane>
         <!-- 值班签到 -->
         <el-tab-pane label="值班签到" name="duty">
-          <div class="first-tab">
+          <div class="second-tab">
             <el-calendar>
               <template slot="dateCell" slot-scope="{date, data}">
                 <div
@@ -40,10 +66,10 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      activeName: "duty",
+      activeName: "sitemap",
       dutys: "",
       users: [],
-      today: "2020-02-13"   //TODO
+      today: "2020-02-13" //TODO
     };
   },
   computed: {
@@ -136,14 +162,97 @@ export default {
   mounted: async function() {
     await this.getUserList();
     await this.getDutyList();
+
+    //background: -webkit-linear-gradient(bottom,green,white);
   }
 };
 </script>
 
 <style scoped>
 .first-tab {
+  position: relative;
+}
+
+.left-pan {
+  width: 70%;
+  min-height: 800px;
+  float: left;
+}
+
+.left-section-manual {
+  width: 100%;
+  height: 300px;
+  border: 1px solid #ddd;
+  margin-bottom: 5px;
+}
+
+.left-section-auto {
+  width: 100%;
+  height: 300px;
+  border: 1px solid #ddd;
+  margin-bottom: 5px;
+}
+
+.left-section-pdf {
+  width: 100%;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.left-manual {
+  width: 300px;
+  height: 198px;
+  border: 1px solid #ddd;
+  float: left;
+}
+
+.left-document {
+  width: 530px;
+  height: 198px;
+  border: 1px solid #ddd;
+  float: left;
+  margin-left: 8px;
+}
+
+.right-pan {
+  width: 29%;
+  min-height: 800px;
+  float: left;
+  margin-left: 3px;
+}
+
+.right-section-sms {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #ddd;
+  margin: 3px;
+}
+
+.right-section-store {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #ddd;
+  margin: 3px;
+}
+
+.right-section-network {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #ddd;
+  margin: 3px;
+}
+
+.right-section-others {
+  width: 100%;
+  height: 645px;
+  border: 1px solid #ddd;
+  margin: 3px;
+}
+
+.second-tab {
   width: 1000px;
-  height: 680px;
+  height: 800px;
 }
 
 .duty-tag {
@@ -158,13 +267,6 @@ export default {
 
 .duty-today {
   background: #d9ecff;
-}
-
-.block {
-  border-radius: 10px;
-  border: 1px solid #c0c4cc;
-  padding: 10px;
-  min-height: 100px;
 }
 
 .is-selected {
