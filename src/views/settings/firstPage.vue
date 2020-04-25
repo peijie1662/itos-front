@@ -39,7 +39,7 @@
                     </ul>
                   </el-card>
                   <!-- 统计图 -->
-                  <div style="width:400px;overflow:hidden;margin-top:20px;">
+                  <div style="width:500px;overflow:hidden;margin-top:20px;">
                     <ve-pie :data="manualChartData" :settings="manualChartSettings"></ve-pie>
                   </div>
                 </div>
@@ -73,16 +73,117 @@
                   </ul>
                 </el-card>
                 <!-- 统计图 -->
-                <div style="width:450px;overflow:hidden;margin-top:20px;">
-                  <ve-histogram :data="autoChartData" height="270px"/>
+                <div style="width:500px;overflow:hidden;margin-top:20px;margin-left:50px;">
+                  <ve-histogram :data="autoChartData" height="270px" />
                 </div>
               </div>
               <!-- 1.3文档中心 -->
               <div class="left-section-pdf">
                 <!-- 1.3.1服务台手册 -->
-                <div class="left-pdf-manual"></div>
+                <div class="left-pdf-manual">
+                  <!-- 标题 -->
+                  <div class="left-pdf-manual-title"></div>
+                  <div>
+                    <i
+                      class="iconfont icon-tushuguanlibrary12 icon"
+                      style="font-size:30px;position: absolute;top: 15px;left: 30px;color:#559088;"
+                    ></i>
+                  </div>
+                  <div style="position: absolute;top:20px;left:100px;">
+                    <span style="font-size:20px;color: #559088;">IT运维文档</span>
+                  </div>
+                  <!-- 内容 -->
+                  <div style="position: absolute;top:50px;left:10px;">
+                    <ul style="list-style:none;">
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#559088;"></i>IT服务台手册
+                      </li>
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#559088;"></i>值班人员注意事项
+                      </li>
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#559088;"></i>办公网重启文档
+                      </li>
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#559088;"></i>ITOS系统使用指南
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- 更多 -->
+                  <div style="position: absolute;bottom:10px;right:50px;">
+                    <a href="#" style="color:#559088;">更多文档...</a>
+                  </div>
+                </div>
                 <!-- 1.3.2任务文档 -->
-                <div class="left-pdf-document"></div>
+                <div class="left-pdf-document">
+                  <!-- 标题 -->
+                  <div class="left-pdf-document-title"></div>
+                  <div>
+                    <i
+                      class="iconfont icon-tushu1 icon"
+                      style="font-size:30px;position: absolute;top: 15px;left: 30px;color:#deb683;"
+                    ></i>
+                  </div>
+                  <div style="position: absolute;top:20px;left:100px;">
+                    <span style="font-size:20px;color: #deb683;">服务台报告</span>
+                  </div>
+                  <!-- 内容 -->
+                  <div style="position: absolute;top:50px;left:10px;">
+                    <ul style="list-style:none;">
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#deb683;"></i>2020-03服务台月报
+                      </li>
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#deb683;"></i>2020-02服务台月报
+                      </li>
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#deb683;"></i>2020-01服务台月报
+                      </li>
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#deb683;"></i>2019-12服务台月报
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- 更多 -->
+                  <div style="position: absolute;bottom:10px;right:50px;">
+                    <a href="#" style="color:#deb683;">更多报表...</a>
+                  </div>
+                </div>
+                <!-- 1.3.3自动任务 -->
+                <div class="left-pdf-auto">
+                  <!-- 标题 -->
+                  <div class="left-pdf-auto-title"></div>
+                  <div>
+                    <i
+                      class="iconfont icon-tushuguan icon"
+                      style="font-size:30px;position: absolute;top: 15px;left: 30px;color:#678cac;"
+                    ></i>
+                  </div>
+                  <div style="position: absolute;top:20px;left:100px;">
+                    <span style="font-size:20px;color: #678cac;">自动任务报告</span>
+                  </div>
+                  <!-- 内容 -->
+                  <div style="position: absolute;top:50px;left:10px;">
+                    <ul style="list-style:none;">
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#678cac;"></i>2020-04-05自动任务日报
+                      </li>
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#678cac;"></i>2020-04-04自动任务日报
+                      </li>
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#678cac;"></i>2020-04-03自动任务日报
+                      </li>
+                      <li>
+                        <i class="iconfont icon-tushu icon" style="font-size:20px;color:#678cac;"></i>2020-04-02自动任务日报
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- 更多 -->
+                  <div style="position: absolute;bottom:10px;right:50px;">
+                    <a href="#" style="color:#678cac;">更多报表...</a>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- 2.右侧面板 -->
@@ -157,8 +258,12 @@
                   </div>
                 </div>
               </div>
-              <!-- 2.6其它 -->
-              <div class="right-section-others">其它</div>
+              <!-- 2.6系统动态 -->
+              <div class="right-section-others">
+                <div style="margin-left:10px;margin-top:10px;">
+                  <span style="color: #a6b5c4;">系统动态</span>
+                </div>
+              </div>
             </div>
           </div>
         </el-tab-pane>
@@ -226,7 +331,7 @@ export default {
           { 日期: "1/4", 任务: 56, 已完成: 56, 未完成: 0 },
           { 日期: "1/5", 任务: 200, 已完成: 196, 未完成: 4 },
           { 日期: "1/6", 任务: 123, 已完成: 110, 未完成: 13 },
-          { 日期: "1/6", 任务: 123, 已完成: 110, 未完成: 13 },
+          { 日期: "1/6", 任务: 123, 已完成: 110, 未完成: 13 }
         ]
       }
     };
@@ -379,26 +484,58 @@ export default {
 
 .left-section-pdf {
   width: 100%;
-  height: 200px;
   position: relative;
   overflow: hidden;
 }
 
 .left-pdf-manual {
-  width: 300px;
+  width: 250px;
   height: 198px;
   border: 1px solid #ddd;
   float: left;
   overflow: hidden;
+  position: relative;
+}
+
+.left-pdf-manual-title {
+  width: 0px;
+  height: 0px;
+  border-top: 80px solid #c1e4de;
+  border-right: 80px solid transparent;
 }
 
 .left-pdf-document {
-  width: 450px;
+  width: 250px;
   height: 198px;
   border: 1px solid #ddd;
   float: left;
   margin-left: 8px;
   overflow: hidden;
+  position: relative;
+}
+
+.left-pdf-document-title {
+  width: 0px;
+  height: 0px;
+  border-top: 80px solid #f4e0bd;
+  border-right: 80px solid transparent;
+}
+
+.left-pdf-auto {
+  width: 250px;
+  height: 198px;
+  border: 1px solid #ddd;
+  float: left;
+  margin-left: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.left-pdf-auto-title {
+  width: 0px;
+  height: 0px;
+  border-top: 80px solid #b7d6ec;
+  border-right: 80px solid transparent;
 }
 
 .right-pan {
