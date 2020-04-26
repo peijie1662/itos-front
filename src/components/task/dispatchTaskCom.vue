@@ -2,18 +2,18 @@
   <div>
     <div class="outer" @mouseleave="showNextStatus = false">
       <!-- 第1行，标题 -->
-      <div class="section">
+      <div class="section-title">
         <!-- 图标 -->
         <div style="float:left;">
           <i
             :class="task.icon.icon"
-            :style="isExpired()?'color:red':'color:#67C23A'"
+            :style="task.executedCallback?'color:red':'color:#67C23A'"
             style="font-size:30px;background:#e9ebec;"
           ></i>
         </div>
         <!-- 简介 -->
         <div style="float:left;margin-left:10px;">
-          <span style="font-size:20px;user-select:none;line-height:30px;">{{task.abs}}</span>
+          <span style="font-size:16px;user-select:none;line-height:30px;">{{task.abs}}</span>
         </div>
         <!-- 状态 -->
         <div
@@ -44,24 +44,22 @@
       </div>
       <!-- 第2行,登记信息 -->
       <div class="section-noborder">
-        <!-- 开始执行 -->
-        <div class="sub_section" style="width:250px;">
-          <span>开始执行：{{task.planDtStr}}</span>
-        </div>
-        <!-- 过期时间 -->
-        <div class="sub_section" style="width:250px;">
-          <span>过期时间：{{task.expiredTimeStr}}</span>
+        <!-- 开始执行/过期时间 -->
+        <div>
+          <span style="color: #a6b5c4;">开始执行：{{task.planDtStr}}</span>
+          <span style="color: #a6b5c4;margin-left:30px;">过期时间：{{task.expiredTimeStr}}</span>
         </div>
       </div>
       <!-- 第3行,内容 -->
-      <div class="section" style="min-height:50px;word-wrap: break-word;">{{task.content}}</div>
+      <div style="min-height:50px;word-wrap: break-word;padding: 10px;">{{task.content}}</div>
       <!-- 第4行,处理人 -->
-      <div class="section">
-        <span style="color:black;background:#e9ebec;">处理人员</span>
+      <div>
+        <span style="color: #a6b5c4;">处理人员：</span>
         <span style="margin-left:5px;">{{task.handlers}}</span>
       </div>
       <!-- 第5行,处理日志 -->
-      <div class="section" style="font-size:10px;">
+      <span style="color: #a6b5c4;">任务日志：</span>
+      <div style="font-size:10px;color: #a6b5c4;">
         <div v-for="(item,index) in taskLog" :key="index" style="margin-top:2px;">
           <i :class="item.sta.icon" :style="item.sta.iconclass" style="margin-left:10px;"></i>
           <span>{{item.opDtStr}}</span>
@@ -77,6 +75,8 @@
     <processingCom :ttask="processingTask" @updateTaskSuccess="updateTaskSuccess"></processingCom>
     <!-- 完成窗口 -->
     <doneCom :ttask="doneTask" @updateTaskSuccess="updateTaskSuccess"></doneCom>
+    <!-- 失败窗口 -->
+    <failCom :ttask="failTask" @updateTaskSuccess="updateTaskSuccess"></failCom>    
     <!-- 取消窗口 -->
     <cancelCom :ttask="cancelTask" @updateTaskSuccess="updateTaskSuccess"></cancelCom>
     <!-- 修改窗口 -->
@@ -88,10 +88,11 @@
 
 <script>
 import { getTaskLog } from "@/api/api";
-import { localDateToStr, localDateToDate } from "@/api/util";
+import { localDateToStr } from "@/api/util";
 import { getTaskIconById, getTaskStatusById, listIsEmpty } from "@/api/data";
 import processingCom from "@/components/task/commonStatusCom.vue";
 import doneCom from "@/components/task/commonStatusCom.vue";
+import failCom from "@/components/task/commonStatusCom.vue";
 import cancelCom from "@/components/task/commonStatusCom.vue";
 import modifyCom from "@/components/task/modifyCom.vue";
 import swapCom from "@/components/task/swapCom.vue";
@@ -106,17 +107,13 @@ export default {
       //
       processingTask: null,
       doneTask: null,
+      failTask: null,
       cancelTask: null,
       modifyTask: null,
       swapTask: null
     };
   },
   methods: {
-    isExpired() {
-      let dt1 = localDateToDate(this.task.expiredTime);
-      let dt2 = new Date();
-      return dt1 < dt2;
-    },
     updateTaskSuccess() {
       this.$emit("updateTaskSuccess");
     },
@@ -150,6 +147,8 @@ export default {
         this.processingTask = { ...task };
       } else if (status.id == "DONE") {
         this.doneTask = { ...task };
+      } else if (status.id == "FAIL") {
+        this.failTask = { ...task };        
       } else if (status.id == "CANCEL") {
         this.cancelTask = { ...task };
       } else if (status.id == "MODIFY") {
@@ -181,6 +180,7 @@ export default {
   components: {
     processingCom,
     doneCom,
+    failCom,
     cancelCom,
     modifyCom,
     swapCom
@@ -198,6 +198,13 @@ export default {
   height: 100%;
   margin-top: 2px;
   border: 1px solid #ddd;
+}
+
+.section-title {
+  overflow: hidden;
+  height: 100%;
+  margin-top: 2px;
+  background: -webkit-linear-gradient(right, #e9c341, white);
 }
 
 .section-noborder {

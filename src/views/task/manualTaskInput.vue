@@ -4,7 +4,7 @@
       <el-checkbox v-model="selCheckin" @change="filter">登记</el-checkbox>
       <el-checkbox v-model="selProcessing" @change="filter">进行中</el-checkbox>
       <el-checkbox v-model="selDone" @change="filter">完成</el-checkbox>
-      <el-checkbox v-model="selCancel" @change="filter">删除</el-checkbox>
+      <el-checkbox v-model="selCancel" @change="filter">失败/取消</el-checkbox>
       <el-divider direction="vertical"></el-divider>
       <el-date-picker
         v-model="dateRange"
@@ -63,7 +63,7 @@ export default {
           (me.selCheckin && item.status == "CHECKIN") ||
           (me.selProcessing && item.status == "PROCESSING") ||
           (me.selDone && item.status == "DONE") ||
-          (me.selCancel && item.status == "CANCEL")
+          (me.selCancel &&  ((item.status == "CANCEL")||(item.status == "FAIL")))
         );
       });
     },

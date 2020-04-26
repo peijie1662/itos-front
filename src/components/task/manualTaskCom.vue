@@ -89,6 +89,8 @@
     <processingCom :ttask="processingTask" @updateTaskSuccess="updateTaskSuccess"></processingCom>
     <!-- 完成窗口 -->
     <doneCom :ttask="doneTask" @updateTaskSuccess="updateTaskSuccess"></doneCom>
+    <!-- 失败窗口 -->
+    <failCom :ttask="failTask" @updateTaskSuccess="updateTaskSuccess"></failCom>
     <!-- 取消窗口 -->
     <cancelCom :ttask="cancelTask" @updateTaskSuccess="updateTaskSuccess"></cancelCom>
     <!-- 修改窗口 -->
@@ -104,6 +106,7 @@ import { localDateToStr, localDateToDate } from "@/api/util";
 import { getTaskIconById, getTaskStatusById, listIsEmpty } from "@/api/data";
 import processingCom from "@/components/task/commonStatusCom.vue";
 import doneCom from "@/components/task/commonStatusCom.vue";
+import failCom from "@/components/task/commonStatusCom.vue";
 import cancelCom from "@/components/task/commonStatusCom.vue";
 import modifyCom from "@/components/task/modifyCom.vue";
 import swapCom from "@/components/task/swapCom.vue";
@@ -118,6 +121,7 @@ export default {
       //
       processingTask: null,
       doneTask: null,
+      failTask: null,
       cancelTask: null,
       modifyTask: null,
       swapTask: null
@@ -162,6 +166,8 @@ export default {
         this.processingTask = { ...task };
       } else if (status.id == "DONE") {
         this.doneTask = { ...task };
+      } else if (status.id == "FAIL") {
+        this.failTask = { ...task };
       } else if (status.id == "CANCEL") {
         this.cancelTask = { ...task };
       } else if (status.id == "MODIFY") {
@@ -193,6 +199,7 @@ export default {
   components: {
     processingCom,
     doneCom,
+    failCom,
     cancelCom,
     modifyCom,
     swapCom

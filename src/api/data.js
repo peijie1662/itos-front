@@ -197,7 +197,7 @@ export const TASKICONS = [
 
 //任务的
 //1.通用状态
-//CHECKIN(登记)->PROCESSING(处理中)->DONE(完成)
+//CHECKIN(登记)->PROCESSING(处理中)->DONE(完成)/FAIL(失败)
 //2.特殊状态
 //SWAP(换人)-可以在任一阶段
 //MODIFY(内容修改)-可以在任一阶段
@@ -211,7 +211,7 @@ export const TASKSTATUS = [
     size: "large",//图标大小(timeline中使用) 
     iconclass: { background: "#e9ebec", color: "#7ab900" },
     hoverclass: { background: "#7ab900", color: "white" },
-    next: ["PROCESSING", "DONE", "SWAP", "MODIFY", "CANCEL"]
+    next: ["PROCESSING", "DONE","FAIL", "SWAP", "MODIFY", "CANCEL"]
   },
   {
     id: "PROCESSING",
@@ -220,7 +220,7 @@ export const TASKSTATUS = [
     size: "large",
     iconclass: { background: "#e9ebec", color: "#67C23A" },
     hoverclass: { background: "#67C23A", color: "white" },
-    next: ["PROCESSING", "DONE", "SWAP", "MODIFY", "CANCEL"]
+    next: ["PROCESSING", "DONE", "FAIL","SWAP", "MODIFY", "CANCEL"]
   },
   {
     id: "DONE",
@@ -232,12 +232,21 @@ export const TASKSTATUS = [
     next: ["TERMINAL"]
   },
   {
-    id: "CANCEL",
-    desc: "取消",
+    id: "FAIL",
+    desc: "失败",
     icon: "iconfont icon-quxiao2 icon",
     size: "large",
     iconclass: { background: "#e9ebec", color: "#F56C6C" },
     hoverclass: { background: "#F56C6C", color: "white" },
+    next: ["TERMINAL"]
+  },  
+  {
+    id: "CANCEL",
+    desc: "取消",
+    icon: "iconfont icon-cancel icon",
+    size: "large",
+    iconclass: { background: "#e9ebec", color: "#E6A23C" },
+    hoverclass: { background: "#E6A23C", color: "white" },
     next: ["TERMINAL"]
   },
   {
@@ -245,8 +254,8 @@ export const TASKSTATUS = [
     desc: "内容修改",
     icon: "iconfont icon-note3 icon",
     size: "large",
-    iconclass: { background: "#e9ebec", color: "#E6A23C" },
-    hoverclass: { background: "#E6A23C", color: "white" },
+    iconclass: { background: "#e9ebec", color: "#f68a1e" },
+    hoverclass: { background: "#f68a1e", color: "white" },
     next: ["INHERIT"] //继承上一状态的链节点
   },
   {

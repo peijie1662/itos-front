@@ -34,18 +34,18 @@
       "unicode_decimal": 59804
     },
     {
-      "icon_id": "1110430",
-      "name": "箭头右",
-      "font_class": "jiantouyou",
-      "unicode": "e61a",
-      "unicode_decimal": 58906
-    },
-    {
       "icon_id": "1288599",
       "name": "箭头",
       "font_class": "jiantou1",
       "unicode": "e603",
       "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "1388101",
+      "name": "cancel",
+      "font_class": "cancel",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
     },
     {
       "icon_id": "1962920",
@@ -139,13 +139,6 @@
       "unicode_decimal": 59070
     },
     {
-      "icon_id": "7536904",
-      "name": "任务与计划",
-      "font_class": "icon-test",
-      "unicode": "e61c",
-      "unicode_decimal": 58908
-    },
-    {
       "icon_id": "8941825",
       "name": "任务",
       "font_class": "renwu",
@@ -169,7 +162,7 @@
     {
       "icon_id": "10707252",
       "name": "箭头 右 right",
-      "font_class": "jiantouyou1",
+      "font_class": "jiantouyou",
       "unicode": "e61b",
       "unicode_decimal": 58907
     },
@@ -177,8 +170,8 @@
       "icon_id": "10707278",
       "name": "箭头 左 left",
       "font_class": "jiantouzuo",
-      "unicode": "e61d",
-      "unicode_decimal": 58909
+      "unicode": "e61c",
+      "unicode_decimal": 58908
     },
     {
       "icon_id": "11192573",
