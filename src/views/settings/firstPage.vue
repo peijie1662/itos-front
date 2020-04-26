@@ -89,11 +89,11 @@
                       style="font-size:30px;position: absolute;top: 15px;left: 30px;color:#559088;"
                     ></i>
                   </div>
-                  <div style="position: absolute;top:20px;left:100px;">
+                  <div style="position: absolute;top:20px;left:80px;">
                     <span style="font-size:20px;color: #559088;">IT运维文档</span>
                   </div>
                   <!-- 内容 -->
-                  <div style="position: absolute;top:50px;left:10px;">
+                  <div style="position: absolute;top:50px;left:0px;">
                     <ul style="list-style:none;">
                       <li>
                         <i class="iconfont icon-tushu icon" style="font-size:20px;color:#559088;"></i>IT服务台手册
@@ -124,11 +124,11 @@
                       style="font-size:30px;position: absolute;top: 15px;left: 30px;color:#deb683;"
                     ></i>
                   </div>
-                  <div style="position: absolute;top:20px;left:100px;">
+                  <div style="position: absolute;top:20px;left:80px;">
                     <span style="font-size:20px;color: #deb683;">服务台报告</span>
                   </div>
                   <!-- 内容 -->
-                  <div style="position: absolute;top:50px;left:10px;">
+                  <div style="position: absolute;top:50px;left:0px;">
                     <ul style="list-style:none;">
                       <li>
                         <i class="iconfont icon-tushu icon" style="font-size:20px;color:#deb683;"></i>2020-03服务台月报
@@ -159,11 +159,11 @@
                       style="font-size:30px;position: absolute;top: 15px;left: 30px;color:#678cac;"
                     ></i>
                   </div>
-                  <div style="position: absolute;top:20px;left:100px;">
+                  <div style="position: absolute;top:20px;left:80px;">
                     <span style="font-size:20px;color: #678cac;">自动任务报告</span>
                   </div>
                   <!-- 内容 -->
-                  <div style="position: absolute;top:50px;left:10px;">
+                  <div style="position: absolute;top:50px;left:0px;">
                     <ul style="list-style:none;">
                       <li>
                         <i class="iconfont icon-tushu icon" style="font-size:20px;color:#678cac;"></i>2020-04-05自动任务日报
@@ -260,8 +260,23 @@
               </div>
               <!-- 2.6系统动态 -->
               <div class="right-section-others">
-                <div style="margin-left:10px;margin-top:10px;">
-                  <span style="color: #a6b5c4;">系统动态</span>
+                <div style="margin-top:10px;overflow: hidden;">
+                  <div style="margin-left:10px;float: left;">
+                    <span style="color: #a6b5c4;">系统动态</span>
+                  </div>
+                  <div style="margin-right:10px;float: right;">
+                    <a href="#" style="color: #a6b5c4;">更多...</a>
+                  </div>
+                </div>
+                <div>
+                  <ul style="list-style:none;">
+                    <li v-for="(item,index) in itosLogs" :key="index" style="margin-top:10px;">
+                      <span style="font-size:10px;color:#a6b5c4;">{{item.opDate}}</span>
+                      <br />
+                      <i :class="item.status.icon" :style="{'color': item.status.iconclass.color}"></i>
+                      <span style="font-size:8px;">{{item.statusDesc}}</span>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -295,8 +310,16 @@
 
 <script>
 import QRCode from "qrcodejs2";
-import { APP_URL, dutyList, addDuty, delDuty, getUserList } from "@/api/api";
-import { valueToLabel } from "@/api/data";
+import {
+  APP_URL,
+  dutyList,
+  addDuty,
+  delDuty,
+  getUserList,
+  getItosLog
+} from "@/api/api";
+import { valueToLabel, getTaskStatusById } from "@/api/data";
+import { localDateToStr } from "@/api/util";
 import { mapGetters } from "vuex";
 
 export default {
@@ -306,6 +329,8 @@ export default {
       dutys: "",
       users: [],
       today: "2020-02-13", //TODO
+      //
+      itosLogs: [], //系统日志
       //
       manualChartSettings: {
         radius: 60,
@@ -365,7 +390,7 @@ export default {
             me.$message.error(errMsg);
           } else {
             me.$message.success("你的值班信息已取消。");
-            me.getDutyList();
+            me.loadDutyList();
           }
         });
       } else {
@@ -378,12 +403,12 @@ export default {
             me.$message.error(errMsg);
           } else {
             me.$message.success("你的值班信息已添加。");
-            me.getDutyList();
+            me.loadDutyList();
           }
         });
       }
     },
-    getDutyList() {
+    loadDutyList() {
       return new Promise((resolve, reject) => {
         dutyList({}).then(res => {
           let { flag, data, errMsg } = res;
@@ -400,7 +425,7 @@ export default {
         });
       });
     },
-    getUserList() {
+    loadUserList() {
       return new Promise((resolve, reject) => {
         getUserList({}).then(res => {
           let { flag, data, errMsg } = res;
@@ -422,6 +447,29 @@ export default {
         });
       });
     },
+    loadItosLog() {
+      return new Promise((resolve, reject) => {
+        getItosLog({}).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            this.$message({
+              message: errMsg,
+              type: "error"
+            });
+            reject();
+          } else {
+            this.itosLogs = data.map(item => {
+              return {
+                opDate: localDateToStr(item.opDate),
+                status: getTaskStatusById(item.status),
+                statusDesc: item.statusDesc
+              };
+            });
+            resolve();
+          }
+        });
+      });
+    },
     duty(day) {
       let ds = this.dutys[day];
       if (ds) {
@@ -436,8 +484,9 @@ export default {
     }
   },
   mounted: async function() {
-    await this.getUserList();
-    await this.getDutyList();
+    await this.loadUserList();
+    await this.loadDutyList();
+    await this.loadItosLog();
     this.useqrcode();
   }
 };

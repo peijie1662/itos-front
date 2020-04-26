@@ -225,7 +225,7 @@ export const TASKSTATUS = [
   {
     id: "DONE",
     desc: "完成",
-    icon: "iconfont icon-wancheng2 icon",
+    icon: "iconfont icon-wancheng3 icon",
     size: "large",
     iconclass: { background: "#e9ebec", color: "#3b99ff" },
     hoverclass: { background: "#3b99ff", color: "white" },
