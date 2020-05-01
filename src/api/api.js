@@ -78,6 +78,14 @@ export const getManualTaskList = params => { return axios.post(`${base}/manualta
 export const addManualTask = params => { return axios.post(`${base}/manualtask/add`, params).then(res => res.data); };
 //任务状态-SWAP
 export const swapTask = params => { return axios.post(`${base}/manualtask/swap`, params).then(res => res.data); };
+//新委外记录
+export const addDr = params => { return axios.post(`${base}/manualtask/newdr`, params).then(res => res.data); };
+//修改委外记录
+export const updateDr = params => { return axios.post(`${base}/manualtask/updatedr`, params).then(res => res.data); };
+//删除委外记录
+export const deleteDr = params => { return axios.post(`${base}/manualtask/deletedr`, params).then(res => res.data); };
+//任务委外列表
+export const getDrList = params => { return axios.post(`${base}/manualtask/drlist`, params).then(res => res.data); };
 
 //------------------------------------------任务通用
 //临时任务

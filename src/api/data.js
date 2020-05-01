@@ -211,7 +211,8 @@ export const TASKSTATUS = [
     size: "large",//图标大小(timeline中使用) 
     iconclass: { background: "#e9ebec", color: "#7ab900" },
     hoverclass: { background: "#7ab900", color: "white" },
-    next: ["PROCESSING", "DONE","FAIL", "SWAP", "MODIFY", "CANCEL"]
+    next: ["PROCESSING", "DONE","FAIL", "SWAP", "MODIFY", "CANCEL","DELIVERREPAIR"],
+    scope: ["MANUAL","AUTO"]
   },
   {
     id: "PROCESSING",
@@ -220,7 +221,8 @@ export const TASKSTATUS = [
     size: "large",
     iconclass: { background: "#e9ebec", color: "#67C23A" },
     hoverclass: { background: "#67C23A", color: "white" },
-    next: ["PROCESSING", "DONE", "FAIL","SWAP", "MODIFY", "CANCEL"]
+    next: ["PROCESSING", "DONE", "FAIL","SWAP", "MODIFY", "CANCEL","DELIVERREPAIR"],
+    scope: ["MANUAL","AUTO"]
   },
   {
     id: "DONE",
@@ -229,7 +231,8 @@ export const TASKSTATUS = [
     size: "large",
     iconclass: { background: "#e9ebec", color: "#3b99ff" },
     hoverclass: { background: "#3b99ff", color: "white" },
-    next: ["TERMINAL"]
+    next: ["TERMINAL"],
+    scope: ["MANUAL","AUTO"]
   },
   {
     id: "FAIL",
@@ -238,7 +241,8 @@ export const TASKSTATUS = [
     size: "large",
     iconclass: { background: "#e9ebec", color: "#F56C6C" },
     hoverclass: { background: "#F56C6C", color: "white" },
-    next: ["TERMINAL"]
+    next: ["TERMINAL"],
+    scope: ["AUTO"]
   },  
   {
     id: "CANCEL",
@@ -247,7 +251,8 @@ export const TASKSTATUS = [
     size: "large",
     iconclass: { background: "#e9ebec", color: "#E6A23C" },
     hoverclass: { background: "#E6A23C", color: "white" },
-    next: ["TERMINAL"]
+    next: ["TERMINAL"],
+    scope: ["MANUAL","AUTO"]
   },
   {
     id: "MODIFY",
@@ -256,7 +261,8 @@ export const TASKSTATUS = [
     size: "large",
     iconclass: { background: "#e9ebec", color: "#f68a1e" },
     hoverclass: { background: "#f68a1e", color: "white" },
-    next: ["INHERIT"] //继承上一状态的链节点
+    next: ["INHERIT"],  
+    scope: ["MANUAL"]
   },
   {
     id: "SWAP",
@@ -264,8 +270,19 @@ export const TASKSTATUS = [
     icon: "iconfont icon-icon-test icon",
     size: "large",
     iconclass: { background: "#e9ebec", color: "#b848ff" },
-    hoverclass: { background: "#b848ff", color: "#b848ff" },
-    next: ["INHERIT"] //继承上一状态的链节点
+    hoverclass: { background: "#b848ff", color: "white" },
+    next: ["INHERIT"],
+    scope: ["MANUAL"]
+  },
+  {
+    id: "DELIVERREPAIR",
+    desc: "委外修理",
+    icon: "iconfont icon-weihu icon",
+    size: "large",
+    iconclass: { background: "#e9ebec", color: "#616bdd" },
+    hoverclass: { background: "#616bdd", color: "white" },
+    next: ["INHERIT"],
+    scope: ["MANUAL"]
   }
 ]
 

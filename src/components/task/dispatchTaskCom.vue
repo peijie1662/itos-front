@@ -76,7 +76,7 @@
     <!-- 完成窗口 -->
     <doneCom :ttask="doneTask" @updateTaskSuccess="updateTaskSuccess"></doneCom>
     <!-- 失败窗口 -->
-    <failCom :ttask="failTask" @updateTaskSuccess="updateTaskSuccess"></failCom>    
+    <failCom :ttask="failTask" @updateTaskSuccess="updateTaskSuccess"></failCom>
     <!-- 取消窗口 -->
     <cancelCom :ttask="cancelTask" @updateTaskSuccess="updateTaskSuccess"></cancelCom>
     <!-- 修改窗口 -->
@@ -148,7 +148,7 @@ export default {
       } else if (status.id == "DONE") {
         this.doneTask = { ...task };
       } else if (status.id == "FAIL") {
-        this.failTask = { ...task };        
+        this.failTask = { ...task };
       } else if (status.id == "CANCEL") {
         this.cancelTask = { ...task };
       } else if (status.id == "MODIFY") {
@@ -165,9 +165,13 @@ export default {
         this.task = newVal;
         this.task.icon = getTaskIconById(newVal.taskIcon);
         this.task.sta = getTaskStatusById(newVal.status);
-        this.task.nextSta = this.task.sta.next.map(item => {
-          return getTaskStatusById(item);
-        });
+        this.task.nextSta = this.task.sta.next
+          .map(item => {
+            return getTaskStatusById(item);
+          })
+          .filter(item => {
+            return item.scope.indexOf("AUTO") >= 0;
+          });
         this.task.handlers = newVal.handler.join(",");
         this.task.planDtStr = localDateToStr(this.task.planDt);
         this.task.expiredTimeStr = localDateToStr(this.task.expiredTime);

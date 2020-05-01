@@ -2,12 +2,12 @@
   <div>
     <div class="outer" @mouseleave="showNextStatus = false">
       <!-- 第1行，标题 -->
-      <div class="section">
+      <div class="section-title">
         <!-- 图标 -->
         <div style="float:left;">
           <i
             :class="task.icon.icon"
-            :style="isExpired()?'color:red':'color:#67C23A'"
+            :style="task.executedCallback?'color:red':'color:#67C23A'"
             style="font-size:30px;background:#e9ebec;"
           ></i>
         </div>
@@ -65,15 +65,31 @@
           <span>过期时间：{{task.expiredTimeStr}}</span>
         </div>
       </div>
-      <!-- 第3行,内容 -->
-      <div class="section" style="min-height:50px;" v-html="task.content"></div>
-      <!-- 第4行,处理人 -->
+      <!-- 第3行,委外修理 -->
+      <div class="section" style="color:#c0c4cc;" v-if="dr.drId">
+        <div class="sub_section" style="width:250px;">
+          <span>送修时间：{{dr.deliverDateStr}}</span>
+        </div>
+        <div class="sub_section" style="width:250px;">
+          <span>收回时间：{{dr.receiptDateStr}}</span>
+        </div>
+        <div class="sub_section" style="width:250px;">
+          <span>发票号码：{{dr.invoiceNumber}}</span>
+        </div>
+        <div class="sub_section" style="width:100px;">
+          <span>金额：{{dr.amount}}</span>
+        </div>
+      </div>
+      <!-- 第4行,内容 -->
+      <div class="section" style="min-height:50px;padding: 10px;" v-html="task.content"></div>
+      <!-- 第5行,处理人 -->
       <div class="section">
-        <span style="color:black;background:#e9ebec;">处理人员</span>
+        <span style="color:#c0c4cc;">处理人员：</span>
         <span style="margin-left:5px;">{{task.handlers}}</span>
       </div>
-      <!-- 第5行,处理日志 -->
-      <div class="section" style="font-size:10px;">
+      <!-- 第6行,处理日志 -->
+      <span style="color: #a6b5c4;">任务日志：</span>
+      <div class="section" style="font-size:10px;color:#c0c4cc;">
         <div v-for="(item,index) in taskLog" :key="index" style="margin-top:2px;">
           <i :class="item.sta.icon" :style="item.sta.iconclass" style="margin-left:10px;"></i>
           <span>{{item.opDtStr}}</span>
@@ -97,11 +113,13 @@
     <modifyCom :ttask="modifyTask" @updateTaskSuccess="updateTaskSuccess"></modifyCom>
     <!-- 换人窗口 -->
     <swapCom :ttask="swapTask" @updateTaskSuccess="updateTaskSuccess"></swapCom>
+    <!-- 委外窗口 -->
+    <dr-com :dr="dr_param" @updateTaskSuccess="updateTaskSuccess"></dr-com>
   </div>
 </template>
 
 <script>
-import { getTaskLog } from "@/api/api";
+import { getTaskLog, getDrList } from "@/api/api";
 import { localDateToStr, localDateToDate } from "@/api/util";
 import { getTaskIconById, getTaskStatusById, listIsEmpty } from "@/api/data";
 import processingCom from "@/components/task/commonStatusCom.vue";
@@ -110,6 +128,7 @@ import failCom from "@/components/task/commonStatusCom.vue";
 import cancelCom from "@/components/task/commonStatusCom.vue";
 import modifyCom from "@/components/task/modifyCom.vue";
 import swapCom from "@/components/task/swapCom.vue";
+import drCom from "@/components/deliverrepair/deliverRepairCom.vue";
 
 export default {
   data() {
@@ -124,15 +143,13 @@ export default {
       failTask: null,
       cancelTask: null,
       modifyTask: null,
-      swapTask: null
+      swapTask: null,
+      //
+      dr: null, //委外
+      dr_param: null
     };
   },
   methods: {
-    isExpired() {
-      let dt1 = localDateToDate(this.task.expiredTime);
-      let dt2 = new Date();
-      return dt1 < dt2;
-    },
     updateTaskSuccess() {
       this.$emit("updateTaskSuccess");
     },
@@ -140,24 +157,52 @@ export default {
       this.showNextStatus =
         !this.showNextStatus && !listIsEmpty(this.task.nextSta);
     },
-    loadData() {
-      let me = this;
-      getTaskLog({
-        taskId: me.task.taskId
-      }).then(res => {
-        let { flag, data, errMsg } = res;
-        if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
-        } else {
-          me.taskLog = data;
-          me.taskLog.forEach(item => {
-            item.opDtStr = localDateToStr(item.opDate);
-            item.sta = getTaskStatusById(item.status);
-          });
-        }
+    loadTaskLog() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getTaskLog({
+          taskId: me.task.taskId
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            this.$message({
+              message: errMsg,
+              type: "error"
+            });
+            reject();
+          } else {
+            me.taskLog = data;
+            me.taskLog.forEach(item => {
+              item.opDtStr = localDateToStr(item.opDate);
+              item.sta = getTaskStatusById(item.status);
+            });
+            resolve();
+          }
+        });
+      });
+    },
+    loadTaskDeliverRepair() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getDrList({
+          taskId: me.task.taskId
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            this.$message({
+              message: errMsg,
+              type: "error"
+            });
+            reject();
+          } else {
+            me.dr = data.length > 0 ? data[0] : { taskId: me.task.taskId };
+            me.dr.deliverDateStr = localDateToStr(me.dr.deliverDate);
+            me.dr.receiptDateStr = localDateToStr(me.dr.receiptDate);
+            me.dr.deliverDate = localDateToDate(me.dr.deliverDate);
+            me.dr.receiptDate = localDateToDate(me.dr.receiptDate);
+            resolve();
+          }
+        });
       });
     },
     nextStatus(task, status) {
@@ -174,23 +219,30 @@ export default {
         this.modifyTask = { ...task };
       } else if (status.id == "SWAP") {
         this.swapTask = { ...task };
+      } else if (status.id == "DELIVERREPAIR") {
+        this.dr_param = { ...this.dr };
       }
     }
   },
   props: ["ttask"],
   watch: {
     ttask: {
-      handler(newVal) {
+      handler: async function(newVal) {
         this.task = newVal;
         this.task.icon = getTaskIconById(newVal.taskIcon);
         this.task.sta = getTaskStatusById(newVal.status);
-        this.task.nextSta = this.task.sta.next.map(item => {
-          return getTaskStatusById(item);
-        });
+        this.task.nextSta = this.task.sta.next
+          .map(item => {
+            return getTaskStatusById(item);
+          })
+          .filter(item => {
+            return item.scope.indexOf("MANUAL") >= 0;
+          });
         this.task.handlers = newVal.handler.join(",");
         this.task.planDtStr = localDateToStr(this.task.planDt);
         this.task.expiredTimeStr = localDateToStr(this.task.expiredTime);
-        this.loadData();
+        await this.loadTaskLog();
+        await this.loadTaskDeliverRepair();
       },
       deep: true,
       immediate: true
@@ -202,7 +254,8 @@ export default {
     failCom,
     cancelCom,
     modifyCom,
-    swapCom
+    swapCom,
+    drCom
   }
 };
 </script>
@@ -212,11 +265,17 @@ export default {
   position: relative;
 }
 
+.section-title {
+  overflow: hidden;
+  height: 100%;
+  margin-top: 2px;
+  background: -webkit-linear-gradient(right, #67c23a, white);
+}
+
 .section {
   overflow: hidden;
   height: 100%;
   margin-top: 2px;
-  border: 1px solid #ddd;
 }
 
 .section-noborder {
@@ -227,8 +286,7 @@ export default {
 
 .sub_section {
   float: left;
-  border-bottom: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+  color: #c0c4cc;
   overflow: hidden;
 }
 
