@@ -66,7 +66,7 @@
         </div>
       </div>
       <!-- 第3行,委外修理 -->
-      <div class="section" style="color:#c0c4cc;" v-if="dr.drId">
+      <div class="section" style="color:#c0c4cc;" v-if="dr && dr.drId">
         <div class="sub_section" style="width:250px;">
           <span>送修时间：{{dr.deliverDateStr}}</span>
         </div>

@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import { STATIC_URL, WS_URL } from "@/api/api";
+import { STATIC_URL } from "@/api/api";
 import UserSetupCom from "@/components/user/userSetupCom.vue";
 import { mapGetters, mapMutations } from "vuex";
 import { userOnline, enterScene, leaveScene } from "@/api/store_socket";
@@ -124,7 +124,6 @@ export default {
       setupUser: null,
       showIM: false,
       isCollapse: false,
-      path: WS_URL,
       online_users: [],
       face_url: ""
     };

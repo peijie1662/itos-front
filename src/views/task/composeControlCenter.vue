@@ -110,7 +110,6 @@
 
 <script>
 import {
-  WS_URL,
   getComposeModelList,
   getComposeTaskByModel,
   saveOnceTask,
@@ -153,9 +152,6 @@ export default {
         bgDt: "",
         edDt: ""
       },
-      //
-      path: WS_URL,
-      socket: "",
       //
       pdfUrl: ""
     };
