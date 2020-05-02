@@ -71,7 +71,7 @@ export const insertContent = function (content) {
   }
 }
 
-export const formatDate = function(date, fmt) {
+export const formatDate = function (date, fmt) {
   var o = {
     "M+": date.getMonth() + 1, //月份
     "d+": date.getDate(), //日
@@ -135,4 +135,10 @@ export const generateUUID = function () {
     return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
   });
   return uuid;
+}
+
+export const arrDeepCopy = function (source) {
+  var sourceCopy = [];
+  for (var item in source) sourceCopy[item] = typeof source[item] === 'object' ? arrDeepCopy(source[item]) : source[item];
+  return sourceCopy;
 }

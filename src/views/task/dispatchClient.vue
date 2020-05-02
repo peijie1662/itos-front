@@ -4,14 +4,32 @@
       <div style="margin-top:10px;">
         <el-button type="primary" size="mini" @click="addClient">登记</el-button>
         <el-button type="primary" size="mini" @click="loadData">刷新</el-button>
+        <el-divider direction="vertical"></el-divider>
+        <el-cascader
+          v-model="qryModelKey"
+          :options="gpOpt"
+          :props="{ expandTrigger: 'hover',emitPath:false }"
+          @change="handleQryModelKey"
+          size="mini"
+          placeholder="选择任务KEY"
+          clearable
+          style="width:400px;"
+        ></el-cascader>
       </div>
     </div>
     <div class="content">
-      <el-table :data="clients" :header-cell-style="headerCellStyle" :cell-style="cellStyle" border>
+      <el-table
+        :data="clients"
+        :header-cell-style="headerCellStyle"
+        :cell-style="cellStyle"
+        border
+        :row-key="getRowKeys"
+        :expand-row-keys="expands"
+      >
         <el-table-column type="expand">
           <template slot-scope="scope">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item>
+              <el-form-item expanded="true">
                 <div v-for="item in scope.row.models" :key="item.modelId" class="model">
                   <sample-model-com :mmodel="item"></sample-model-com>
                 </div>
@@ -60,7 +78,7 @@ import {
   serverReloadClient,
   getGroupList
 } from "@/api/api";
-import { localDateToStr } from "@/api/util";
+import { localDateToStr, arrDeepCopy } from "@/api/util";
 import sampleModelCom from "@/components/model/sampleModelCom";
 import newClientCom from "@/components/client/newClientCom";
 import updateClientCom from "@/components/client/updateClientCom";
@@ -72,10 +90,25 @@ export default {
       updateClient: null,
       models: [],
       clients: [],
-      gpList: []
+      gpList: [],
+      gpOpt: [],
+      qryModelKey: "",
+      expands: []
     };
   },
   methods: {
+    getRowKeys(row) {
+      return row.serviceName;
+    },
+    handleQryModelKey() {
+      let me = this;
+      me.expands = [];
+      me.clients.forEach(client => {
+        if (client.modelKey.indexOf(me.qryModelKey) >= 0) {
+          me.expands.push(client.serviceName);
+        }
+      });
+    },
     addClient() {
       this.newClient = {};
     },
@@ -94,7 +127,23 @@ export default {
       });
     },
     chgClient(index) {
-      this.updateClient = { ...this.clients[index] };
+      let me = this;
+      let uc = this.clients[index];
+      //禁用其它client已使用的model
+      me.gpList.forEach(gp => {
+        gp.children.forEach(child => {
+          child.disabled = false;
+          me.clients.forEach(client => {
+            if (
+              client.modelKey.indexOf(child.value) >= 0 &&
+              client.serviceName != uc.serviceName
+            ) {
+              child.disabled = true;
+            }
+          });
+        });
+      });
+      me.updateClient = { ...uc };
     },
     loadData: async function() {
       let me = this;
@@ -147,6 +196,7 @@ export default {
                 }
               });
             });
+            me.gpOpt = arrDeepCopy(me.gpList);
             resolve();
           }
         });
