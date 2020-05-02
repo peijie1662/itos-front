@@ -111,6 +111,10 @@ export const EXPIREDCALLBACKS = [
     label: "超时转为完成"
   },
   {
+    value: "FAIL",
+    label: "超时转为失败"
+  },  
+  {
     value: "CANCEL",
     label: "超时转为取消"
   },

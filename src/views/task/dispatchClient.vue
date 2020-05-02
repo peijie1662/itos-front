@@ -31,7 +31,10 @@
             <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item expanded="true">
                 <div v-for="item in scope.row.models" :key="item.modelId" class="model">
-                  <sample-model-com :mmodel="item"></sample-model-com>
+                  <sample-model-com
+                    :mmodel="item"
+                    :style="item.modelId == qryModelKey?'background:yellow':'background:white'"
+                  ></sample-model-com>
                 </div>
               </el-form-item>
             </el-form>
