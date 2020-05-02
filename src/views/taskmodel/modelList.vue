@@ -89,21 +89,34 @@ export default {
       gpList: [], //组列表,包含组内模版
       newModel: null, //新分组
       modelList: [], //模版列表
-      noGpModels: [] //未分组模版
+      noGpModels: [], //未分组模版
+      expands: []
     };
   },
   methods: {
+    saveExpands() {
+      let me = this;
+      me.expands = [];
+      me.gpList.forEach(gp => {
+        if (gp.collapse) {
+          me.expands.push(gp.groupName);
+        }
+      });
+      sessionStorage.setItem("gpexpands", JSON.stringify(me.expands));
+    },
     expandGroup() {
       this.gpList.forEach(gp => {
         gp.collapse = true;
       });
       this.gpList = [...this.gpList];
+      this.saveExpands();
     },
     collapseGroup() {
       this.gpList.forEach(gp => {
         gp.collapse = false;
       });
       this.gpList = [...this.gpList];
+      this.saveExpands();
     },
     change(gp) {
       let me = this;
@@ -150,6 +163,7 @@ export default {
     collapse(gp) {
       gp.collapse = !gp.collapse;
       this.gpList = [...this.gpList];
+      this.saveExpands();
     },
     addGroup() {
       this.newGp = {};
@@ -190,8 +204,8 @@ export default {
           } else {
             me.modelList = data;
             me.modelList.forEach(m => {
-              m.startDate = localDateToDate(m.startDate)
-            })
+              m.startDate = localDateToDate(m.startDate);
+            });
             resolve();
           }
         });
@@ -212,7 +226,7 @@ export default {
             me.gpList = data;
             me.gpList.forEach(gp => {
               gp.models = [];
-              gp.collapse = false;
+              gp.collapse = me.expands.indexOf(gp.groupName) >= 0;
             });
             resolve();
           }
@@ -222,6 +236,10 @@ export default {
   },
   mounted() {
     this.loadData();
+    let expands = sessionStorage.getItem("gpexpands");
+    if (expands) {
+      this.expands = JSON.parse(expands);
+    }
   },
   components: {
     modelCom,

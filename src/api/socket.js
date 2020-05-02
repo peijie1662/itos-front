@@ -9,8 +9,6 @@ export default {
             alert("您的浏览器不支持socket");
         } else {
             // 实例化socket
-
-            console.info(WS_URL);
             socket = new WebSocket(WS_URL);
             // 监听socket连接
             socket.onopen = this.open;
