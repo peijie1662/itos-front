@@ -170,7 +170,7 @@ export default {
             return getTaskStatusById(item);
           })
           .filter(item => {
-            return item.scope.indexOf("AUTO") >= 0;
+            return item.scope && item.scope.indexOf("AUTO") >= 0;
           });
         this.task.handlers = newVal.handler.join(",");
         this.task.planDtStr = localDateToStr(this.task.planDt);
