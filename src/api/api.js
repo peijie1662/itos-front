@@ -3,23 +3,23 @@ import axios from 'axios'
 //后台URL
 //let base = '/api';
 //Websocket的URL
+//export const WS_URL = 'ws://169.169.41.27:7857/ws';
+//移动App的URL
+//export const APP_URL = "http://169.169.41.27:8081/";
+
+//后台URL
+let base = 'http://169.169.41.26:7856';
+//Websocket的URL
+export const WS_URL = 'ws://169.169.41.26:7857/ws';
+//移动App的URL
+export const APP_URL = "http://169.169.41.26:8081/";
+
+//后台URL
+//let base = 'http://10.170.59.44:7856';
+//Websocket的URL
 //export const WS_URL = 'ws://10.170.59.44:7857/ws';
 //移动App的URL
-//export const APP_URL = "http://169.169.41.26:8081/";
-
-//后台URL
-//let base = 'http://169.169.41.26:7856';
-//Websocket的URL
-//export const WS_URL = 'ws://169.169.41.26:7857/ws';
-//移动App的URL
-//export const APP_URL = "http://169.169.41.26:8081/";
-
-//后台URL
-let base = 'http://10.170.59.44:7856';
-//Websocket的URL
-export const WS_URL = 'ws://10.170.59.44:7857/ws';
-//移动App的URL
-export const APP_URL = "http://10.170.59.44:8081/";
+//export const APP_URL = "http://10.170.59.44:8081/";
 
 export const STATIC_URL = `${base}/itosfile/`
 export const UPLOAD_TASK_URL = `${base}/task/uploadfile`
@@ -147,3 +147,7 @@ export const getItosLog = params => { return axios.post(`${base}/page/itoslog`, 
 //------------------------------------------PDF报表
 //组合任务报表
 export const composeReport = params => { return axios.post(`${base}/pdf/compose`, params).then(res => res.data); };
+//文档列表
+export const getDocumentList = params => { return axios.post(`${base}/pdf/document/list`, params).then(res => res.data); };
+//移动文档
+export const moveDocument = params => { return axios.post(`${base}/pdf/document/move`, params).then(res => res.data); };

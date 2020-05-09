@@ -66,7 +66,7 @@
         </el-table-column>
       </el-table>
       <!-- 登记终端 -->
-      <newClientCom :nclient="newClient" :mmodel="models" @updateClientSuccess="loadData"></newClientCom>
+      <newClientCom :nclient="newClient" :gps="gpList" @updateClientSuccess="loadData"></newClientCom>
       <!-- 修改终端 -->
       <updateClientCom :uclient="updateClient" :gps="gpList" @updateClientSuccess="loadData"></updateClientCom>
     </div>
@@ -113,6 +113,18 @@ export default {
       });
     },
     addClient() {
+      let me = this;
+      //禁用其它client已使用的model
+      me.gpList.forEach(gp => {
+        gp.children.forEach(child => {
+          child.disabled = false;
+          me.clients.forEach(client => {
+            if (client.modelKey.indexOf(child.value) >= 0) {
+              child.disabled = true;
+            }
+          });
+        });
+      });
       this.newClient = {};
     },
     delClient(row) {

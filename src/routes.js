@@ -13,6 +13,7 @@ import ComposeMaintance from './views/task/composeMaintance.vue'
 import UserManager from './views/settings/userManager.vue'
 import firstPage from './views/settings/firstPage.vue'
 import reportModel from './views/report/reportModel.vue'
+import documentManage from './views/report/documentManage.vue'
 
 let routes = [
     {
@@ -109,7 +110,11 @@ let routes = [
             {
                 path: '/report_model', component: reportModel, name: '报告定制',
                 meta: { funId: '5001', dis: true }
-            }
+            },
+            {
+                path: '/document_manage', component: documentManage, name: '文档管理',
+                meta: { funId: '5002', dis: true }
+            },
         ]
     },
     {

@@ -26,7 +26,7 @@
         >
           <el-cascader
             v-model="client.modelKey"
-            :options="gpList"
+            :options="gps"
             :props="{multiple: true,emitPath:false}"
             clearable
             style="width:100%;"
@@ -54,7 +54,6 @@ export default {
   data() {
     return {
       client: "",
-      gpList: [],
       dialogVisible: false
     };
   },
@@ -110,7 +109,7 @@ export default {
       });
     }
   },
-  props: ["nclient", "mmodel"],
+  props: ["nclient", "gps"],
   watch: {
     nclient: {
       handler(newVal) {
