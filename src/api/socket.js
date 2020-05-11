@@ -1,23 +1,43 @@
-import { WS_URL } from '@/api/api'
+import { OFFICE_WS_URL, PRD_WS_URL } from '@/api/api'
 
 let socket = null
+let prdSocket = null
+let officeSocket = null
 let recieveHandler = {}//接收数据处理函数
 
 export default {
-    init() {
+    //初始化生产网WS
+    initPrd() {
         if (typeof WebSocket === "undefined") {
             alert("您的浏览器不支持socket");
         } else {
             // 实例化socket
-            socket = new WebSocket(WS_URL);
+            prdSocket = new WebSocket(PRD_WS_URL);
             // 监听socket连接
-            socket.onopen = this.open;
+            prdSocket.onopen = this.open;
             // 监听socket错误信息
-            socket.onerror = this.error;
+            prdSocket.onerror = this.error;
             // 监听socket消息
-            socket.onmessage = this.getMessage;
+            prdSocket.onmessage = this.getMessage;
             //关闭
-            socket.onclose = this.close;
+            prdSocket.onclose = this.close;
+        }
+    },
+    //初始化办公网WS
+    initOffice() {
+        if (typeof WebSocket === "undefined") {
+            alert("您的浏览器不支持socket");
+        } else {
+            // 实例化socket
+            officeSocket = new WebSocket(OFFICE_WS_URL);
+            // 监听socket连接
+            officeSocket.onopen = this.open;
+            // 监听socket错误信息
+            officeSocket.onerror = this.error;
+            // 监听socket消息
+            officeSocket.onmessage = this.getMessage;
+            //关闭
+            officeSocket.onclose = this.close;
         }
     },
     inner_addRcvHandler(handlers) {//重置数据接收处理函数
@@ -57,10 +77,11 @@ export default {
         this.inner_delRcvHandler(scene)
     },
     open() {
-        console.log("socket已经连接");
+        socket = this;
+        console.log(this.url + "已经连接");
     },
     error() {
-        console.log("连接错误");
+        console.log(this.url + "连接错误");
     },
     getMessage(msg) {
         console.log("入口数据：" + msg.data);
@@ -80,7 +101,7 @@ export default {
         }
     },
     close() {
-        console.log("socket已经关闭");
+        console.log(this.url + "已经关闭");
     }
 }
 

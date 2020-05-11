@@ -40,14 +40,20 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="服务名" width="150">
+        <el-table-column label="服务名" width="150" sortable>
           <template slot-scope="scope">
             <i class="el-icon-sunny" style="color:green;" v-if="scope.row.onLine"></i>
             <i class="el-icon-moon" style="color:#F56C6C;" v-else></i>
             <span style="margin-left:5px;">{{scope.row.serviceName}}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="domain" label="域" width="100" sortable></el-table-column>
         <el-table-column prop="description" label="描述" width="360"></el-table-column>
+        <el-table-column label="KEY" width="50">
+          <template slot-scope="scope">
+            {{scope.row.models?scope.row.models.length:'0'}}
+          </template>
+        </el-table-column>
         <el-table-column prop="ip" label="IP" width="120"></el-table-column>
         <el-table-column prop="activeTimeStr" label="活动时间" width="160"></el-table-column>
         <el-table-column label="操作">

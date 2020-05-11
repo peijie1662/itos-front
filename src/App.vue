@@ -32,7 +32,8 @@ export default {
       sessionStorage.setItem("curRoute", this.$router.currentRoute.path);
     });
     //初始化WebSocket
-    socket.init()
+    socket.initPrd()
+    socket.initOffice()
   },
   mounted() {
     this.timer = setInterval(() => {

@@ -3,6 +3,19 @@
     <el-dialog title="修改终端" width="500px" :visible.sync="dialogVisible">
       <el-form ref="form" :model="client" label-width="100px">
         <el-form-item label="服务名" prop="serviceName">{{client.serviceName}}</el-form-item>
+        <!-- 域 -->
+        <el-form-item
+          label="所属域"
+          prop="domain"
+          :rules="[
+      { required: true, message: '请选择所属域', trigger: 'blur' }]"
+        >
+          <el-select v-model="client.domain" size="mini" placeholder="请选择所属域">
+            <el-option label="OFFICE" value="OFFICE"></el-option>
+            <el-option label="NBCT" value="NBCT"></el-option>
+          </el-select>
+        </el-form-item>
+        <!-- 描述 -->
         <el-form-item
           label="描述"
           prop="description"
@@ -11,6 +24,7 @@
         >
           <el-input v-model="client.description" size="mini"></el-input>
         </el-form-item>
+        <!-- 任务KEY -->
         <el-form-item label="任务KEY">
           <el-cascader
             v-model="client.modelKey"
@@ -20,12 +34,14 @@
             style="width:100%;"
           ></el-cascader>
         </el-form-item>
+        <!-- 备注 -->
         <el-form-item label="备注1">
           <el-input type="textarea" v-model="client.remark1"></el-input>
         </el-form-item>
         <el-form-item label="备注2">
           <el-input type="textarea" v-model="client.remark2"></el-input>
         </el-form-item>
+        <!-- 按钮 -->
         <el-form-item>
           <el-button
             type="primary"
