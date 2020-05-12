@@ -33,12 +33,7 @@
           <el-input v-model="client.description" size="mini"></el-input>
         </el-form-item>
         <!-- 任务KEY -->
-        <el-form-item
-          label="任务KEY"
-          prop="modelKey"
-          :rules="[
-      { required: true, message: '请选择任务KEY', trigger: 'blur' }]"
-        >
+        <el-form-item label="任务KEY" prop="modelKey">
           <el-cascader
             v-model="client.modelKey"
             :options="gps"

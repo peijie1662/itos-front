@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 //后台URL
-let base = '/api';
+//let base = '/api';
 //OFFICE Websocket的URL
-export const OFFICE_WS_URL = 'ws://169.169.41.27:7857/ws';
+//export const OFFICE_WS_URL = 'ws://169.169.41.27:7857/ws';
 //PRD Websocket的URL
-export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
+//export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
 //移动App的URL//TODO
-export const APP_URL = "http://169.169.41.27:8081/";
+//export const APP_URL = "http://169.169.41.27:8081/";
 
 //后台URL
 //let base = 'http://169.169.41.26:7856';
@@ -17,13 +17,13 @@ export const APP_URL = "http://169.169.41.27:8081/";
 //export const APP_URL = "http://169.169.41.26:8081/";
 
 //后台URL
-//let base = 'http://10.170.59.44:7856';
+let base = 'http://10.170.59.44:7856';
 //OFFICE Websocket的URL
-//export const OFFICE_WS_URL = 'ws://10.170.59.44:7857/ws';
+export const OFFICE_WS_URL = 'ws://10.170.59.44:7857/ws';
 //PRD Websocket的URL
-//export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
+export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
 //移动App的URL
-//export const APP_URL = "http://10.170.59.44:8081/";
+export const APP_URL = "http://10.170.59.44:8081/";
 
 export const STATIC_URL = `${base}/itosfile/`
 export const UPLOAD_TASK_URL = `${base}/task/uploadfile`
@@ -69,6 +69,8 @@ export const getGroupList = params => { return axios.post(`${base}/model/groupli
 export const delModelGroup = params => { return axios.post(`${base}/model/delgroup`, params).then(res => res.data); };
 //更新分组
 export const updateModelGroup = params => { return axios.post(`${base}/model/updategroup`, params).then(res => res.data); };
+//分组排序
+export const sortingGroup = params => { return axios.post(`${base}/model/sortgroup`, params).then(res => res.data); };
 
 //------------------------------------------组合任务
 //组合任务模版详细信息

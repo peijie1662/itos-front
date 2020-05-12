@@ -5,6 +5,9 @@
         <el-button type="primary" size="mini" @click="addClient">登记</el-button>
         <el-button type="primary" size="mini" @click="loadData">刷新</el-button>
         <el-divider direction="vertical"></el-divider>
+        <el-checkbox v-model="selNbct" @change="loadData">NBCT</el-checkbox>
+        <el-checkbox v-model="selOffice" @change="loadData">OFFICE</el-checkbox>
+        <el-divider direction="vertical"></el-divider>
         <el-cascader
           v-model="qryModelKey"
           :options="gpOpt"
@@ -50,15 +53,13 @@
         <el-table-column prop="domain" label="域" width="100" sortable></el-table-column>
         <el-table-column prop="description" label="描述" width="360"></el-table-column>
         <el-table-column label="KEY" width="50">
-          <template slot-scope="scope">
-            {{scope.row.models?scope.row.models.length:'0'}}
-          </template>
+          <template slot-scope="scope">{{scope.row.models?scope.row.models.length:'0'}}</template>
         </el-table-column>
         <el-table-column prop="ip" label="IP" width="120"></el-table-column>
         <el-table-column prop="activeTimeStr" label="活动时间" width="160"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" plain size="mini" @click="chgClient(scope.$index)">修改</el-button>
+            <el-button type="primary" plain size="mini" @click="chgClient(scope.row.serviceName)">修改</el-button>
             <el-popconfirm title="确定要删除该终端吗？" @onConfirm="delClient(scope.row)">
               <el-button
                 type="danger"
@@ -102,7 +103,9 @@ export default {
       gpList: [],
       gpOpt: [],
       qryModelKey: "",
-      expands: []
+      expands: [],
+      selNbct: true,
+      selOffice: true
     };
   },
   methods: {
@@ -147,9 +150,11 @@ export default {
         }
       });
     },
-    chgClient(index) {
+    chgClient(serviceName) {
       let me = this;
-      let uc = this.clients[index];
+      let uc = this.clients.filter(item => {
+        return item.serviceName == serviceName;
+      })[0];
       //禁用其它client已使用的model
       me.gpList.forEach(gp => {
         gp.children.forEach(child => {
@@ -269,7 +274,12 @@ export default {
             });
             reject();
           } else {
-            me.clients = data;
+            me.clients = data.filter(item => {
+              return (
+                (me.selNbct && item.domain == "NBCT") ||
+                (me.selOffice && item.domain == "OFFICE")
+              );
+            });
             resolve();
           }
         });

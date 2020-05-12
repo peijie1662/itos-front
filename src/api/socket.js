@@ -56,21 +56,25 @@ export default {
     },
     setReceiveHandler(handlers) {//重置数据接收处理函数(数组)
         recieveHandler = [];
-        if (socket.readyState == WebSocket.OPEN) {
-            this.inner_addRcvHandler(handlers)
-        } else if (socket.readyState == WebSocket.CONNECTING) {
-            setTimeout(() => {
+        if (socket) {
+            if (socket.readyState == WebSocket.OPEN) {
                 this.inner_addRcvHandler(handlers)
-            }, 1000)
+            } else if (socket.readyState == WebSocket.CONNECTING) {
+                setTimeout(() => {
+                    this.inner_addRcvHandler(handlers)
+                }, 1000)
+            }
         }
     },
     addReceiveHandler(handlers) {//添加数据接收处理函数(数组)
-        if (socket.readyState == WebSocket.OPEN) {
-            this.inner_addRcvHandler(handlers)
-        } else if (socket.readyState == WebSocket.CONNECTING) {
-            setTimeout(() => {
+        if (socket) {
+            if (socket.readyState == WebSocket.OPEN) {
                 this.inner_addRcvHandler(handlers)
-            }, 1000)
+            } else if (socket.readyState == WebSocket.CONNECTING) {
+                setTimeout(() => {
+                    this.inner_addRcvHandler(handlers)
+                }, 1000)
+            }
         }
     },
     delReceiveHandler(scene) {//删除数据接收处理函数(数组)
@@ -92,12 +96,14 @@ export default {
         }
     },
     send(msg) {
-        if (socket.readyState == WebSocket.OPEN) {
-            socket.send(msg)
-        } else if (socket.readyState == WebSocket.CONNECTING) {
-            setTimeout(() => {
+        if (socket) {
+            if (socket.readyState == WebSocket.OPEN) {
                 socket.send(msg)
-            }, 1000)
+            } else if (socket.readyState == WebSocket.CONNECTING) {
+                setTimeout(() => {
+                    socket.send(msg)
+                }, 1000)
+            }
         }
     },
     close() {

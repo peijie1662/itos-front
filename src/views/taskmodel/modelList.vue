@@ -26,7 +26,7 @@
     </draggable>
     <!-- 2.分组 -->
     <div
-      v-for="gp in gpList"
+      v-for="(gp,index) in gpList"
       :key="gp.groupId"
       class="group"
       :style="{'height':(gp.collapse?'100%':'22px')}"
@@ -45,6 +45,9 @@
         <el-divider direction="vertical"></el-divider>
         <span>{{gp.models.length}}</span>
         <i class="el-icon-close group-close-btn" @click="delGroup(gp.groupId)"></i>
+
+        <i class="el-icon-bottom group-arrow-btn" @click="sortGroupDown(index)"></i>
+        <i class="el-icon-top group-arrow-btn" @click="sortGroupUp(index)"></i>
       </div>
       <!-- 2.2组内模版 -->
       <draggable
@@ -71,12 +74,13 @@
 
 <script>
 import draggable from "vuedraggable";
-import { localDateToDate } from "@/api/util";
+import { localDateToDate, upInArr, downInArr } from "@/api/util";
 import {
   getModelList,
   getGroupList,
   delModelGroup,
-  updateModelGroup
+  updateModelGroup,
+  sortingGroup
 } from "@/api/api";
 import modelCom from "@/components/model/modelCom.vue";
 import newModelCom from "@/components/model/newModelCom.vue";
@@ -94,6 +98,40 @@ export default {
     };
   },
   methods: {
+    sortGroupDown(index) {
+      let me = this;
+      downInArr(me.gpList, index);
+      sortingGroup(
+        me.gpList.map(item => {
+          return item.groupId;
+        })
+      ).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          me.$message({
+            message: errMsg,
+            type: "error"
+          });
+        }
+      });
+    },
+    sortGroupUp(index) {
+      let me = this;
+      upInArr(me.gpList, index);
+      sortingGroup(
+        me.gpList.map(item => {
+          return item.groupId;
+        })
+      ).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          me.$message({
+            message: errMsg,
+            type: "error"
+          });
+        }
+      });
+    },
     saveExpands() {
       let me = this;
       me.expands = [];
@@ -262,6 +300,15 @@ export default {
   position: inline-block;
   float: right;
   background: #f56c6c;
+  color: white;
+  margin-right: 3px;
+  margin-top: 2px;
+}
+
+.group-arrow-btn {
+  position: inline-block;
+  float: right;
+  background: #ddd;
   color: white;
   margin-right: 3px;
   margin-top: 2px;
