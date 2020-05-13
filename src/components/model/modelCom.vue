@@ -27,7 +27,7 @@
         </div>
         <!-- 分组按钮 -->
         <div style="float:left;">
-          <i class="el-icon-paperclip small-btn"></i>
+          <i class="el-icon-paperclip small-btn" @click="selectGroup"></i>
         </div>
       </div>
     </div>
@@ -42,14 +42,32 @@
         <el-button type="primary" @click="createOnceTask" size="small">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 分组窗口 -->
+    <el-dialog title="选择分组" :visible.sync="gpDialogVisible" width="30%">
+      <div>
+        <span>选择分组：</span>
+        <el-select v-model="selGp" placeholder="请选择" size="mini">
+          <el-option
+            v-for="item in gps"
+            :key="item.groupName"
+            :label="item.groupName"
+            :value="item.groupId"
+          ></el-option>
+          <el-option key="noGroup" label="不分组" value="noGroup"></el-option>
+        </el-select>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="gpDialogVisible = false" size="small">取 消</el-button>
+        <el-button type="primary" @click="chgModelGroup" size="small">确 定</el-button>
+      </span>
+    </el-dialog>
     <!-- 模版详情 -->
     <model-detail-com :tmodel="detailModel" @modelUpdateOk="modelUpdateOk"></model-detail-com>
-    <!-- 分组窗口 --> 
   </div>
 </template>
 
 <script>
-import { saveOnceTask, chgModelStatus } from "@/api/api";
+import { saveOnceTask, chgModelStatus, updateModelGroup } from "@/api/api";
 import { getCategoryColor } from "@/api/data";
 import modelDetailCom from "@/components/model/modelDetailCom.vue";
 import { mapGetters } from "vuex";
@@ -58,6 +76,8 @@ export default {
   data() {
     return {
       crtDialogVisible: false,
+      gpDialogVisible: false,
+      selGp: "",
       planDt: new Date(),
       detailModel: null,
       taskModel: "",
@@ -83,6 +103,39 @@ export default {
     ...mapGetters(["userInfo"])
   },
   methods: {
+    chgModelGroup() {
+      let me = this;
+      updateModelGroup({
+        models: [
+          {
+            modelId: me.taskModel.modelId,
+            groupId: me.selGp == "noGroup" ? "" : me.selGp,
+            index: 99
+          }
+        ]
+      }).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          me.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.$emit("modelUpdateOk");
+        }
+      });
+    },
+    selectGroup() {
+      let me = this;
+      if (me.taskModel.groupId) {
+        me.selGp = me.gps.filter(item => {
+          return item.groupId == me.taskModel.groupId;
+        })[0].groupName;
+      } else {
+        me.selGp = "noGroup";
+      }
+      me.gpDialogVisible = true;
+    },
     newOnce() {
       this.planDt = new Date();
       this.crtDialogVisible = true;
@@ -163,7 +216,7 @@ export default {
       }
     }
   },
-  props: ["tmodel"],
+  props: ["tmodel", "gps"],
   watch: {
     tmodel: {
       handler(newVal) {

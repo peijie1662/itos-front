@@ -21,6 +21,7 @@
         :key="item.modelId"
         class="model"
         :tmodel="item"
+        :gps="gpList"
         @modelUpdateOk="loadData"
       ></model-com>
     </draggable>
@@ -61,6 +62,7 @@
           :key="item.modelId"
           class="model"
           :tmodel="item"
+          :gps="gpList"
           @modelUpdateOk="loadData"
         ></model-com>
       </draggable>

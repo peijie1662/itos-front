@@ -55,7 +55,7 @@
         <el-table-column label="KEY" width="50">
           <template slot-scope="scope">{{scope.row.models?scope.row.models.length:'0'}}</template>
         </el-table-column>
-        <el-table-column prop="ip" label="IP" width="120"></el-table-column>
+        <el-table-column prop="ip" label="IP" width="120" sortable></el-table-column>
         <el-table-column prop="activeTimeStr" label="活动时间" width="160"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
