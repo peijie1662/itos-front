@@ -7,7 +7,7 @@
           v-model="selComposeModelId"
           @change="selectOneModel"
           size="mini"
-          style="width:200px;margin-left:10px;"
+          style="width:250px;margin-left:10px;"
           placeholder="请选择"
         >
           <el-option
@@ -25,7 +25,7 @@
           size="mini"
           @click="createComposeTask"
           style="margin-left:10px;"
-        >创建任务</el-button>
+        >创建</el-button>
         <el-divider direction="vertical"></el-divider>
         <span>组合任务</span>
         <el-select
@@ -61,18 +61,21 @@
             </div>
           </el-option>
         </el-select>
+        <el-button type="primary" size="mini" @click="startComposeTask" style="margin-left:10px;">启动</el-button>
         <el-button
           type="primary"
-          size="mini"
-          @click="startComposeTask"
-          style="margin-left:10px;"
-        >启动任务</el-button>
-        <el-button
-          type="primary"
+          plain
           size="mini"
           @click="composeTaskReport"
           style="margin-left:10px;"
-        >任务报告</el-button>
+        >报告</el-button>
+        <el-button
+          type="danger"
+          plain
+          size="mini"
+          @click="delComposeTask"
+          style="margin-left:10px;"
+        >删除</el-button>
       </div>
     </div>
     <div class="content">
@@ -117,7 +120,8 @@ import {
   getTaskInCompose,
   getNotComposeModelList,
   getComposeModelDetail,
-  composeReport
+  composeReport,
+  deleteComposeTask
 } from "@/api/api";
 import miniCom from "@/components/task/miniModelAndTaskCom.vue";
 import { localDateToStr } from "@/api/util";
@@ -176,6 +180,45 @@ export default {
     }
   },
   methods: {
+    initSteps() {
+      this.step01 = {
+        tasks: [],
+        bgDt: "",
+        edDt: ""
+      };
+      this.step02 = {
+        tasks: [],
+        bgDt: "",
+        edDt: ""
+      };
+      this.step03 = {
+        tasks: [],
+        bgDt: "",
+        edDt: ""
+      };
+    },
+    delComposeTask() {
+      let me = this;
+      deleteComposeTask({
+        composeId: me.selComposeTaskId
+      }).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          me.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          me.$message({
+            message: "组合任务已删除",
+            type: "success"
+          });
+          me.initSteps();
+          me.selComposeTaskId = "";
+          me.selectOneTask();
+        }
+      });
+    },
     composeTaskReport() {
       let me = this;
       composeReport({
@@ -441,7 +484,7 @@ export default {
 }
 
 .blocktag {
-  background: #909399;
+  background: #ff5500;
   color: white;
   display: block;
   width: 100px;
@@ -464,7 +507,7 @@ export default {
 
 .block {
   margin-top: 20px;
-  border: 2px dashed #409eff;
+  border: 2px dashed #ddd;
   overflow: hidden;
   padding: 10px;
   width: 90%;
