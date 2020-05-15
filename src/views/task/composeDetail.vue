@@ -127,21 +127,33 @@ export default {
         }
       });
       //4.生成各层模版
-      me.step01 = me.oriModels.filter(c => {
-        return me.details.some(d => {
-          return d.modelId == c.modelId && d.composeLevel == 1;
+      me.step01 = me.details
+        .filter(d => {
+          return d.composeLevel == 1;
+        })
+        .flatMap(d => {
+          return me.oriModels.filter(m => {
+            return d.modelId == m.modelId;
+          });
         });
-      });
-      me.step02 = me.oriModels.filter(c => {
-        return me.details.some(d => {
-          return d.modelId == c.modelId && d.composeLevel == 2;
+      me.step02 = me.details
+        .filter(d => {
+          return d.composeLevel == 2;
+        })
+        .flatMap(d => {
+          return me.oriModels.filter(m => {
+            return d.modelId == m.modelId;
+          });
         });
-      });
-      me.step03 = me.oriModels.filter(c => {
-        return me.details.some(d => {
-          return d.modelId == c.modelId && d.composeLevel == 3;
+      me.step03 = me.details
+        .filter(d => {
+          return d.composeLevel == 3;
+        })
+        .flatMap(d => {
+          return me.oriModels.filter(m => {
+            return d.modelId == m.modelId;
+          });
         });
-      });
     },
     loadGroupList() {
       return new Promise((resolve, reject) => {
@@ -232,29 +244,32 @@ export default {
       }
       let params = [];
       if (l1 > 0) {
-        me.step01.forEach(item => {
+        me.step01.forEach((item, index) => {
           params.push({
             composeId: me.selComposeModelId,
             composeLevel: 1,
-            modelId: item.modelId
+            modelId: item.modelId,
+            orderInLevel: index
           });
         });
       }
       if (l2 > 0) {
-        me.step02.forEach(item => {
+        me.step02.forEach((item, index) => {
           params.push({
             composeId: me.selComposeModelId,
             composeLevel: 2,
-            modelId: item.modelId
+            modelId: item.modelId,
+            orderInLevel: index
           });
         });
       }
       if (l3 > 0) {
-        me.step03.forEach(item => {
+        me.step03.forEach((item, index) => {
           params.push({
             composeId: me.selComposeModelId,
             composeLevel: 3,
-            modelId: item.modelId
+            modelId: item.modelId,
+            orderInLevel: index
           });
         });
       }
