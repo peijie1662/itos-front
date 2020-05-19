@@ -368,6 +368,10 @@ export default {
       countStepTime(me.step03);
       //7.compose task状态刷新
       await me.loadComposeTasks();
+      //8.再绑定处理方法,刷新有可能丢失
+      enterScene([
+        { scene: "CONTROLCENTER", sceneFun: this.handlerControlCenter }
+      ]);
     },
     createComposeTask() {
       let me = this;

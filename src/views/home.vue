@@ -28,7 +28,7 @@
                   </div>
                 </el-image>
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" style="margin-top: -15px;">
                 <el-dropdown-item @click.native="toggleIM">我的消息</el-dropdown-item>
                 <el-dropdown-item @click.native="showSetup">设置</el-dropdown-item>
                 <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
@@ -40,7 +40,7 @@
           <el-menu
             :default-active="$route.path"
             class="el-menu-vertical-demo"
-            :unique-opened = false
+            :unique-opened="false"
             router
             :collapse="isCollapse"
           >
@@ -91,32 +91,19 @@
         </el-col>
       </el-row>
     </div>
-    <el-collapse-transition>
-      <div class="leftfloat" v-if="showIM">
-        <i
-          class="el-icon-close"
-          style="position: absolute; top :15px; right:15px; font-size:18px;z-index: 99;"
-          @click="toggleIM"
-        ></i>
-        <el-tabs>
-          <el-tab-pane label="在线用户" name="inline_user">
-            <div v-for="(item,index) in online_users" :key="index">{{item}}</div>
-          </el-tab-pane>
-          <el-tab-pane label="系统日志" name="sys_log">
-            <div v-for="(item,index) in sysLog" :key="index">{{item}}</div>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-    </el-collapse-transition>
-    <UserSetupCom :user="setupUser" @updateFaceSuccess="chgFaceSuccess"></UserSetupCom>
+    <!-- 消息窗口 -->
+    <notify-com v-show="showIM" class="notify-window"></notify-com>
+    <!-- 用户信息设置窗口 -->
+    <user-setup-com :user="setupUser" @updateFaceSuccess="chgFaceSuccess"></user-setup-com>
   </div>
 </template>
 
 <script>
 import { STATIC_URL } from "@/api/api";
-import UserSetupCom from "@/components/user/userSetupCom.vue";
-import { mapGetters, mapMutations } from "vuex";
-import { userOnline, enterScene, leaveScene } from "@/api/store_socket";
+import userSetupCom from "@/components/user/userSetupCom.vue";
+import notifyCom from "@/components/message/notifyCom.vue";
+import { mapGetters } from "vuex";
+
 
 export default {
   data() {
@@ -124,12 +111,10 @@ export default {
       setupUser: null,
       showIM: false,
       isCollapse: false,
-      online_users: [],
       face_url: ""
     };
   },
   methods: {
-    ...mapMutations(["update_sysLog"]),
     chgFaceSuccess() {
       this.face_url =
         STATIC_URL +
@@ -169,17 +154,10 @@ export default {
     },
     showSetup() {
       this.setupUser = { ...this.userInfo };
-    },
-    handlerSysLog(content) {
-      console.info("SYSLOG数据:" + content);
-      this.update_sysLog(content);
-    },
-    handlerOnlineUser(content) {
-      console.info("ONLINEUSER数据:" + content);
     }
   },
   computed: {
-    ...mapGetters(["userInfo", "sysLog"])
+    ...mapGetters(["userInfo"])
   },
   mounted() {
     //用户头像
@@ -189,26 +167,23 @@ export default {
       this.userInfo.userId.toLowerCase() +
       ".JPG?" +
       Math.random(100);
-    //同步用户登录信息到后台
-    userOnline();
-    //进入场景
-    enterScene([
-      { scene: "SYSLOG", sceneFun: this.handlerSysLog },
-      { scene: "ONLINEUSER", sceneFun: this.onlineUser }
-    ]);
-  },
-  destroyed() {
-    //退出场景
-    leaveScene(["SYSLOG", "ONLINEUSER"]);
   },
   components: {
-    UserSetupCom
+    userSetupCom,
+    notifyCom
   }
 };
 </script>
 
 <style scoped lang="scss">
 $color-primary: #20a0ff; //#18c79c
+
+.notify-window {
+  position: absolute;
+  top: 100px;
+  right: 50px;
+  z-index: 99;
+}
 
 .face {
   width: 45px;
