@@ -30,7 +30,7 @@
     <div class="content">
       <!-- 候选模版 -->
       <div>
-        <span class="blocktag">候选模版</span>
+        <span >候选模版</span>
         <el-select
           v-model="filterGp"
           @change="selectOneModel"
@@ -72,6 +72,20 @@
           <sampleModelCom :mmodel="item"></sampleModelCom>
         </li>
       </draggable>
+      <!-- STEP04 -->
+      <span class="blocktag">STEP-4</span>
+      <draggable tag="ul" v-model="step04" group="{name:'mygroup'}" class="ul">
+        <li v-for="item in step04" :key="item.modelId" class="li">
+          <sampleModelCom :mmodel="item"></sampleModelCom>
+        </li>
+      </draggable>
+      <!-- STEP05 -->
+      <span class="blocktag">STEP-5</span>
+      <draggable tag="ul" v-model="step05" group="{name:'mygroup'}" class="ul">
+        <li v-for="item in step05" :key="item.modelId" class="li">
+          <sampleModelCom :mmodel="item"></sampleModelCom>
+        </li>
+      </draggable>
     </div>
   </div>
 </template>
@@ -98,6 +112,8 @@ export default {
       step01: [], //第1层次模版
       step02: [], //第2层次模版
       step03: [], //第3层次模版
+      step04: [], //第4层次模版
+      step05: [], //第5层次模版
       //
       gps: [], //分组
       filterGp: [] //选中组
@@ -127,33 +143,22 @@ export default {
         }
       });
       //4.生成各层模版
-      me.step01 = me.details
-        .filter(d => {
-          return d.composeLevel == 1;
-        })
-        .flatMap(d => {
-          return me.oriModels.filter(m => {
-            return d.modelId == m.modelId;
+      let getStep = function(step) {
+        return me.details
+          .filter(d => {
+            return d.composeLevel == step;
+          })
+          .flatMap(d => {
+            return me.oriModels.filter(m => {
+              return d.modelId == m.modelId;
+            });
           });
-        });
-      me.step02 = me.details
-        .filter(d => {
-          return d.composeLevel == 2;
-        })
-        .flatMap(d => {
-          return me.oriModels.filter(m => {
-            return d.modelId == m.modelId;
-          });
-        });
-      me.step03 = me.details
-        .filter(d => {
-          return d.composeLevel == 3;
-        })
-        .flatMap(d => {
-          return me.oriModels.filter(m => {
-            return d.modelId == m.modelId;
-          });
-        });
+      };
+      me.step01 = getStep(1);
+      me.step02 = getStep(2);
+      me.step03 = getStep(3);
+      me.step04 = getStep(4);
+      me.step05 = getStep(5);
     },
     loadGroupList() {
       return new Promise((resolve, reject) => {
@@ -161,10 +166,7 @@ export default {
         getGroupList({}).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             me.gps = data;
@@ -183,10 +185,7 @@ export default {
       getComposeModelList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.models = data;
         }
@@ -200,10 +199,7 @@ export default {
         }).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             me.details = data;
@@ -218,10 +214,7 @@ export default {
         getNotComposeModelList({}).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            this.$message.error(errMsg);
             reject();
           } else {
             me.oriModels = data;
@@ -235,11 +228,15 @@ export default {
       let l1 = me.step01.length;
       let l2 = me.step02.length;
       let l3 = me.step03.length;
-      if ((l1 == 0 && (l2 > 0 || l3 > 0)) || (l2 == 0 && l3 > 0)) {
-        me.$message({
-          message: "请按顺序排列模版。",
-          type: "error"
-        });
+      let l4 = me.step04.length;
+      let l5 = me.step05.length;
+      if (
+        (l1 == 0 && l2 + l3 + l4 + l5 > 0) ||
+        (l2 == 0 && l3 + l4 + l5 > 0) ||
+        (l3 == 0 && l4 + l5 > 0) ||
+        (l4 == 0 && l5 > 0)
+      ) {
+        me.$message.error("请按顺序排列模版");
         return;
       }
       let params = [];
@@ -273,21 +270,35 @@ export default {
           });
         });
       }
+      if (l4 > 0) {
+        me.step04.forEach((item, index) => {
+          params.push({
+            composeId: me.selComposeModelId,
+            composeLevel: 4,
+            modelId: item.modelId,
+            orderInLevel: index
+          });
+        });
+      }
+      if (l5 > 0) {
+        me.step05.forEach((item, index) => {
+          params.push({
+            composeId: me.selComposeModelId,
+            composeLevel: 5,
+            modelId: item.modelId,
+            orderInLevel: index
+          });
+        });
+      }
       saveComposeModelDetail({
         composeId: me.selComposeModelId,
         details: params
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          this.$message.error(errMsg);
         } else {
-          this.$message({
-            message: "保存模版组合信息成功。",
-            type: "success"
-          });
+          this.$message.success("保存模版组合信息成功");
         }
       });
     }
@@ -304,25 +315,24 @@ export default {
 
 <style scoped>
 .blocktag {
-  background: #909399;
+  background: #ff5500;
   color: white;
-  display: inline-block;
+  display: block;
   width: 100px;
   height: 20px;
   text-align: center;
-  margin-bottom: -15px;
 }
 
 .ul {
+  margin-top: 5px;
   list-style: none;
   display: block;
   position: relative;
-  margin-top: 20px;
   border: 2px dashed #409eff;
   overflow: hidden;
   padding: 10px;
   width: 90%;
-  min-height: 100px;
+  min-height: 50px;
 }
 
 .li {

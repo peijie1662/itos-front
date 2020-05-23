@@ -1,9 +1,15 @@
 <template>
   <div>
-    <div style="position:relative;text-align:center;width:120px;height:80px;">
-      <div :style="topTriangleStyle()"></div>
-      <span class="title">{{mmodel.abs}}</span>
-      <div :style="bottomTriangleStyle()"></div>
+    <div style="position:relative;text-align:center;width:120px;height:80px;font-size:8px;">
+      <div :style="topTriangleStyle"></div>
+      <div style="position: absolute;top: 2px;right:2px;">
+        <span style="color: #cdcdcd;">{{mmodel.serviceName}}</span>
+        <span :style="domainColor">{{mmodel.serviceDomain}}</span>
+      </div>
+      <div style="margin-top:10px;">
+        <span>{{mmodel.abs}}</span>
+      </div>
+      <div :style="bottomTriangleStyle"></div>
     </div>
   </div>
 </template>
@@ -12,10 +18,13 @@
 import { getCategoryColor } from "@/api/data";
 
 export default {
+  data() {
+    return {};
+  },
   props: ["mmodel"],
-  methods: {
+  computed: {
     topTriangleStyle() {
-      let mstyle = {
+      let style = {
         width: "0",
         height: "0",
         borderTop: "20px solid red",
@@ -23,15 +32,23 @@ export default {
         borderTopRadius: "5px"
       };
       if (this.mmodel.invalid) {
-        mstyle.borderTop = "20px solid " + getCategoryColor(null);
+        style.borderTop = "20px solid " + getCategoryColor(null);
       } else {
-        mstyle.borderTop =
+        style.borderTop =
           "20px solid " + getCategoryColor(this.mmodel.category);
       }
-      return mstyle;
+      return style;
+    },
+    domainColor() {
+      let style = {
+        color: "#ddd"
+      };
+      if (this.mmodel.serviceDomain == "NBCT") style.color = "#FF4500";
+      if (this.mmodel.serviceDomain == "OFFICE") style.color = "#00AA88";
+      return style;
     },
     bottomTriangleStyle() {
-      let mstyle = {
+      let style = {
         width: "0",
         height: "0",
         borderBottom: "20px solid red",
@@ -41,21 +58,17 @@ export default {
         right: "0px"
       };
       if (this.mmodel.invalid) {
-        mstyle.borderBottom = "20px solid " + getCategoryColor(null);
+        style.borderBottom = "20px solid " + getCategoryColor(null);
       } else {
-        mstyle.borderBottom =
+        style.borderBottom =
           "20px solid " + getCategoryColor(this.mmodel.category);
       }
-      return mstyle;
+      return style;
     }
   }
 };
 </script>
 
 <style scoped>
-
-.title{
-  font-size: 8px;
-}
 
 </style>

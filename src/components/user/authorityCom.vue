@@ -79,7 +79,9 @@ export default {
           return r;
         });
       //2.注入用户数据
-      let funIds = this.curUser.authority.split(",");
+      let funIds = this.curUser.authority
+        ? this.curUser.authority.split(",")
+        : [];
       this.$nextTick(() => {
         this.$refs.tree.setCheckedKeys(funIds);
       });
