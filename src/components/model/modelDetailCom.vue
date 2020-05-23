@@ -12,7 +12,10 @@
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">模版ID</span>
             <span class="dialogContent" style="left:120px;">{{taskModel.modelId}}</span>
-            <i class="el-icon-document-copy copy-tag id-tag" @click="copy('.id-tag',taskModel.modelId)"></i>
+            <i
+              class="el-icon-document-copy copy-tag id-tag"
+              @click="copy('.id-tag',taskModel.modelId)"
+            ></i>
           </div>
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">任务类型</span>
@@ -21,12 +24,18 @@
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">任务简介</span>
             <span class="dialogContent" style="left:120px;">{{taskModel.abs}}</span>
-            <i class="el-icon-document-copy copy-tag abs-tag" @click="copy('.abs-tag',taskModel.abs)"></i>
+            <i
+              class="el-icon-document-copy copy-tag abs-tag"
+              @click="copy('.abs-tag',taskModel.abs)"
+            ></i>
           </div>
           <!-- 任务内容 -->
           <div class="dialogLine">
             <span class="dialogtitle" style="left:20px;">任务内容</span>
-            <i class="el-icon-document-copy copy-tag content-tag" @click="copy('.content-tag',taskModel.comments)"></i>
+            <i
+              class="el-icon-document-copy copy-tag content-tag"
+              @click="copy('.content-tag',taskModel.comments)"
+            ></i>
           </div>
           <div ref="content" contenteditable="true" class="content" v-html="taskModel.comments"></div>
           <el-upload
@@ -66,7 +75,7 @@
             ></el-date-picker>
           </div>
           <!-- 过期处理 -->
-          <div class="dialogLine">
+          <div class="dialogLine" v-if="!isBroadcast">
             <span class="dialogtitle" style="left:20px;">过期处理</span>
             <el-select
               v-model="taskModel.callback"
@@ -86,7 +95,7 @@
             </el-select>
           </div>
           <!-- 过期通知 -->
-          <div class="dialogLine">
+          <div class="dialogLine" v-if="!isBroadcast">
             <span class="dialogtitle" style="left:20px;">过期通知</span>
             <el-select
               v-model="taskModel.notify"
@@ -188,6 +197,10 @@ export default {
     //是否循环
     isCircular() {
       return this.taskModel.cycle == "CIRCULAR";
+    },
+    //广播任务不显示过期处理和过期通知
+    isBroadcast() {
+      return this.taskModel.category == "BROADCAST";
     }
   },
   props: ["tmodel"],
@@ -204,20 +217,20 @@ export default {
     }
   },
   methods: {
-    copy(classTag,content) {
+    copy(classTag, content) {
       let clipboard = new Clipboard(classTag, {
-        text: function () {
+        text: function() {
           return content;
         }
-      })
-      clipboard.on('success', () => {
-        this.$message({message: '复制成功', showClose: true, type: 'success'})
-        clipboard.destroy()
-      })
-      clipboard.on('error', () => {
-        this.$message({message: '复制失败,', showClose: true, type: 'error'})
-        clipboard.destroy()
-      })
+      });
+      clipboard.on("success", () => {
+        this.$message.success("复制成功");
+        clipboard.destroy();
+      });
+      clipboard.on("error", () => {
+        this.$message({ message: "复制失败,", showClose: true, type: "error" });
+        clipboard.destroy();
+      });
     },
     handlerSuccess(res, file) {
       let { flag, errMsg } = res;
@@ -230,25 +243,32 @@ export default {
     },
     updateModel() {
       let me = this;
+      //1.普通任务,组合任务内容中可以包含图片文档
       me.taskModel.comments =
         me.taskModel.category == "COMMON" || me.taskModel.category == "COMPOSE"
           ? me.$refs.content.innerHTML
           : me.$refs.content.textContent;
+      //2.广播任务默认超期时间1小时,超期处理为DONE
+      if (me.taskModel.category == "BROADCAST") {
+        me.taskModel.expired = me.taskModel.expired
+          ? parseInt(me.taskModel.expired)
+          : 60 * 60;
+        me.taskModel.callback = "DONE";
+      }
+      //3.默认超期时间24小时(除广播任务外)
       me.taskModel.expired = me.taskModel.expired
         ? parseInt(me.taskModel.expired)
         : 24 * 60 * 60;
+      //4.保存
       updateModel({
         ...me.taskModel
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.dialogVisible = false;
-          this.$emit("modelUpdateOk");
+          me.$emit("modelUpdateOk");
         }
       });
     },
@@ -260,13 +280,10 @@ export default {
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.dialogVisible = false;
-          this.$emit("modelUpdateOk");
+          me.$emit("modelUpdateOk");
         }
       });
     }

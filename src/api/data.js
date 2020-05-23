@@ -61,7 +61,7 @@ export const CATEGORYS = [
   },
   {
     value: "APPSERVER",
-    label: "调用其它服务执行任务",
+    label: "调用其它服务任务",
     color: "#E6A23C"
   },
   {
@@ -74,6 +74,11 @@ export const CATEGORYS = [
     label: "组合任务",
     color: "#F56C6C"
   },
+  {
+    value: "BROADCAST",
+    label: "广播任务",
+    color: "#00AA55"    
+  }
 ]
 
 //执行周期

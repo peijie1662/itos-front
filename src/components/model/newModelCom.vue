@@ -99,7 +99,7 @@
             ></el-date-picker>
           </div>
           <!-- 过期处理 -->
-          <div class="dialogLine">
+          <div class="dialogLine" v-if="!isBroadcast">
             <span class="dialogtitle" style="left:20px;">过期处理</span>
             <el-select
               v-model="taskModel.callback"
@@ -119,7 +119,7 @@
             </el-select>
           </div>
           <!-- 过期通知 -->
-          <div class="dialogLine">
+          <div class="dialogLine" v-if="!isBroadcast">
             <span class="dialogtitle" style="left:20px;">过期通知</span>
             <el-select
               v-model="taskModel.notify"
@@ -212,6 +212,10 @@ export default {
     //是否循环
     isCircular() {
       return this.taskModel.cycle == "CIRCULAR";
+    },
+    //广播任务不显示过期处理和过期通知
+    isBroadcast() {
+      return this.taskModel.category == "BROADCAST";
     }
   },
   props: ["tmodel"],
@@ -240,24 +244,32 @@ export default {
     },
     saveModel() {
       let me = this;
+      //1.组合任务无执行周期
       if (me.taskModel.category == "COMPOSE") me.taskModel.cycle = "NONE";
+      //2.普通任务,组合任务内容中可以包含图片文档
       me.taskModel.comments =
         me.taskModel.category == "COMMON" || me.taskModel.category == "COMPOSE"
           ? me.$refs.content.innerHTML
           : me.$refs.content.textContent;
+      //3.广播任务默认超期时间1小时,超期处理为DONE
+      if (me.taskModel.category == "BROADCAST") {
+        me.taskModel.expired = me.taskModel.expired
+          ? parseInt(me.taskModel.expired)
+          : 60 * 60;
+        me.taskModel.callback = "DONE";
+      }
+      //4.默认超期时间24小时(除广播任务外)
       me.taskModel.expired = me.taskModel.expired
         ? parseInt(me.taskModel.expired)
-        : 24 * 60 * 60;
+        : 24 * 60 * 60;      
+      //5.保存
       addModel({ ...me.taskModel }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.dialogVisible = false;
-          this.$emit("modelUpdateOk");
+          me.$emit("modelUpdateOk");
         }
       });
     }
