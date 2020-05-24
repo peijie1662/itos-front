@@ -83,29 +83,16 @@
         <span class="blocktag">任务内容</span>
       </div>
       <div class="block" v-html="selComposeModel.comments"></div>
-      <div class="blocktagouter">
-        <span class="blocktag">STEP-1</span>
-        <span class="blocksubtag">开始时间：{{step01.bgDt}}</span>
-        <span class="blocksubtag">结束时间：{{step01.edDt}}</span>
-      </div>
-      <div class="block">
-        <mini-com v-for="item in step01.tasks" :key="item.model.modelId" :detail="item"></mini-com>
-      </div>
-      <div class="blocktagouter">
-        <span class="blocktag">STEP-2</span>
-        <span class="blocksubtag">开始时间：{{step02.bgDt}}</span>
-        <span class="blocksubtag">结束时间：{{step02.edDt}}</span>
-      </div>
-      <div class="block">
-        <mini-com v-for="item in step02.tasks" :key="item.model.modelId" :detail="item"></mini-com>
-      </div>
-      <div class="blocktagouter">
-        <span class="blocktag">STEP-3</span>
-        <span class="blocksubtag">开始时间：{{step03.bgDt}}</span>
-        <span class="blocksubtag">结束时间：{{step03.edDt}}</span>
-      </div>
-      <div class="block">
-        <mini-com v-for="item in step03.tasks" :key="item.model.modelId" :detail="item"></mini-com>
+      <!-- 层次 -->
+      <div v-for="(step,index) in steps" :key="index">
+        <div class="blocktagouter">
+          <span class="blocktag">STEP-{{step.step}}</span>
+          <span class="blocksubtag">开始时间：{{step.bgDt}}</span>
+          <span class="blocksubtag">结束时间：{{step.edDt}}</span>
+        </div>
+        <div class="block">
+          <mini-com v-for="task in step.tasks" :key="task.model.modelId" :detail="task"></mini-com>
+        </div>
       </div>
     </div>
   </div>
@@ -136,27 +123,10 @@ export default {
       selComposeModelId: "", //选中组合模版
       composeTasks: [], //组合任务
       selComposeTaskId: "", //选中组合任务
-      //
       notComposeModels: [], //组合模版的备选子模版
       subTasks: [], //子任务
       details: [], //选中组合模版详细信息,需将子模版与子任务填进此结构。
-      //
-      step01: {
-        tasks: [],
-        bgDt: "",
-        edDt: ""
-      },
-      step02: {
-        tasks: [],
-        bgDt: "",
-        edDt: ""
-      },
-      step03: {
-        tasks: [],
-        bgDt: "",
-        edDt: ""
-      },
-      //
+      steps: [], //层次
       pdfUrl: ""
     };
   },
@@ -180,23 +150,6 @@ export default {
     }
   },
   methods: {
-    initSteps() {
-      this.step01 = {
-        tasks: [],
-        bgDt: "",
-        edDt: ""
-      };
-      this.step02 = {
-        tasks: [],
-        bgDt: "",
-        edDt: ""
-      };
-      this.step03 = {
-        tasks: [],
-        bgDt: "",
-        edDt: ""
-      };
-    },
     delComposeTask() {
       let me = this;
       deleteComposeTask({
@@ -204,16 +157,10 @@ export default {
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          me.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
-          me.$message({
-            message: "组合任务已删除",
-            type: "success"
-          });
-          me.initSteps();
+          me.$message.success("组合任务已删除");
+          me.steps = [];
           me.selComposeTaskId = "";
           me.selectOneTask();
         }
@@ -230,10 +177,7 @@ export default {
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.download();
         }
@@ -250,10 +194,7 @@ export default {
         }).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             data.forEach(item => {
@@ -273,10 +214,7 @@ export default {
         getNotComposeModelList({}).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             me.notComposeModels = data;
@@ -293,10 +231,7 @@ export default {
         }).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             me.subTasks = data;
@@ -317,10 +252,7 @@ export default {
         }).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             me.details = data;
@@ -350,25 +282,35 @@ export default {
           }
         });
       });
-      //5.各层
-      if (me.selComposeTask) {
-        me.step01.tasks = me.details.filter(d => {
-          return d.composeLevel == 1;
-        });
-        me.step02.tasks = me.details.filter(d => {
-          return d.composeLevel == 2;
-        });
-        me.step03.tasks = me.details.filter(d => {
-          return d.composeLevel == 3;
+      //5.初始化层
+      me.steps = [];
+      let stepLength = me.details.slice(-1)[0].composeLevel;
+      for (let i = 0; i < stepLength; i++) {
+        me.steps.push({
+          step: me.steps.length + 1,
+          bgDt: "",
+          edDt: "",
+          tasks: []
         });
       }
-      //6.统计各层时间
-      countStepTime(me.step01);
-      countStepTime(me.step02);
-      countStepTime(me.step03);
-      //7.compose task状态刷新
+      me.$forceUpdate;
+      //6.填充各层
+      if (me.selComposeTask) {
+        me.steps.forEach(step => {
+          step.tasks = me.details.filter(d => {
+            return d.composeLevel == step.step;
+          });
+        });
+      }
+      //7.统计各层时间
+      if (me.selComposeTask) {
+        me.steps.forEach(step => {
+          countStepTime(step);
+        });
+      }
+      //8.compose task状态刷新
       await me.loadComposeTasks();
-      //8.再绑定处理方法,刷新有可能丢失
+      //9.再绑定处理方法,刷新有可能丢失
       enterScene([
         { scene: "CONTROLCENTER", sceneFun: this.handlerControlCenter }
       ]);
@@ -382,16 +324,10 @@ export default {
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          me.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
-          me.$message({
-            message: "组合任务创建成功。",
-            type: "success"
-          });
-          me.selectOneModel(); //刷新任务列表
+          me.$message.success("组合任务创建成功");
+          me.selectOneModel();
         }
       });
     },
@@ -403,16 +339,12 @@ export default {
       }).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          me.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
-          me.$message({
-            message: "组合任务启动成功，创建第一层任务" + data + "个。",
-            type: "success"
-          });
-          me.selectOneTask(); //刷新子任务列表
+          me.$message.success(
+            "组合任务启动成功，创建第一层任务" + data + "个。"
+          );
+          me.selectOneTask();
         }
       });
     },
@@ -421,10 +353,7 @@ export default {
       getComposeModelList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.composeModels = data;
         }
@@ -515,6 +444,6 @@ export default {
   overflow: hidden;
   padding: 10px;
   width: 90%;
-  min-height: 100px;
+  min-height: 50px;
 }
 </style>

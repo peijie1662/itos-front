@@ -28,9 +28,9 @@
       </div>
     </div>
     <div class="content">
-      <!-- 候选模版 -->
+      <!-- 1.候选模版 -->
       <div>
-        <span >候选模版</span>
+        <span>候选模版</span>
         <el-select
           v-model="filterGp"
           @change="selectOneModel"
@@ -51,41 +51,17 @@
           <sampleModelCom :mmodel="item"></sampleModelCom>
         </li>
       </draggable>
-      <!-- STEP01 -->
-      <span class="blocktag">STEP-1</span>
-      <draggable tag="ul" v-model="step01" group="{name:'mygroup'}" class="ul">
-        <li v-for="item in step01" :key="item.modelId" class="li">
-          <sampleModelCom :mmodel="item"></sampleModelCom>
-        </li>
-      </draggable>
-      <!-- STEP02 -->
-      <span class="blocktag">STEP-2</span>
-      <draggable tag="ul" v-model="step02" group="{name:'mygroup'}" class="ul">
-        <li v-for="item in step02" :key="item.modelId" class="li">
-          <sampleModelCom :mmodel="item"></sampleModelCom>
-        </li>
-      </draggable>
-      <!-- STEP03 -->
-      <span class="blocktag">STEP-3</span>
-      <draggable tag="ul" v-model="step03" group="{name:'mygroup'}" class="ul">
-        <li v-for="item in step03" :key="item.modelId" class="li">
-          <sampleModelCom :mmodel="item"></sampleModelCom>
-        </li>
-      </draggable>
-      <!-- STEP04 -->
-      <span class="blocktag">STEP-4</span>
-      <draggable tag="ul" v-model="step04" group="{name:'mygroup'}" class="ul">
-        <li v-for="item in step04" :key="item.modelId" class="li">
-          <sampleModelCom :mmodel="item"></sampleModelCom>
-        </li>
-      </draggable>
-      <!-- STEP05 -->
-      <span class="blocktag">STEP-5</span>
-      <draggable tag="ul" v-model="step05" group="{name:'mygroup'}" class="ul">
-        <li v-for="item in step05" :key="item.modelId" class="li">
-          <sampleModelCom :mmodel="item"></sampleModelCom>
-        </li>
-      </draggable>
+      <!-- 2.模版层 -->
+      <div v-for="(item,index) in steps" :key="index">
+        <span class="blocktag">STEP-{{item.step}}</span>
+        <draggable tag="ul" v-model="item.models" group="{name:'mygroup'}" class="ul">
+          <li v-for="item in item.models" :key="item.modelId" class="li">
+            <sampleModelCom :mmodel="item"></sampleModelCom>
+          </li>
+        </draggable>
+      </div>
+      <!-- 3.新模版 -->
+      <span class="new-blocktag" @click="addStep">新层</span>
     </div>
   </div>
 </template>
@@ -109,17 +85,20 @@ export default {
       details: [], //模版详细信息
       oriModels: [], //原始
       candidateModels: [], //候选模版
-      step01: [], //第1层次模版
-      step02: [], //第2层次模版
-      step03: [], //第3层次模版
-      step04: [], //第4层次模版
-      step05: [], //第5层次模版
-      //
+      steps: [], //模版层次
       gps: [], //分组
       filterGp: [] //选中组
     };
   },
   methods: {
+    addStep() {
+      let me = this;
+      me.steps.push({
+        step: me.steps.length + 1,
+        models: []
+      });
+      me.$forceUpdate;
+    },
     selectOneModel: async function() {
       let me = this;
       //0.读模版分组信息
@@ -142,7 +121,13 @@ export default {
           return false;
         }
       });
-      //4.生成各层模版
+      //4.初始化层
+      me.steps = [];
+      let stepLength = me.details.slice(-1)[0].composeLevel;
+      for (let i = 0; i < stepLength; i++) {
+        me.addStep();
+      }
+      //5.生成各层模版
       let getStep = function(step) {
         return me.details
           .filter(d => {
@@ -154,11 +139,9 @@ export default {
             });
           });
       };
-      me.step01 = getStep(1);
-      me.step02 = getStep(2);
-      me.step03 = getStep(3);
-      me.step04 = getStep(4);
-      me.step05 = getStep(5);
+      me.steps.forEach(item => {
+        item.models = getStep(item.step);
+      });
     },
     loadGroupList() {
       return new Promise((resolve, reject) => {
@@ -225,71 +208,30 @@ export default {
     },
     saveComposeModelDetail() {
       let me = this;
-      let l1 = me.step01.length;
-      let l2 = me.step02.length;
-      let l3 = me.step03.length;
-      let l4 = me.step04.length;
-      let l5 = me.step05.length;
-      if (
-        (l1 == 0 && l2 + l3 + l4 + l5 > 0) ||
-        (l2 == 0 && l3 + l4 + l5 > 0) ||
-        (l3 == 0 && l4 + l5 > 0) ||
-        (l4 == 0 && l5 > 0)
-      ) {
-        me.$message.error("请按顺序排列模版");
-        return;
+      //1.检查顺序
+      for (let i = 0; i < me.steps.length; i++) {
+        if (me.steps[i].models.length == 0) {
+          for (let m = i + 1; m < me.steps.length; m++) {
+            if (me.steps[m].models.length > 0) {
+              me.$message.error("请按顺序排列模版");
+              return;
+            }
+          }
+        }
       }
+      //2.设置参数
       let params = [];
-      if (l1 > 0) {
-        me.step01.forEach((item, index) => {
+      me.steps.forEach(step => {
+        step.models.forEach((model, index) => {
           params.push({
             composeId: me.selComposeModelId,
-            composeLevel: 1,
-            modelId: item.modelId,
+            composeLevel: step.step,
+            modelId: model.modelId,
             orderInLevel: index
           });
         });
-      }
-      if (l2 > 0) {
-        me.step02.forEach((item, index) => {
-          params.push({
-            composeId: me.selComposeModelId,
-            composeLevel: 2,
-            modelId: item.modelId,
-            orderInLevel: index
-          });
-        });
-      }
-      if (l3 > 0) {
-        me.step03.forEach((item, index) => {
-          params.push({
-            composeId: me.selComposeModelId,
-            composeLevel: 3,
-            modelId: item.modelId,
-            orderInLevel: index
-          });
-        });
-      }
-      if (l4 > 0) {
-        me.step04.forEach((item, index) => {
-          params.push({
-            composeId: me.selComposeModelId,
-            composeLevel: 4,
-            modelId: item.modelId,
-            orderInLevel: index
-          });
-        });
-      }
-      if (l5 > 0) {
-        me.step05.forEach((item, index) => {
-          params.push({
-            composeId: me.selComposeModelId,
-            composeLevel: 5,
-            modelId: item.modelId,
-            orderInLevel: index
-          });
-        });
-      }
+      });
+      //3.保存
       saveComposeModelDetail({
         composeId: me.selComposeModelId,
         details: params
@@ -323,12 +265,27 @@ export default {
   text-align: center;
 }
 
+.new-blocktag {
+  color: #cbcbcb;
+  display: block;
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  border: 2px dashed #ddd;
+}
+
+.new-blocktag:hover {
+  color: #ff5500;
+  background: #bbff66;
+  cursor: pointer;
+}
+
 .ul {
   margin-top: 5px;
   list-style: none;
   display: block;
   position: relative;
-  border: 2px dashed #409eff;
+  border: 2px dashed #ddd;
   overflow: hidden;
   padding: 10px;
   width: 90%;

@@ -109,12 +109,7 @@ export default {
         })
       ).then(res => {
         let { flag, errMsg } = res;
-        if (!flag) {
-          me.$message({
-            message: errMsg,
-            type: "error"
-          });
-        }
+        if (!flag) me.$message.error(errMsg);
       });
     },
     sortGroupUp(index) {
@@ -126,12 +121,7 @@ export default {
         })
       ).then(res => {
         let { flag, errMsg } = res;
-        if (!flag) {
-          me.$message({
-            message: errMsg,
-            type: "error"
-          });
-        }
+        if (!flag) me.$message.error(errMsg);
       });
     },
     saveExpands() {

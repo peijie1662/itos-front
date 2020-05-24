@@ -422,6 +422,9 @@ export const composeReportUrl = function (id) {
 
 //统计每层的开始结束时间
 export const countStepTime = function (step) {
+
+console.info(step)
+
   step.bgDt = "";
   step.edDt = "";
   step.tasks.forEach(item => {
