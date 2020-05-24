@@ -4,7 +4,7 @@
       <div :style="topTriangleStyle"></div>
       <div style="position: absolute;top: 2px;right:2px;">
         <span style="color: #cdcdcd;">{{mmodel.serviceName}}</span>
-        <span :style="domainColor">{{mmodel.serviceDomain}}</span>
+        <span :style="domainColor">{{mmodel.serviceDomain?mmodel.serviceDomain.slice(0,1):''}}</span>
       </div>
       <div style="margin-top:10px;">
         <span>{{mmodel.abs}}</span>
@@ -70,5 +70,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

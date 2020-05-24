@@ -23,8 +23,11 @@
           type="primary"
           size="mini"
           @click="saveComposeModelDetail"
-          style="margin-left:50px;"
+          style="margin-left:20px;"
         >保存</el-button>
+        <el-divider direction="vertical"></el-divider>
+        <el-button @click="expandStep" size="mini">展开分组</el-button>
+        <el-button @click="collapseStep" size="mini">收起分组</el-button>
       </div>
     </div>
     <div class="content">
@@ -53,8 +56,17 @@
       </draggable>
       <!-- 2.模版层 -->
       <div v-for="(item,index) in steps" :key="index">
-        <span class="blocktag">STEP-{{item.step}}</span>
-        <draggable tag="ul" v-model="item.models" group="{name:'mygroup'}" class="ul">
+        <span class="blocktag" @click="collapse(item)">
+          <i :class="[item.collapse?'el-icon-arrow-down':'el-icon-arrow-up']"></i>
+          STEP-{{item.step}}
+        </span>
+        <draggable
+          tag="ul"
+          v-model="item.models"
+          group="{name:'mygroup'}"
+          class="ul"
+          :style="{'height':(item.collapse?'22px':'100%')}"
+        >
           <li v-for="item in item.models" :key="item.modelId" class="li">
             <sampleModelCom :mmodel="item"></sampleModelCom>
           </li>
@@ -91,11 +103,28 @@ export default {
     };
   },
   methods: {
+    expandStep() {
+      this.steps.forEach(item => {
+        item.collapse = false;
+      });
+      this.$forceUpdate;
+    },
+    collapseStep() {
+      this.steps.forEach(item => {
+        item.collapse = true;
+      });
+      this.$forceUpdate;
+    },
+    collapse(item) {
+      item.collapse = !item.collapse;
+      this.$forceUpdate;
+    },
     addStep() {
       let me = this;
       me.steps.push({
         step: me.steps.length + 1,
-        models: []
+        models: [],
+        collapse: false
       });
       me.$forceUpdate;
     },
@@ -123,7 +152,8 @@ export default {
       });
       //4.初始化层
       me.steps = [];
-      let stepLength = me.details.slice(-1)[0].composeLevel;
+      let stepLength =
+        me.details.length > 0 ? me.details.slice(-1)[0].composeLevel : 0;
       for (let i = 0; i < stepLength; i++) {
         me.addStep();
       }
@@ -259,15 +289,16 @@ export default {
 .blocktag {
   background: #ff5500;
   color: white;
-  display: block;
+  display: inline-block;
   width: 100px;
   height: 20px;
   text-align: center;
+  cursor: pointer;
 }
 
 .new-blocktag {
   color: #cbcbcb;
-  display: block;
+  display: inline-block;
   width: 100px;
   height: 20px;
   text-align: center;
