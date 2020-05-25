@@ -78,7 +78,12 @@ export const CATEGORYS = [
     value: "BROADCAST",
     label: "广播任务",
     color: "#00AA55"    
-  }
+  },
+  {
+    value: "SYSTEM",
+    label: "系统任务",
+    color: "#FFD700"    
+  },  
 ]
 
 //执行周期
@@ -422,9 +427,6 @@ export const composeReportUrl = function (id) {
 
 //统计每层的开始结束时间
 export const countStepTime = function (step) {
-
-console.info(step)
-
   step.bgDt = "";
   step.edDt = "";
   step.tasks.forEach(item => {

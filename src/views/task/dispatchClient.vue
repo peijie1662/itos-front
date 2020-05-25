@@ -99,7 +99,8 @@ export default {
       newClient: null,
       updateClient: null,
       models: [],
-      clients: [],
+      clients: [], //过滤后
+      oriClients: [], //过滤前
       gpList: [],
       gpOpt: [],
       qryModelKey: "",
@@ -127,7 +128,7 @@ export default {
       me.gpList.forEach(gp => {
         gp.children.forEach(child => {
           child.disabled = false;
-          me.clients.forEach(client => {
+          me.oriClients.forEach(client => {
             if (client.modelKey.indexOf(child.value) >= 0) {
               child.disabled = true;
             }
@@ -135,16 +136,14 @@ export default {
         });
       });
       this.newClient = {};
+      me.gpList = arrDeepCopy(me.gpList);
     },
     delClient(row) {
       let me = this;
       deleteClient({ serviceName: row.serviceName }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.loadData();
         }
@@ -159,7 +158,7 @@ export default {
       me.gpList.forEach(gp => {
         gp.children.forEach(child => {
           child.disabled = false;
-          me.clients.forEach(client => {
+          me.oriClients.forEach(client => {
             if (
               client.modelKey.indexOf(child.value) >= 0 &&
               client.serviceName != uc.serviceName
@@ -170,6 +169,7 @@ export default {
         });
       });
       me.updateClient = { ...uc };
+      me.gpList = arrDeepCopy(me.gpList);
     },
     loadData: async function() {
       let me = this;
@@ -195,10 +195,7 @@ export default {
         getGroupList({}).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             me.gpList = data;
@@ -234,10 +231,7 @@ export default {
         getNotComposeModelList({}).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             me.models = data;
@@ -248,13 +242,11 @@ export default {
     },
     reloadServerClient() {
       return new Promise((resolve, reject) => {
+        let me = this;
         serverReloadClient({}).then(res => {
           let { flag, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             resolve();
@@ -268,12 +260,10 @@ export default {
         getClientList({}).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
+            me.oriClients = data;
             me.clients = data.filter(item => {
               return (
                 (me.selNbct && item.domain == "NBCT") ||

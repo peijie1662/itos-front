@@ -168,3 +168,13 @@ export const upInArr = function (arr, index) {
     swapArray(arr, index, index - 1);
   }
 }
+
+//json格式校验
+export const validateJson = function (str) {
+  try {
+    JSON.parse(str)
+    return true
+  } catch{
+    return false
+  }
+}

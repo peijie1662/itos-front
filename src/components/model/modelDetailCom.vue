@@ -37,7 +37,16 @@
               @click="copy('.content-tag',taskModel.comments)"
             ></i>
           </div>
-          <div ref="content" contenteditable="true" class="content" v-html="taskModel.comments"></div>
+          <div v-if="isJsonContent" ref="content" contenteditable="true" class="content">
+            <pre>{{taskModel.comments}}</pre>
+          </div>
+          <div
+            v-else
+            ref="content"
+            contenteditable="true"
+            class="content"
+            v-html="taskModel.comments"
+          ></div>
           <el-upload
             :action="uploadUrl"
             :data="{'userId':userInfo.userId,'modelId':taskModel.modelId}"
@@ -142,7 +151,7 @@
 
 <script>
 import { updateModel, deleteModel, UPLOAD_MODEL_URL } from "@/api/api";
-import { insertContent } from "@/api/util";
+import { insertContent, validateJson } from "@/api/util";
 import {
   CYCLES,
   EXPIREDCALLBACKS,
@@ -167,6 +176,10 @@ export default {
   },
   computed: {
     ...mapGetters(["userInfo"]),
+    //内容是json格式
+    isJsonContent() {
+      return typeof this.taskModel.comments != "string";
+    },
     //上传按钮不可用
     f_upload_btn() {
       return this.taskModel.category
@@ -209,6 +222,9 @@ export default {
       handler(newVal) {
         if (newVal != null) {
           this.taskModel = newVal;
+          if (validateJson(this.taskModel.comments)) {
+            this.taskModel.comments = JSON.parse(this.taskModel.comments);
+          }
           this.dialogVisible = true;
         }
       },
@@ -259,7 +275,10 @@ export default {
       me.taskModel.expired = me.taskModel.expired
         ? parseInt(me.taskModel.expired)
         : 24 * 60 * 60;
-      //4.保存
+      //4.替换掉json中不需要字符
+      if (validateJson(me.taskModel.comments))
+        me.taskModel.comments = me.taskModel.comments.replace(/[\r\n]/g, "");
+      //5.保存
       updateModel({
         ...me.taskModel
       }).then(res => {

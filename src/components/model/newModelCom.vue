@@ -165,7 +165,7 @@ import {
   valueToComment,
   modelUploadDom
 } from "@/api/data";
-import { insertContent, generateUUID } from "@/api/util";
+import { insertContent, generateUUID,validateJson } from "@/api/util";
 import { mapGetters } from "vuex";
 
 export default {
@@ -261,8 +261,11 @@ export default {
       //4.默认超期时间24小时(除广播任务外)
       me.taskModel.expired = me.taskModel.expired
         ? parseInt(me.taskModel.expired)
-        : 24 * 60 * 60;      
-      //5.保存
+        : 24 * 60 * 60;   
+      //5.替换掉json中不需要字符
+      if (validateJson(me.taskModel.comments))
+        me.taskModel.comments = me.taskModel.comments.replace(/[\r\n]/g, "");           
+      //6.保存
       addModel({ ...me.taskModel }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
