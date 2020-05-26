@@ -9,7 +9,7 @@
       </div>
       <!-- 简介 -->
       <div style="text-align: center;">
-        <span style="line-height:50px;font-size:12px;">{{taskModel.abs}}</span>
+        <span style="font-size:12px;">{{taskModel.abs}}</span>
       </div>
       <!-- 底部三角 -->
       <div :style="bottomTriangleStyle"></div>
@@ -235,8 +235,8 @@ export default {
 
 <style scoped>
 .outer {
-  width: 160px;
-  height: 120px;
+  width: 150px;
+  height: 100px;
   border: 1px solid #909399;
   position: relative;
   border-radius: 5px;
