@@ -33,10 +33,26 @@
     </div>
     <!-- 生成新任务窗口 -->
     <el-dialog title="临时创建新任务" :visible.sync="crtDialogVisible" width="30%">
-      <div>
-        <span>输入任务执行时间：</span>
-        <el-date-picker type="datetime" v-model="planDt"></el-date-picker>
+      <el-switch v-model="isOnce" active-text="创建单次任务" inactive-text="创建区间任务" style="margin-bottom: 10px;"></el-switch>
+      <!-- 单次任务 -->
+      <div v-if="isOnce" style="height: 100px;">
+        <div style="margin-top:10px;">
+          <span>计划时间：</span>
+          <el-date-picker type="datetime" v-model="planDt" size="mini" style="margin-left:5px;"></el-date-picker>
+        </div>
       </div>
+      <!-- 区间任务 -->
+      <div v-if="!isOnce" style="height: 100px;">
+        <div style="margin-top:10px;">
+          <span>开始时间：</span>
+          <el-date-picker type="datetime" v-model="bgDt" size="mini" style="margin-left:5px;"></el-date-picker>
+        </div>
+        <div style="margin-top:5px;">
+          <span>结束时间：</span>
+          <el-date-picker type="datetime" v-model="edDt" size="mini" style="margin-left:5px;"></el-date-picker>
+        </div>
+      </div>
+      <!-- 按钮 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="crtDialogVisible = false" size="small">取 消</el-button>
         <el-button type="primary" @click="createOnceTask" size="small">确 定</el-button>
@@ -67,7 +83,12 @@
 </template>
 
 <script>
-import { saveOnceTask, chgModelStatus, updateModelGroup } from "@/api/api";
+import {
+  saveOnceTask,
+  savePeriodTask,
+  chgModelStatus,
+  updateModelGroup
+} from "@/api/api";
 import { getCategoryColor } from "@/api/data";
 import modelDetailCom from "@/components/model/modelDetailCom.vue";
 import { mapGetters } from "vuex";
@@ -96,7 +117,10 @@ export default {
         position: "absolute",
         bottom: "0px",
         right: "0px"
-      }
+      },
+      isOnce: true,
+      bgDt: new Date(),
+      edDt: new Date()
     };
   },
   computed: {
@@ -148,29 +172,56 @@ export default {
     },
     createOnceTask() {
       let me = this;
-      saveOnceTask({
-        modelId: me.taskModel.modelId,
-        planDt: me.planDt,
-        userId: me.userInfo.userId
-      }).then(res => {
-        let { flag, errMsg } = res;
-        if (!flag) {
-          me.$message({
-            message: errMsg,
-            type: "error"
-          });
-        } else {
-          let msg =
-            me.taskModel.category == "COMMON"
-              ? "生成人工任务成功，请到‘任务大厅’中查看。"
-              : "生成系统任务成功，请到‘系统任务’中查看。";
-          me.$message({
-            message: msg,
-            type: "success"
-          });
-          me.crtDialogVisible = false;
-        }
-      });
+      if (me.isOnce) {
+        saveOnceTask({
+          modelId: me.taskModel.modelId,
+          planDt: me.planDt,
+          userId: me.userInfo.userId
+        }).then(res => {
+          let { flag, errMsg } = res;
+          if (!flag) {
+            me.$message({
+              message: errMsg,
+              type: "error"
+            });
+          } else {
+            let msg =
+              me.taskModel.category == "COMMON"
+                ? "生成人工任务成功，请到‘任务大厅’中查看。"
+                : "生成系统任务成功，请到‘系统任务’中查看。";
+            me.$message({
+              message: msg,
+              type: "success"
+            });
+            me.crtDialogVisible = false;
+          }
+        });
+      } else {
+        savePeriodTask({
+          modelId: me.taskModel.modelId,
+          bgDt: me.bgDt,
+          edDt: me.edDt,
+          userId: me.userInfo.userId
+        }).then(res => {
+          let { flag, errMsg } = res;
+          if (!flag) {
+            me.$message({
+              message: errMsg,
+              type: "error"
+            });
+          } else {
+            let msg =
+              me.taskModel.category == "COMMON"
+                ? "生成人工任务成功，请到‘任务大厅’中查看。"
+                : "生成系统任务成功，请到‘系统任务’中查看。";
+            me.$message({
+              message: msg,
+              type: "success"
+            });
+            me.crtDialogVisible = false;
+          }
+        });
+      }
     },
     chgInvalidStatus() {
       let me = this;
