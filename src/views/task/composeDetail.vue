@@ -92,7 +92,7 @@ import sampleModelCom from "@/components/model/sampleModelCom.vue";
 export default {
   data() {
     return {
-      models: [],
+      models: [],//組合模版
       selComposeModelId: "", //选中组合模版
       details: [], //模版详细信息
       oriModels: [], //原始
