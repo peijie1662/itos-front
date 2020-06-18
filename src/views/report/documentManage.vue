@@ -3,135 +3,141 @@
     <div class="header">
       <el-button @click="uploadDocument" type="primary" size="mini">上传文档</el-button>
       <el-divider direction="vertical"></el-divider>
-      <el-button @click="newGroup" type="primary" size="mini">新文件夹</el-button>
+      <el-button @click="newGroup" size="mini">文档分组</el-button>
+      <el-button @click="newCategory" size="mini">文档分类</el-button>
       <el-divider direction="vertical"></el-divider>
+      <el-button @click="loadData" type="primary" size="mini">刷新</el-button>
     </div>
-    <div>
-      <!-- 1.未分组 -->
-      <draggable
-        tag="ul"
-        v-model="rootFns"
-        group="{name:'mygroup'}"
-        @end="change"
-        class="content"
-        id="root"
-      >
-        <document-com
-          v-for="(item,index) in rootFns"
-          :key="index"
-          :bk="item"
-          class="book"
-          :id="item"
-        ></document-com>
-      </draggable>
-      <!-- 2.分组 -->
-      <div
-        v-for="(gp,index) in groups"
-        :key="index"
-        class="group"
-        :style="{'height':(gp.collapse?'100%':'22px')}"
-      >
-        <!-- 2.1分组标题 -->
-        <div style="border:1px solid #ddd;">
-          <i
-            :class="[gp.collapse?'el-icon-arrow-up':'el-icon-arrow-down']"
-            style="background:#409EFF;color:white;"
-            @click="collapse(gp)"
-          ></i>
-          <el-divider direction="vertical"></el-divider>
-          <span>{{gp.group}}</span>
-          <i class="el-icon-close group-close-btn" @click="delGroup(gp.groupId)"></i>
-        </div>
-        <!-- 2.2组内模版 -->
-        <draggable
-          v-model="gp.fns"
-          group="{name:'mygroup'}"
-          class="group-content"
-          @end="change"
-          :id="gp.group"
-        >
-          <document-com
-            v-for="(item,index) in gp.fns"
-            :key="index"
-            class="book"
-            :bk="item"
-            :id="item"
-          ></document-com>
-        </draggable>
-      </div>
+    <div class="content">
+      <el-table :data="list" :header-cell-style="headerCellStyle" :cell-style="cellStyle" border>
+        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column label="文件名" width="200">
+          <template slot-scope="scope">
+            <a
+              :href="documentUrl(scope.row.fileName)"
+              target="_blank"
+              style="color:#606266;white-space:nowrap;"
+            >{{scope.row.fileName}}</a>
+          </template>
+        </el-table-column>
+        <el-table-column prop="groupId" label="分组" width="150"></el-table-column>
+        <el-table-column prop="category" label="分类" width="80"></el-table-column>
+        <el-table-column label="简介" width="250">
+          <template slot-scope="scope">
+            <span style="white-space:nowrap;">{{scope.row.abs}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="oper" label="上传" width="60"></el-table-column>
+        <el-table-column prop="opDateStr" label="时间" width="160"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" plain size="mini" @click="chgDocumentInfo(scope.row)">修改</el-button>
+            <el-popconfirm title="确定要删除该文档吗？" @onConfirm="delDocument(scope.row)">
+              <el-button
+                type="danger"
+                plain
+                size="mini"
+                slot="reference"
+                style="margin-left:10px;"
+              >删除</el-button>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
+    <!-- 上传文档 -->
+    <new-document-com :newDoc="newDoc" @updateSuccess="loadData"></new-document-com>
+    <!-- 新建分组 -->
+    <new-group-com :newGp="newGp" @updateSuccess="loadData"></new-group-com>
+    <!-- 新建分类 -->
+    <new-category-com :newCg="newCg" @updateSuccess="loadData"></new-category-com>
+    <!-- 修改文档 -->
+    <upd-document-com :updDoc="updDoc" @updateSuccess="loadData"></upd-document-com>
   </div>
 </template>
 
 <script>
-import { getDocumentList, moveDocument } from "@/api/api";
-import draggable from "vuedraggable";
-import documentCom from "@/components/report/documentCom.vue";
+import { documentList, delDocument } from "@/api/api";
+import { localDateToStr } from "@/api/util";
+import { documentUrl } from "@/api/data";
+import newDocumentCom from "@/components/document/newDocumentCom.vue";
+import newGroupCom from "@/components/document/newGroupCom.vue";
+import newCategoryCom from "@/components/document/newCategoryCom.vue";
+import updDocumentCom from "@/components/document/updDocumentCom.vue";
 
 export default {
   data() {
     return {
-      rootFns: [], //未分组文件
-      groups: [] //分组
+      newDoc: null,
+      updDoc: null,
+      newGp: null,
+      newCg: null,
+      category: "",
+      list: []
     };
   },
+  computed: {},
   methods: {
-    change(e) {
-      console.info(e);
-
-      let from = e.from.id;
-      let to = e.to.id;
-      let item = e.clone.id;
-      //源目录与目标目录不同
-      if (from != to) {
-        let me = this;
-        moveDocument({ from, to, item }).then(res => {
-          let { flag, errMsg } = res;
-          if (!flag) {
-            me.$message({
-              message: errMsg,
-              type: "error"
-            });
-          } else {
-            me.loadDocuments();
-          }
-        });
-      }
+    documentUrl(fileName) {
+      return documentUrl(fileName);
     },
-    loadDocuments() {
+    newGroup() {
+      this.newGp = {};
+    },
+    newCategory() {
+      this.newCg = {};
+    },
+    chgDocumentInfo(row) {
+      this.updDoc = { ...row };
+    },
+    delDocument(row) {
       let me = this;
-      getDocumentList({}).then(res => {
-        let { flag, data, errMsg } = res;
+      delDocument({ fileName: row.fileName }).then(res => {
+        let { flag, errMsg } = res;
         if (!flag) {
           me.$message({
             message: errMsg,
             type: "error"
           });
         } else {
-          me.groups = []
-          data.forEach(item => {
-            if (item.group == "root_files") {
-              me.rootFns = item.fns;
-            } else {
-              me.groups.push(item);
-            }
-          });
+          me.loadData();
         }
       });
     },
-    uploadDocument() {},
-    newGroup() {},
-    collapse(gp) {
-      gp.collapse = !gp.collapse;
-      this.groups = [...this.groups];
+    uploadDocument() {
+      this.newDoc = {};
+    },
+    loadData() {
+      documentList({}).then(res => {
+        let { flag, data, errMsg } = res;
+        if (!flag) {
+          this.$message({
+            message: errMsg,
+            type: "error"
+          });
+        } else {
+          data.forEach(item => {
+            item.opDateStr = localDateToStr(item.opDate);
+          });
+          this.list = data;
+        }
+      });
+    },
+    headerCellStyle() {
+      return "padding:0;";
+    },
+    cellStyle() {
+      return "padding-top:2px;padding-bottom:2px;";
     }
   },
   mounted() {
-    this.loadDocuments();
+    this.loadData();
   },
   components: {
-    draggable,
-    documentCom
+    newDocumentCom,
+    newGroupCom,
+    newCategoryCom,
+    updDocumentCom
   }
 };
 </script>
@@ -143,6 +149,7 @@ export default {
   padding: 10px;
   min-height: 50px;
 }
+
 .content {
   border-radius: 10px;
   border: 1px solid #c0c4cc;
@@ -150,30 +157,12 @@ export default {
   margin-top: 10px;
   position: relative;
   overflow: hidden;
+  min-height: 800px;
 }
 
-.group {
-  margin-top: 10px;
-  min-height: 100px;
-  overflow: hidden;
-  border: 1px solid #409eff;
-}
-
-.group-close-btn {
-  position: inline-block;
-  float: right;
-  background: #f56c6c;
-  color: white;
-  margin-right: 3px;
-  margin-top: 2px;
-}
-
-.group-content {
-  overflow: auto;
-}
-
-.book {
-  float: left;
-  margin: 10px;
+.bookshelf {
+  border: 1px solid #ddd;
+  width: 300px;
+  height: 400px;
 }
 </style>

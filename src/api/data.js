@@ -77,13 +77,13 @@ export const CATEGORYS = [
   {
     value: "BROADCAST",
     label: "广播任务",
-    color: "#00AA55"    
+    color: "#00AA55"
   },
   {
     value: "SYSTEM",
     label: "系统任务",
-    color: "#FFD700"    
-  },  
+    color: "#FFD700"
+  },
 ]
 
 //执行周期
@@ -123,7 +123,7 @@ export const EXPIREDCALLBACKS = [
   {
     value: "FAIL",
     label: "超时转为失败"
-  },  
+  },
   {
     value: "CANCEL",
     label: "超时转为取消"
@@ -151,6 +151,20 @@ export const EXPIREDNOTIFIES = [
 
 //任务对象标记，此标记与类别无关，只与内容有关。
 export const TASKICONS = [
+  {
+    id: "COMPUTER",
+    label: "电脑",
+    match: ["主机", "h\\d{3,}"],
+    icon: "iconfont icon-picker-computer icon",
+    iconclass: { background: "#e9ebec", color: "#F56C6C" }
+  },
+  {
+    id: "NETWORK",
+    label: "网络",
+    match: ["网", "不通", "光"],
+    icon: "iconfont icon-network icon",
+    iconclass: { background: "#e9ebec", color: "#F56C6C" }
+  },
   {
     id: "LMD",
     label: "龙门吊",
@@ -180,20 +194,6 @@ export const TASKICONS = [
     iconclass: { background: "#e9ebec", color: "#F56C6C" }
   },
   {
-    id: "COMPUTER",
-    label: "电脑",
-    match: ["主机", "h\\d{3,}"],
-    icon: "iconfont icon-picker-computer icon",
-    iconclass: { background: "#e9ebec", color: "#F56C6C" }
-  },
-  {
-    id: "NETWORK",
-    label: "网络",
-    match: ["网", "不通", "光"],
-    icon: "iconfont icon-network icon",
-    iconclass: { background: "#e9ebec", color: "#F56C6C" }
-  },
-  {
     id: "OTHER",
     label: "其它",
     match: [],
@@ -206,7 +206,7 @@ export const TASKICONS = [
     match: [],
     icon: "iconfont icon-robot2 icon",
     iconclass: { background: "#e9ebec", color: "#F56C6C" }
-  },
+  }
 ]
 
 //任务的
@@ -225,8 +225,8 @@ export const TASKSTATUS = [
     size: "large",//图标大小(timeline中使用) 
     iconclass: { background: "#e9ebec", color: "#7ab900" },
     hoverclass: { background: "#7ab900", color: "white" },
-    next: ["PROCESSING", "DONE","FAIL", "SWAP", "MODIFY", "CANCEL","DELIVERREPAIR"],
-    scope: ["MANUAL","AUTO"]
+    next: ["PROCESSING", "DONE", "FAIL", "SWAP", "MODIFY", "CANCEL", "DELIVERREPAIR"],
+    scope: ["MANUAL", "AUTO"]
   },
   {
     id: "PROCESSING",
@@ -235,8 +235,8 @@ export const TASKSTATUS = [
     size: "large",
     iconclass: { background: "#e9ebec", color: "#67C23A" },
     hoverclass: { background: "#67C23A", color: "white" },
-    next: ["PROCESSING", "DONE", "FAIL","SWAP", "MODIFY", "CANCEL","DELIVERREPAIR"],
-    scope: ["MANUAL","AUTO"]
+    next: ["PROCESSING", "DONE", "FAIL", "SWAP", "MODIFY", "CANCEL", "DELIVERREPAIR"],
+    scope: ["MANUAL", "AUTO"]
   },
   {
     id: "DONE",
@@ -246,7 +246,7 @@ export const TASKSTATUS = [
     iconclass: { background: "#e9ebec", color: "#3b99ff" },
     hoverclass: { background: "#3b99ff", color: "white" },
     next: ["TERMINAL"],
-    scope: ["MANUAL","AUTO"]
+    scope: ["MANUAL", "AUTO"]
   },
   {
     id: "FAIL",
@@ -257,7 +257,7 @@ export const TASKSTATUS = [
     hoverclass: { background: "#F56C6C", color: "white" },
     next: ["TERMINAL"],
     scope: ["AUTO"]
-  },  
+  },
   {
     id: "CANCEL",
     desc: "取消",
@@ -266,7 +266,7 @@ export const TASKSTATUS = [
     iconclass: { background: "#e9ebec", color: "#E6A23C" },
     hoverclass: { background: "#E6A23C", color: "white" },
     next: ["TERMINAL"],
-    scope: ["MANUAL","AUTO"]
+    scope: ["MANUAL", "AUTO"]
   },
   {
     id: "MODIFY",
@@ -275,7 +275,7 @@ export const TASKSTATUS = [
     size: "large",
     iconclass: { background: "#e9ebec", color: "#f68a1e" },
     hoverclass: { background: "#f68a1e", color: "white" },
-    next: ["INHERIT"],  
+    next: ["INHERIT"],
     scope: ["MANUAL"]
   },
   {
@@ -423,6 +423,11 @@ export const taskUploadDom = function (file, id) {
 //组合任务报表
 export const composeReportUrl = function (id) {
   return STATIC_URL + "pdf/compose/" + id + ".pdf" + "?" + Math.random(100);
+}
+
+//文档
+export const documentUrl = function(fileName){
+  return STATIC_URL + "pdf/document/" + fileName;
 }
 
 //统计每层的开始结束时间

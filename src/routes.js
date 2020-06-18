@@ -14,6 +14,7 @@ import UserManager from './views/settings/userManager.vue'
 import firstPage from './views/settings/firstPage.vue'
 import reportModel from './views/report/reportModel.vue'
 import documentManage from './views/report/documentManage.vue'
+import documentBrowsing from './views/report/documentBrowsing.vue'
 
 let routes = [
     {
@@ -115,6 +116,10 @@ let routes = [
                 path: '/document_manage', component: documentManage, name: '文档管理',
                 meta: { funId: '5002', dis: true }
             },
+            {
+                path: '/document_browsing', component: documentBrowsing, name: '文档浏览',
+                meta: { funId: '5003', dis: true }
+            }
         ]
     },
     {

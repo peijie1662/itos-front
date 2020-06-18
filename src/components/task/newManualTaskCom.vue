@@ -136,6 +136,7 @@ export default {
           this.task = newVal;
           //提前生成UUID,因为上传图片可能要先用
           this.task.taskId = generateUUID();
+          this.task.handler = [this.userInfo.userId];
           this.dialogVisible = true;
         }
       },
@@ -188,12 +189,13 @@ export default {
             let m = machineName.toUpperCase();
             if (!hasItem) {
               if (
-                m.startsWith("H") ||
-                m.startsWith("F-H") ||
-                m.startsWith("D") ||
-                m.startsWith("F-D") ||
-                m.startsWith("P") ||
-                m.startsWith("F-P")
+                (m.startsWith("H") ||
+                  m.startsWith("F-H") ||
+                  m.startsWith("D") ||
+                  m.startsWith("F-D") ||
+                  m.startsWith("P") ||
+                  m.startsWith("F-P")) &&
+                !m.startsWith("DGJ")
               ) {
                 me.tags.push({
                   name:
