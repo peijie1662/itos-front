@@ -84,8 +84,19 @@
       <div class="section" style="min-height:50px;padding: 10px;" v-html="task.content"></div>
       <!-- 第5行,处理人 -->
       <div class="section">
-        <span style="color:#c0c4cc;">处理人员：</span>
-        <span style="margin-left:5px;">{{task.handlers}}</span>
+        <div style="color:#c0c4cc;float:left;">处理人员：</div>
+        <div
+          v-for="(user,index) in task.handleUsers"
+          :key="index"
+          style="float:left;margin-left:10px;"
+        >
+          <el-image :src="user.faceUrl" fit="contain" :lazy="true" class="face">
+            <div slot="error" class="image-slot">
+              <img src="@/assets/face/man.png" style="height:30px;width:30px;" />
+            </div>
+          </el-image>
+          <span style="font-size:12px;">{{user.userName}}</span>
+        </div>
       </div>
       <!-- 第6行,处理日志 -->
       <span style="color: #a6b5c4;">任务日志：</span>
@@ -121,7 +132,12 @@
 <script>
 import { getTaskLog, getDrList } from "@/api/api";
 import { localDateToStr, localDateToDate } from "@/api/util";
-import { getTaskIconById, getTaskStatusById, listIsEmpty } from "@/api/data";
+import {
+  getTaskIconById,
+  getTaskStatusById,
+  listIsEmpty,
+  faceUrl
+} from "@/api/data";
 import processingCom from "@/components/task/commonStatusCom.vue";
 import doneCom from "@/components/task/commonStatusCom.vue";
 import failCom from "@/components/task/commonStatusCom.vue";
@@ -165,10 +181,7 @@ export default {
         }).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             me.taskLog = data;
@@ -189,10 +202,7 @@ export default {
         }).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
             reject();
           } else {
             me.dr = data.length > 0 ? data[0] : { taskId: me.task.taskId };
@@ -231,6 +241,7 @@ export default {
         this.task = newVal;
         this.task.icon = getTaskIconById(newVal.taskIcon);
         this.task.sta = getTaskStatusById(newVal.status);
+        //设置后续状态
         this.task.nextSta = this.task.sta.next
           .map(item => {
             return getTaskStatusById(item);
@@ -238,7 +249,10 @@ export default {
           .filter(item => {
             return item.scope && item.scope.indexOf("MANUAL") >= 0;
           });
-        this.task.handlers = newVal.handler.join(",");
+        //设置人物头像  
+        this.task.handleUsers.forEach(user => {
+          user.faceUrl = faceUrl(user.userId);
+        });
         this.task.planDtStr = localDateToStr(this.task.planDt);
         this.task.expiredTimeStr = localDateToStr(this.task.expiredTime);
         await this.loadTaskLog();
@@ -261,8 +275,18 @@ export default {
 </script>
 
 <style scoped>
+
+.face {
+  width: 30px;
+  height: 30px;
+  background: #f5f7fa;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
 .outer {
   position: relative;
+  line-height: unset;
 }
 
 .section-title {

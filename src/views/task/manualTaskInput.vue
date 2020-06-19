@@ -35,7 +35,7 @@
 
 <script>
 import { pickerOptions } from "@/api/data";
-import { getManualTaskList } from "@/api/api";
+import { getManualTaskList, getUserList } from "@/api/api";
 import taskCom from "@/components/task/manualTaskCom";
 import newTaskCom from "@/components/task/newManualTaskCom.vue";
 
@@ -50,9 +50,10 @@ export default {
       newTask: null,
       taskList: [],
       finTaskList: [],
+      users: [], //用户信息
       //
       pickerOptions,
-      dateRange: [new Date(),new Date()] //默认当天
+      dateRange: [new Date(), new Date()] //默认当天
     };
   },
   methods: {
@@ -63,29 +64,56 @@ export default {
           (me.selCheckin && item.status == "CHECKIN") ||
           (me.selProcessing && item.status == "PROCESSING") ||
           (me.selDone && item.status == "DONE") ||
-          (me.selCancel &&  ((item.status == "CANCEL")||(item.status == "FAIL")))
+          (me.selCancel && (item.status == "CANCEL" || item.status == "FAIL"))
         );
       });
     },
     addTask() {
       this.newTask = {};
     },
-    loadData() {
+    userList() {
       let me = this;
-      getManualTaskList({
-        dateRange: me.dateRange
-      }).then(res => {
-        let { flag, data, errMsg } = res;
-        if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
-        } else {
-          me.taskList = data;
-          me.filter();
-        }
+      return new Promise((resolve, reject) => {
+        getUserList({}).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            me.users = data;
+            resolve();
+          }
+        });
       });
+    },
+    manualTaskList() {
+      let me = this;
+      return new Promise((resolve, reject) => {
+        getManualTaskList({
+          dateRange: me.dateRange
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            data.forEach(item => {
+              item.handleUsers = item.handler.map(userId => {
+                return me.users.filter(user => {
+                  return user.userId == userId;
+                })[0];
+              });
+            });
+            me.taskList = data;
+            me.filter();
+            resolve();
+          }
+        });
+      });
+    },
+    loadData: async function() {
+      await this.userList();
+      await this.manualTaskList();
     }
   },
   components: {

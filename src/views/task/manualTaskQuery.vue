@@ -31,15 +31,13 @@
       >
         <el-table-column type="expand">
           <template slot-scope="scope">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item>
-                <task-com :ttask="scope.row" class="task"></task-com>
-              </el-form-item>
+            <el-form label-position="left" inline>
+              <task-com :ttask="scope.row" class="task"></task-com>
             </el-form>
           </template>
         </el-table-column>
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column label="任务简介" width="200">
+        <el-table-column label="任务简介" width="100">
           <template slot-scope="scope">
             <span style="white-space:nowrap;">{{scope.row.abs}}</span>
           </template>
@@ -59,7 +57,7 @@
             <span style="white-space:nowrap;">{{scope.row.content}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="handlerStr" label="执行人" width="80"></el-table-column>
+        <el-table-column prop="handlerStr" label="执行人" width="150"></el-table-column>
         <el-table-column prop="planDtStr" label="登记时间" width="200"></el-table-column>
       </el-table>
     </div>
@@ -68,7 +66,7 @@
 
 <script>
 import { pickerOptions } from "@/api/data";
-import { getManualTaskList } from "@/api/api";
+import { getManualTaskList, getUserList } from "@/api/api";
 import { localDateToStr } from "@/api/util";
 import { getTaskStatusById } from "@/api/data";
 import taskCom from "@/components/task/manualTaskCom";
@@ -84,6 +82,7 @@ export default {
       newTask: null,
       taskList: [],
       finTaskList: [],
+      users: [], //用户信息
       //
       pickerOptions,
       dateRange: [new Date(), new Date()] //默认当天
@@ -97,31 +96,60 @@ export default {
           (me.selCheckin && item.status == "CHECKIN") ||
           (me.selProcessing && item.status == "PROCESSING") ||
           (me.selDone && item.status == "DONE") ||
-          (me.selCancel &&  ((item.status == "CANCEL")||(item.status == "FAIL")))
+          (me.selCancel && (item.status == "CANCEL" || item.status == "FAIL"))
         );
       });
     },
-    loadData() {
+    userList() {
       let me = this;
-      getManualTaskList({
-        dateRange: me.dateRange
-      }).then(res => {
-        let { flag, data, errMsg } = res;
-        if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
-        } else {
-          me.taskList = data;
-          me.taskList.forEach(task => {
-            task.handlerStr = task.handler.join(",");
-            task.planDtStr = localDateToStr(task.planDt);
-            task.sta = getTaskStatusById(task.status);
-          });
-          me.filter();
-        }
+      return new Promise((resolve, reject) => {
+        getUserList({}).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            me.users = data;
+            resolve();
+          }
+        });
       });
+    },
+    manualTaskList() {
+      let me = this;
+      return new Promise((resolve, reject) => {
+        getManualTaskList({
+          dateRange: me.dateRange
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            data.forEach(item => {
+              item.handleUsers = item.handler.map(userId => {
+                return me.users.filter(user => {
+                  return user.userId == userId;
+                })[0];
+              });
+            });
+            me.taskList = data;
+            me.taskList.forEach(task => {
+              task.handlerStr = task.handleUsers
+                .map(user => user.userName)
+                .join(",");
+              task.planDtStr = localDateToStr(task.planDt);
+              task.sta = getTaskStatusById(task.status);
+            });
+            me.filter();
+            resolve();
+          }
+        });
+      });
+    },
+    loadData: async function() {
+      await this.userList();
+      await this.manualTaskList();
     },
     headerCellStyle() {
       return "padding:0;";

@@ -99,11 +99,10 @@
 </template>
 
 <script>
-import { STATIC_URL } from "@/api/api";
+import { faceUrl } from "@/api/data";
 import userSetupCom from "@/components/user/userSetupCom.vue";
 import notifyCom from "@/components/message/notifyCom.vue";
 import { mapGetters } from "vuex";
-
 
 export default {
   data() {
@@ -116,27 +115,16 @@ export default {
   },
   methods: {
     chgFaceSuccess() {
-      this.face_url =
-        STATIC_URL +
-        "/user_face/" +
-        this.userInfo.userId.toLowerCase() +
-        ".JPG" +
-        "?" +
-        Math.random(100);
+      this.face_url = faceUrl(this.userInfo.userId);
     },
-    onSubmit() {
-      console.log("submit!");
-    },
-    handleselect: function() {},
-    //退出登录
     logout: function() {
-      var _this = this;
-      this.$confirm("确认退出吗?", "提示", {
+      let me = this;
+      me.$confirm("确认退出吗?", "提示", {
         type: "warning"
       })
         .then(() => {
           sessionStorage.removeItem("user");
-          _this.$router.push("/login");
+          me.$router.push("/login");
         })
         .catch(() => {});
     },
@@ -160,13 +148,7 @@ export default {
     ...mapGetters(["userInfo"])
   },
   mounted() {
-    //用户头像
-    this.face_url =
-      STATIC_URL +
-      "user_face/" +
-      this.userInfo.userId.toLowerCase() +
-      ".JPG?" +
-      Math.random(100);
+    this.face_url = faceUrl(this.userInfo.userId);
   },
   components: {
     userSetupCom,

@@ -420,13 +420,18 @@ export const taskUploadDom = function (file, id) {
   }
 }
 
+//用户头像
+export const faceUrl = function (id) {
+  return STATIC_URL + "/user_face/" + id.toLowerCase() + ".JPG" + "?" + Math.random(100);
+}
+
 //组合任务报表
 export const composeReportUrl = function (id) {
   return STATIC_URL + "pdf/compose/" + id + ".pdf" + "?" + Math.random(100);
 }
 
 //文档
-export const documentUrl = function(fileName){
+export const documentUrl = function (fileName) {
   return STATIC_URL + "pdf/document/" + fileName;
 }
 

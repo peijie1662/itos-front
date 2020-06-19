@@ -14,16 +14,16 @@
           <div
             v-for="(book,index) in gp.books"
             :key="index"
-            style="width:160px;margin:5px;float:left;"
+            style="width:160px;margin:5px;float:left;overflow:hidden;"
             @click="download"
           >
             <!-- 书名 -->
             <div style="width:80px;height:100px;background:#67C23A;margin:0 auto;"></div>
-            <div style="text-align: center;">
+            <div style="text-align: center;width:160px;">
               <a
                 :href="documentUrl(book.fileName)"
                 target="_blank"
-                style="color:#606266;white-space:nowrap;"
+                style="font-size:9px;color:#606266;white-space:nowrap;"
               >{{book.fileName}}</a>
             </div>
             <div style="text-align: center;color:darkgrey;font-size:8px;">{{book.abs}}</div>
@@ -122,11 +122,10 @@ export default {
 
 .bookshelf {
   border: 1px solid #ddd;
-  min-width: 300px;
-  height: 300px;
+  min-height: 50px;
   border-radius: 10px;
-  float: left;
   margin: 5px;
+  overflow: hidden;
 }
 
 .bookshelf .title {
