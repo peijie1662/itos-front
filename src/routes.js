@@ -15,6 +15,7 @@ import firstPage from './views/settings/firstPage.vue'
 import reportModel from './views/report/reportModel.vue'
 import documentManage from './views/report/documentManage.vue'
 import documentBrowsing from './views/report/documentBrowsing.vue'
+import compare from './views/settings/compare.vue'
 
 let routes = [
     {
@@ -77,6 +78,10 @@ let routes = [
             {
                 path: '/dispatch_task_input', component: DispatchTaskInput, name: '任务查看',
                 meta: { funId: '2002', dis: true }
+            },
+            {
+                path: '/dispatch_compare', component: compare, name: '文件比对',
+                meta: { funId: '2003', dis: true }
             }
         ]
     },

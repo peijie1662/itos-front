@@ -182,3 +182,13 @@ export const categoryList = params => { return axios.post(`${base}/document/cate
 export const delDocument = params => { return axios.post(`${base}/document/del`, params).then(res => res.data); };
 //修改文档
 export const updDocument = params => { return axios.post(`${base}/document/update`, params).then(res => res.data); };
+
+//------------------------------------------文件比对
+//页端访问列表
+export const getCompareList = params => { return axios.post(`${base}/compare/pagecomparelist`, params).then(res => res.data); };
+//添加比对项
+export const addCompare = params => { return axios.post(`${base}/compare/add`, params).then(res => res.data); };
+//修改比对项
+export const updCompare = params => { return axios.post(`${base}/compare/update`, params).then(res => res.data); };
+//删除比对项
+export const delCompare = params => { return axios.post(`${base}/compare/del`, params).then(res => res.data); };

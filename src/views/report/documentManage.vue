@@ -95,10 +95,7 @@ export default {
       delDocument({ fileName: row.fileName }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          me.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.loadData();
         }
@@ -108,18 +105,16 @@ export default {
       this.newDoc = {};
     },
     loadData() {
+      let me = this;
       documentList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           data.forEach(item => {
             item.opDateStr = localDateToStr(item.opDate);
           });
-          this.list = data;
+          me.list = data;
         }
       });
     },
