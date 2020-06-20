@@ -86,6 +86,8 @@ export default {
     newDoc: {
       handler(newVal) {
         if (newVal != null) {
+          this.groupList();
+          this.categoryList();
           this.dialogVisible = true;
         }
       },
@@ -111,6 +113,8 @@ export default {
       this.$emit("updateSuccess");
     },
     quit() {
+      this.$refs.upload.clearFiles();
+      this.$refs.form.resetFields();
       this.dialogVisible = false;
     },
     groupList() {
@@ -118,10 +122,7 @@ export default {
       groupList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.groups = data;
         }
@@ -132,19 +133,12 @@ export default {
       categoryList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.categorys = data;
         }
       });
     }
-  },
-  mounted() {
-    this.groupList();
-    this.categoryList();
   }
 };
 </script>

@@ -27,7 +27,7 @@
         label-width="0px"
         class="demo-ruleForm login-container"
       >
-        <canvas id="canvas" style="margin-left: 30px;"></canvas>
+        <div id="qrcode" ref="qrcode" style="margin-left:40px;margin-bottom:30px;"></div>
         <section class="title">
           <i class="iconfont icon-icon_crab_coloured icon" style="color:#85b84f;font-size:30px;"></i>
           <h3>资讯科技部运维系统</h3>ITOMS
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-//import QRCode from "qrcode";
+import QRCode from "qrcodejs2";
 import { APP_URL, login } from "@/api/api";
 import { mapMutations } from "vuex";
 
@@ -82,7 +82,16 @@ export default {
   methods: {
     ...mapMutations(["update_userInfo"]),
     useqrcode() {
-      console.info(APP_URL)
+      let qrcode = new QRCode("qrcode", {
+        width: 120, //图像宽度
+        height: 120, //图像高度
+        colorDark: "#000000", //前景色
+        colorLight: "#ffffff", //背景色
+        typeNumber: 4,
+        correctLevel: QRCode.CorrectLevel.H //容错级别 容错级别有：（1）QRCode.CorrectLevel.L （2）QRCode.CorrectLevel.M （3）QRCode.CorrectLevel.Q （4）QRCode.CorrectLevel.H
+      });
+      qrcode.clear(); //清除二维码
+      qrcode.makeCode(APP_URL); //生成另一个新的二维码
     },
     handleSubmit2() {
       this.$refs.ruleForm2.validate(valid => {
@@ -122,7 +131,7 @@ export default {
     }
   },
   mounted() {
-    //this.useqrcode();
+    this.useqrcode();
   }
 };
 </script>

@@ -64,6 +64,8 @@ export default {
       handler(newVal) {
         if (newVal != null) {
           this.form = newVal;
+          this.groupList();
+          this.categoryList();
           this.dialogVisible = true;
         }
       },
@@ -77,10 +79,7 @@ export default {
       updDocument(me.form).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          me.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.$emit("updateSuccess");
           me.dialogVisible = false;
@@ -95,10 +94,7 @@ export default {
       groupList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.groups = data;
         }
@@ -109,19 +105,12 @@ export default {
       categoryList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.categorys = data;
         }
       });
     }
-  },
-  mounted() {
-    this.groupList();
-    this.categoryList();
   }
 };
 </script>

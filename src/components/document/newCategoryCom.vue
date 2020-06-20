@@ -65,10 +65,7 @@ export default {
       delCategory({ category: tag }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.dynamicTags.splice(me.dynamicTags.indexOf(tag), 1);
         }
@@ -87,10 +84,7 @@ export default {
         newCategory({ category: me.inputValue }).then(res => {
           let { flag, errMsg } = res;
           if (!flag) {
-            this.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
           } else {
             let inputValue = me.inputValue;
             if (inputValue) {
@@ -107,10 +101,7 @@ export default {
       categoryList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.dynamicTags = data.map(item => {
             return item.id;
