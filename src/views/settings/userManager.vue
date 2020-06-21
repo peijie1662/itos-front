@@ -48,6 +48,12 @@
               size="mini"
               @click="setAuthority(scope.$index, scope.row)"
             >权限</el-button>
+            <el-button
+              type="warning"
+              plain
+              size="mini"
+              @click="setSubscription(scope.$index, scope.row)"
+            >短信</el-button>
             <el-popconfirm title="确定要删除该用户吗？" @onConfirm="delUser(scope.$index, scope.row)">
               <el-button
                 type="danger"
@@ -64,6 +70,7 @@
     <AuthorityCom :user="authorityUser" @updateUserSuccess="getUserList"></AuthorityCom>
     <UserCom :user="contentUser" @updateUserSuccess="getUserList"></UserCom>
     <NewUserCom :user="newUser" @updateUserSuccess="getUserList"></NewUserCom>
+    <subscription-com :user="subUser" @updateUserSuccess="getUserList"></subscription-com>
   </div>
 </template>
 
@@ -72,6 +79,7 @@ import { getUserList, delUser } from "@/api/api";
 import AuthorityCom from "@/components/user/authorityCom.vue";
 import UserCom from "@/components/user/userCom.vue";
 import NewUserCom from "@/components/user/newUserCom.vue";
+import subscriptionCom from "@/components/user/subscriptionCom.vue";
 
 export default {
   data() {
@@ -83,7 +91,8 @@ export default {
       finUsers: [],
       authorityUser: null,
       contentUser: null,
-      newUser: null
+      newUser: null,
+      subUser: null
     };
   },
   methods: {
@@ -107,10 +116,7 @@ export default {
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.getUserList();
         }
@@ -119,6 +125,9 @@ export default {
     setAuthority(index) {
       this.authorityUser = { ...this.finUsers[index] };
     },
+    setSubscription(index) {
+      this.subUser = { ...this.finUsers[index] };
+    },
     chgUserContent(index) {
       this.contentUser = { ...this.finUsers[index] };
     },
@@ -126,10 +135,7 @@ export default {
       getUserList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          this.$message.error(errMsg);
         } else {
           this.users = data;
           this.filter();
@@ -146,7 +152,8 @@ export default {
   components: {
     AuthorityCom,
     UserCom,
-    NewUserCom
+    NewUserCom,
+    subscriptionCom
   },
   mounted() {
     this.getUserList();

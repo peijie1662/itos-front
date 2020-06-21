@@ -7,6 +7,12 @@
         style="margin-left:20px;margin-top:15px;"
         @click="addCompare"
       >添加</el-button>
+      <el-button
+        type="primary"
+        size="mini"
+        style="margin-left:20px;margin-top:15px;"
+        @click="loadData"
+      >刷新</el-button>
     </div>
     <div class="content">
       <el-table
@@ -86,7 +92,7 @@ export default {
         if (!flag) {
           me.$message.error(errMsg);
         } else {
-          me.loadData()
+          me.loadData();
         }
       });
     },

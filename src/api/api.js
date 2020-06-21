@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 //后台URL
-//let base = '/api';
+let base = '/api';
 //OFFICE Websocket的URL
-//export const OFFICE_WS_URL = 'ws://169.169.41.27:7857/ws';
+export const OFFICE_WS_URL = 'ws://169.169.41.27:7857/ws';
 //PRD Websocket的URL
-//export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
+export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
 //移动App的URL//TODO
-//export const APP_URL = "http://169.169.41.27:8081/";
+export const APP_URL = "http://169.169.41.27:8081/";
 
 //后台URL
 //let base = 'http://169.169.41.27:8099/api';
@@ -19,13 +19,13 @@ import axios from 'axios'
 //export const APP_URL = "http://169.169.41.27:8081/";
 
 //后台URL
-let base = 'http://10.170.59.44:7856';
+//let base = 'http://10.170.59.44:7856';
 //OFFICE Websocket的URL
-export const OFFICE_WS_URL = 'ws://10.170.59.44:7857/ws';
+//export const OFFICE_WS_URL = 'ws://10.170.59.44:7857/ws';
 //PRD Websocket的URL
-export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
+//export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
 //移动App的URL
-export const APP_URL = "http://10.170.59.44:8081/";
+//export const APP_URL = "http://10.170.59.44:8081/";
 
 export const STATIC_URL = `${base}/itosfile/`
 export const UPLOAD_TASK_URL = `${base}/task/uploadfile`
@@ -144,6 +144,10 @@ export const updateFirstPage = params => { return axios.post(`${base}/user/first
 export const updatePassword = params => { return axios.post(`${base}/user/password`, params).then(res => res.data); };
 //在线用户
 export const getOnlineUserList = params => { return axios.post(`${base}/user/onlineusers`, params).then(res => res.data); };
+//短信订阅
+export const smsSubscription = params => { return axios.post(`${base}/user/subscription`, params).then(res => res.data); };
+//订阅主题
+export const getTopicList = params => { return axios.post(`${base}/user/topiclist`, params).then(res => res.data); };
 
 //------------------------------------------关联信息
 //设备号关联信息

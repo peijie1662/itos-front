@@ -191,5 +191,7 @@ export default {
   border: 1px solid #c0c4cc;
   border-radius: 5px;
   padding: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 </style>
