@@ -27,7 +27,7 @@
         <el-table-column label="路径" prop="filePath" width="200"></el-table-column>
         <el-table-column label="文件名" prop="fileName" width="100"></el-table-column>
         <el-table-column label="大小" prop="curFileSize" width="100"></el-table-column>
-        <el-table-column label="修改时间" prop="curModifyTime" width="100"></el-table-column>
+        <el-table-column label="修改时间" prop="curFileModifyTime" width="100"></el-table-column>
         <el-table-column label="刷新时间" prop="refreshDateStr" width="100"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -115,7 +115,7 @@ export default {
           me.$message.error(errMsg);
         } else {
           data.forEach(item => {
-            item.refreshDateStr = localDateToStr(item.refreshDate);
+            item.refreshDateStr = localDateToStr(item.curRefreshDate);
           });
           me.compares = data;
           let arr = data.map(item => item.compareGroup);
