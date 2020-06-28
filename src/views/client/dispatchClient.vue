@@ -36,6 +36,7 @@
                 <div v-for="item in scope.row.models" :key="item.modelId" class="model">
                   <sample-model-com
                     :mmodel="item"
+                    :onceBtn="true"
                     :style="item.modelId == qryModelKey?'background:yellow':'background:white'"
                   ></sample-model-com>
                 </div>

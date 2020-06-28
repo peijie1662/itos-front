@@ -93,6 +93,10 @@
     </div>
     <!-- 消息窗口 -->
     <notify-com v-show="showIM" class="notify-window"></notify-com>
+    <!-- 消息窗口指示标记 -->
+    <div v-show="!showIM" class="showim" @click="update_showIM(true)">
+      <i class="iconfont icon-jiantouzuo icon" style="font-size:25px;line-height:48px;"></i>
+    </div>
     <!-- 用户信息设置窗口 -->
     <user-setup-com :user="setupUser" @updateFaceSuccess="chgFaceSuccess"></user-setup-com>
   </div>
@@ -102,18 +106,18 @@
 import { faceUrl } from "@/api/data";
 import userSetupCom from "@/components/user/userSetupCom.vue";
 import notifyCom from "@/components/message/notifyCom.vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   data() {
     return {
       setupUser: null,
-      showIM: false,
       isCollapse: false,
       face_url: ""
     };
   },
   methods: {
+    ...mapMutations(["update_showIM"]),
     chgFaceSuccess() {
       this.face_url = faceUrl(this.userInfo.userId);
     },
@@ -138,14 +142,14 @@ export default {
       )[0].style.display = status ? "block" : "none";
     },
     toggleIM() {
-      this.showIM = !this.showIM;
+      this.update_showIM(!this.showIM);
     },
     showSetup() {
       this.setupUser = { ...this.userInfo };
     }
   },
   computed: {
-    ...mapGetters(["userInfo"])
+    ...mapGetters(["userInfo", "showIM"])
   },
   mounted() {
     this.face_url = faceUrl(this.userInfo.userId);
@@ -163,8 +167,20 @@ $color-primary: #20a0ff; //#18c79c
 .notify-window {
   position: absolute;
   top: 100px;
-  right: 50px;
+  right: 20px;
   z-index: 99;
+}
+
+.showim {
+  position: absolute;
+  top: 300px;
+  right: 20px;
+  z-index: 100;
+  width: 24px;
+  height: 48px;
+  background: #00bbff;
+  border-radius: 48px 0 0 48px;
+  color: white;
 }
 
 .face {

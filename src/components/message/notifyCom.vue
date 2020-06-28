@@ -2,6 +2,9 @@
   <div>
     <el-collapse-transition>
       <div class="outer">
+        <div class="showim" @click="update_showIM(false)">
+          <i class="iconfont icon-jiantouyou icon" style="font-size:25px;line-height:48px;"></i>
+        </div>
         <!-- 1.标题 -->
         <div class="title">
           <div
@@ -35,14 +38,30 @@
             <div v-if="item">
               <span style="color:#c8c8c8;">{{item.substr(0,20)}}</span>
               <br />
-              {{item.substr(20)}}
+              <span
+                :style="attentionIM && (item.indexOf(attentionIM) >= 0)?'background:yellow':'background:white'"
+              >{{item.substr(20)}}</span>
             </div>
           </div>
+        </div>
+        <!-- 提醒词 -->
+        <div v-if="showTab == 'LOGS'">
+          <el-button size="mini" @click="clearLog" style="margin:5px;">清除消息</el-button>
+          <el-tag
+            v-if="attentionIM"
+            size="mini"
+            closable
+            style="margin:10px;"
+            @close="update_attentionIM('')"
+          >{{attentionIM}}</el-tag>
         </div>
       </div>
     </el-collapse-transition>
   </div>
 </template>
+
+<style scoped>
+</style>
 
 <script>
 //<i class="el-icon-close"></i>
@@ -59,7 +78,16 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["update_sysLog"]),
+    ...mapMutations([
+      "update_sysLog",
+      "clear_sysLog",
+      "update_showIM",
+      "update_attentionIM"
+    ]),
+    clearLog() {
+      this.clear_sysLog();
+      this.update_attentionIM("");
+    },
     handlerSysLog(content) {
       console.info("SYSLOG数据:" + content);
       this.update_sysLog(content);
@@ -72,10 +100,7 @@ export default {
       getOnlineUserList().then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          me.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.users = data;
         }
@@ -83,20 +108,20 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["userInfo", "sysLog"])
+    ...mapGetters(["userInfo", "sysLog", "attentionIM"])
   },
   mounted() {
     let me = this;
-    //1.进入场景
-    enterScene([
-      { scene: "SYSLOG", sceneFun: me.handlerSysLog },
-      { scene: "ONLINEUSER", sceneFun: me.onlineUser }
-    ]);
-    //2.同步用户登录信息到后台,延时1秒，刷新时可能还未连接。
+    //1.同步用户登录信息到后台,延时2秒，因为刷新时可能还未连接。
+    //数据就传递不到后台
     setTimeout(() => {
+      enterScene([
+        { scene: "SYSLOG", sceneFun: me.handlerSysLog },
+        { scene: "ONLINEUSER", sceneFun: me.onlineUser }
+      ]);
       userOnline();
-    }, 1000);
-    //3.定时刷新用户
+    }, 2000);
+    //2.定时刷新用户
     if (me.timer) {
       clearInterval(me.timer);
     } else {
@@ -119,10 +144,23 @@ export default {
   position: relative;
 }
 
+.showim {
+  width: 24px;
+  height: 48px;
+  background: #00bbff;
+  border-radius: 0 48px 48px 0;
+  float: left;
+  color: white;
+  position: absolute;
+  top: 220px;
+  left: 0px;
+  opacity: 0.5;
+}
+
 .sub-title {
   width: 100px;
-  height: 48px;
-  line-height: 48px;
+  height: 40px;
+  line-height: 40px;
   text-align: center;
   border: 1px solid #ddd;
   float: left;
@@ -130,9 +168,9 @@ export default {
 
 .sub-title-sel {
   width: 100px;
-  height: 48px;
+  height: 40px;
   color: #20a0ff;
-  line-height: 48px;
+  line-height: 40px;
   text-align: center;
   border: 1px solid #20a0ff;
   float: left;
@@ -146,9 +184,10 @@ export default {
 }
 
 .outer {
-  height: 700px;
-  width: 400px;
+  height: 600px;
+  width: 350px;
   background: white;
   border: #20a0ff 1px solid;
+  overflow: hidden;
 }
 </style>

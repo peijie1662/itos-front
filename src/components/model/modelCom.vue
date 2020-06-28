@@ -33,7 +33,12 @@
     </div>
     <!-- 生成新任务窗口 -->
     <el-dialog title="临时创建新任务" :visible.sync="crtDialogVisible" width="30%">
-      <el-switch v-model="isOnce" active-text="创建单次任务" inactive-text="创建区间任务" style="margin-bottom: 10px;"></el-switch>
+      <el-switch
+        v-model="isOnce"
+        active-text="创建单次任务"
+        inactive-text="创建区间任务"
+        style="margin-bottom: 10px;"
+      ></el-switch>
       <!-- 单次任务 -->
       <div v-if="isOnce" style="height: 100px;">
         <div style="margin-top:10px;">
@@ -91,7 +96,7 @@ import {
 } from "@/api/api";
 import { getCategoryColor } from "@/api/data";
 import modelDetailCom from "@/components/model/modelDetailCom.vue";
-import { mapGetters } from "vuex";
+import { mapGetters,mapMutations } from "vuex";
 
 export default {
   data() {
@@ -127,6 +132,7 @@ export default {
     ...mapGetters(["userInfo"])
   },
   methods: {
+    ...mapMutations(["update_showIM","update_attentionIM"]),
     chgModelGroup() {
       let me = this;
       updateModelGroup({
@@ -140,10 +146,7 @@ export default {
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
-          me.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.$emit("modelUpdateOk");
         }
@@ -180,20 +183,17 @@ export default {
         }).then(res => {
           let { flag, errMsg } = res;
           if (!flag) {
-            me.$message({
-              message: errMsg,
-              type: "error"
-            });
+            me.$message.error(errMsg);
           } else {
             let msg =
               me.taskModel.category == "COMMON"
                 ? "生成人工任务成功，请到‘任务大厅’中查看。"
                 : "生成系统任务成功，请到‘系统任务’中查看。";
-            me.$message({
-              message: msg,
-              type: "success"
-            });
+            me.$message.success(msg);
             me.crtDialogVisible = false;
+            //打开消息窗口
+            me.update_showIM(true);
+            me.update_attentionIM( me.taskModel.abs);
           }
         });
       } else {
@@ -205,19 +205,13 @@ export default {
         }).then(res => {
           let { flag, errMsg } = res;
           if (!flag) {
-            me.$message({
-              message: errMsg,
-              type: "error"
-            });
+             me.$message.error(errMsg);
           } else {
             let msg =
               me.taskModel.category == "COMMON"
                 ? "生成人工任务成功，请到‘任务大厅’中查看。"
                 : "生成系统任务成功，请到‘系统任务’中查看。";
-            me.$message({
-              message: msg,
-              type: "success"
-            });
+            me.$message.success(msg);
             me.crtDialogVisible = false;
           }
         });
@@ -240,10 +234,7 @@ export default {
           }).then(res => {
             let { flag, errMsg } = res;
             if (!flag) {
-              me.$message({
-                message: errMsg,
-                type: "error"
-              });
+              me.$message.error(errMsg);
             } else {
               me.setModelColor();
               me.$emit("modelUpdateOk");

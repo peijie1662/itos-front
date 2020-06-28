@@ -25,6 +25,7 @@ const enterScene = function (newScene) {
 
 //退出场景
 const leaveScene = function (oldScene) {
+    if (!store.state.userInfo) return;
     let userInfo = store.state.userInfo;
     //删除场景处理函数
     socket.delReceiveHandler(oldScene);

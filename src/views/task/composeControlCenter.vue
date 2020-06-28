@@ -379,9 +379,11 @@ export default {
   mounted() {
     this.loadComposeModels();
     //进入场景
-    enterScene([
-      { scene: "CONTROLCENTER", sceneFun: this.handlerControlCenter }
-    ]);
+    setTimeout(() => {
+      enterScene([
+        { scene: "CONTROLCENTER", sceneFun: this.handlerControlCenter }
+      ]);
+    }, 2000);
   },
   destroyed() {
     //退出场景
