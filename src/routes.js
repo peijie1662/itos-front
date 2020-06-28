@@ -6,18 +6,18 @@ import ManualTaskQuery from './views/task/manualTaskQuery.vue'
 import ModelList from './views/taskmodel/modelList.vue'
 import SmartTips from './views/settings/smartTips.vue'
 import DispatchTaskInput from './views/task/dispatchTaskInput.vue'
-import DispatchClient from './views/task/dispatchClient.vue'
+import DispatchClient from './views/client/dispatchClient.vue'
 import ComposeDetail from './views/task/composeDetail.vue'
 import ComposeControlCenter from './views/task/composeControlCenter.vue'
-import ComposeMaintance from './views/task/composeMaintance.vue'
 import UserManager from './views/settings/userManager.vue'
 import firstPage from './views/settings/firstPage.vue'
 import reportModel from './views/report/reportModel.vue'
 import documentManage from './views/report/documentManage.vue'
 import documentBrowsing from './views/report/documentBrowsing.vue'
 import compare from './views/settings/compare.vue'
+import topology from './views/settings/topology.vue'
 
-let routes = [
+let routes = [ 
     {
         path: '/login',
         component: Login,
@@ -99,10 +99,6 @@ let routes = [
             {
                 path: '/compose_control_center', component: ComposeControlCenter, name: '控制中心',
                 meta: { funId: '3002', dis: true }
-            },
-            {
-                path: '/compose_maintancer', component: ComposeMaintance, name: '组合维护',
-                meta: { funId: '3003', dis: true }
             }
         ]
     },
@@ -127,6 +123,17 @@ let routes = [
             }
         ]
     },
+    {
+        path: '/',
+        component: Home,
+        name: '',
+        iconCls: 'el-icon-setting',
+        leaf: true,
+        children: [{
+            path: '/topology', component: topology, name: '服务拓扑',
+            meta: { funId: '6001', dis: true }
+        }]
+    },    
     {
         path: '/',
         component: Home,

@@ -15,7 +15,6 @@
             v-for="(book,index) in gp.books"
             :key="index"
             style="width:160px;margin:5px;float:left;overflow:hidden;"
-            @click="download"
           >
             <!-- 书名 -->
             <div style="width:80px;height:100px;background:#67C23A;margin:0 auto;"></div>

@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 //后台URL
-let base = '/api';
+//let base = '/api';
 //OFFICE Websocket的URL
-export const OFFICE_WS_URL = 'ws://169.169.41.27:7857/ws';
+//export const OFFICE_WS_URL = 'ws://169.169.41.27:7857/ws';
 //PRD Websocket的URL
-export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
+//export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
 //移动App的URL//TODO
-export const APP_URL = "http://169.169.41.27:8081/";
+//export const APP_URL = "http://169.169.41.27:8081/";
 
 //后台URL
 //let base = 'http://169.169.41.27:8099/api';
@@ -19,13 +19,13 @@ export const APP_URL = "http://169.169.41.27:8081/";
 //export const APP_URL = "http://169.169.41.27:8081/";
 
 //后台URL
-//let base = 'http://10.170.59.44:7856';
+let base = 'http://10.170.59.44:7856';
 //OFFICE Websocket的URL
-//export const OFFICE_WS_URL = 'ws://10.170.59.44:7857/ws';
+export const OFFICE_WS_URL = 'ws://10.170.59.44:7857/ws';
 //PRD Websocket的URL
-//export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
+export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
 //移动App的URL
-//export const APP_URL = "http://10.170.59.44:8081/";
+export const APP_URL = "http://10.170.59.44:8081/";
 
 export const STATIC_URL = `${base}/itosfile/`
 export const UPLOAD_TASK_URL = `${base}/task/uploadfile`
@@ -196,3 +196,11 @@ export const addCompare = params => { return axios.post(`${base}/compare/add`, p
 export const updCompare = params => { return axios.post(`${base}/compare/update`, params).then(res => res.data); };
 //删除比对项
 export const delCompare = params => { return axios.post(`${base}/compare/del`, params).then(res => res.data); };
+
+//-------------------------------------------服务拓扑
+//服务信息列表
+export const appInfoList = params => { return axios.post(`${base}/appinfo/list`, params).then(res => res.data); };
+//服务拓扑位置(这个暂时不用，在服务端组合好)
+export const coordinateList = params => { return axios.post(`${base}/appinfo/coordinatelist`, params).then(res => res.data); };
+//拓扑位置更新
+export const updCoordinate = params => { return axios.post(`${base}/appinfo/refreshcoordinate`, params).then(res => res.data); };

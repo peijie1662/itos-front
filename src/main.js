@@ -8,10 +8,12 @@ import routes from './routes'
 import './assets/iconfont/iconfont.css'
 import './assets/first-page/iconfont.css'
 import store from '@/api/store'
+import VueKonva from 'vue-konva'
 
 Vue.use(VueRouter)
 Vue.use(ElementUI)
 Vue.use(VCharts)
+Vue.use(VueKonva)
 
 const router = new VueRouter({
   //mode: "history",
