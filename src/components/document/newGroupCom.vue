@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { newGroup, delGroup, groupList } from "@/api/api";
+import { addSysCode, delSysCode, listSysCode } from "@/api/api";
 import { mapGetters } from "vuex";
 
 export default {
@@ -62,7 +62,7 @@ export default {
     //删除组
     handleClose(tag) {
       let me = this;
-      delGroup({ groupName: tag }).then(res => {
+      delSysCode({ category: "DOCUMENTGROUP", id: tag }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
           me.$message.error(errMsg);
@@ -81,24 +81,26 @@ export default {
     handleInputConfirm() {
       let me = this;
       if (me.inputValue) {
-        newGroup({ groupName: me.inputValue }).then(res => {
-          let { flag, errMsg } = res;
-          if (!flag) {
-            me.$message.error(errMsg);
-          } else {
-            let inputValue = me.inputValue;
-            if (inputValue) {
-              me.dynamicTags.push(inputValue);
+        addSysCode({ category: "DOCUMENTGROUP", id: me.inputValue }).then(
+          res => {
+            let { flag, errMsg } = res;
+            if (!flag) {
+              me.$message.error(errMsg);
+            } else {
+              let inputValue = me.inputValue;
+              if (inputValue) {
+                me.dynamicTags.push(inputValue);
+              }
+              me.inputVisible = false;
+              me.inputValue = "";
             }
-            me.inputVisible = false;
-            me.inputValue = "";
           }
-        });
+        );
       }
     },
     groupList() {
       let me = this;
-      groupList({}).then(res => {
+      listSysCode({ category: "DOCUMENTGROUP" }).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
           me.$message.error(errMsg);

@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { UPLOAD_DOCUMENT_URL, groupList, categoryList } from "@/api/api";
+import { UPLOAD_DOCUMENT_URL, listSysCode } from "@/api/api";
 import { mapGetters } from "vuex";
 
 export default {
@@ -119,7 +119,7 @@ export default {
     },
     groupList() {
       let me = this;
-      groupList({}).then(res => {
+      listSysCode({ category: "DOCUMENTGROUP" }).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
           me.$message.error(errMsg);
@@ -130,7 +130,7 @@ export default {
     },
     categoryList() {
       let me = this;
-      categoryList({}).then(res => {
+      listSysCode({ category: "DOCUMENTCATEGORY" }).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
           me.$message.error(errMsg);

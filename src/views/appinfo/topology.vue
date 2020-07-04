@@ -18,7 +18,7 @@
             <v-rect :config="item.outer_rect"></v-rect>
             <v-text :config="item.server_name_text"></v-text>
             <v-text :config="item.ip_text"></v-text>
-            <v-rect :config="item.heartbeat"></v-rect>
+            <v-circle :config="item.heartbeat"></v-circle>
           </v-group>
           <!-- 连接线 -->
           <v-line v-for="item in connectorLineList" :key="item.sourceId" :config="item"></v-line>
@@ -31,15 +31,15 @@
 </template>
 
 <script>
-import Konva from "konva";
-import { appInfoList, updCoordinate } from "@/api/api";
+//import Konva from "konva";
+import { listAppInfo, updCoordinate } from "@/api/api";
 import {
   drawLine,
   drawArrow,
   drawService,
   drawSelService,
   drawNormalService
-} from "@/views/settings/topology_util.js";
+} from "@/views/appinfo/topology_util.js";
 
 const STAGE_WIDTH = 1200;
 const STAGE_HEIGHT = 800;
@@ -57,8 +57,6 @@ export default {
       connectorArrowList: [],
       timer: null,
       clickService: null, //点击选中
-      toolbars: [],
-      anim: null,
 
       //模拟相连数据传入
       connectors: [
@@ -117,14 +115,21 @@ export default {
       });
     },
     drawTopology() {
-      if (this.dragID == null) return;
-      let stage = this.$refs.stage.getNode();
-      this.connectorLineList = drawLine(stage, this.connectors).filter(
+      let me = this;
+      //if (me.dragID == null) return;
+      let stage = me.$refs.stage.getNode();
+      me.connectorLineList = drawLine(stage, me.connectors).filter(
         item => item
       );
-      this.connectorArrowList = drawArrow(stage, this.connectors).filter(
+      me.connectorArrowList = drawArrow(stage, me.connectors).filter(
         item => item
       );
+      let shapes = me.$refs.stage.getNode().find("#heartbeat");
+
+      shapes.forEach(shape => {
+        shape.attrs.stroke =
+          shape.attrs.stroke == "#00FF00" ? "#409EFF" : "#00FF00";
+      });
     },
     loadConnectorList() {
       //TODO 载入数据
@@ -132,7 +137,7 @@ export default {
     },
     loadAppInfoList() {
       let me = this;
-      appInfoList({}).then(res => {
+      listAppInfo({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
           me.$message.error(errMsg);
@@ -143,10 +148,11 @@ export default {
           this.dragID = "BGEGIN";
           this.drawTopology();
           this.gragId = null;
-          this.heartbeat();
+          //this.heartbeat();
         }
       });
-    },
+    }
+    /** 
     heartbeat() {
       let me = this;
       let period = 2000;
@@ -158,8 +164,10 @@ export default {
           shape.scale({ x: scale, y: 1 });
         });
       }, me.$refs.layer.getNode());
+      console.info("anim:")
       me.anim.start();
     }
+    */
   },
   mounted() {
     let me = this;
@@ -173,7 +181,7 @@ export default {
     }
   },
   destroyed() {
-    this.anim.stop();
+    //this.anim.stop();
     clearInterval(this.timer);
   }
 };

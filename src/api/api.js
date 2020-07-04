@@ -146,8 +146,6 @@ export const updatePassword = params => { return axios.post(`${base}/user/passwo
 export const getOnlineUserList = params => { return axios.post(`${base}/user/onlineusers`, params).then(res => res.data); };
 //短信订阅
 export const smsSubscription = params => { return axios.post(`${base}/user/subscription`, params).then(res => res.data); };
-//订阅主题
-export const getTopicList = params => { return axios.post(`${base}/user/topiclist`, params).then(res => res.data); };
 
 //------------------------------------------关联信息
 //设备号关联信息
@@ -170,18 +168,6 @@ export const composeReport = params => { return axios.post(`${base}/pdf/compose`
 //------------------------------------------文档管理
 //文档列表
 export const documentList = params => { return axios.post(`${base}/document/list`, params).then(res => res.data); };
-//新建分组
-export const newGroup = params => { return axios.post(`${base}/document/newgroup`, params).then(res => res.data); };
-//删除分组
-export const delGroup = params => { return axios.post(`${base}/document/delgroup`, params).then(res => res.data); };
-//分组列表
-export const groupList = params => { return axios.post(`${base}/document/grouplist`, params).then(res => res.data); };
-//新建分类
-export const newCategory = params => { return axios.post(`${base}/document/newcategory`, params).then(res => res.data); };
-//删除分类
-export const delCategory = params => { return axios.post(`${base}/document/delcategory`, params).then(res => res.data); };
-//分类列表
-export const categoryList = params => { return axios.post(`${base}/document/categorylist`, params).then(res => res.data); };
 //删除文档
 export const delDocument = params => { return axios.post(`${base}/document/del`, params).then(res => res.data); };
 //修改文档
@@ -198,9 +184,26 @@ export const updCompare = params => { return axios.post(`${base}/compare/update`
 export const delCompare = params => { return axios.post(`${base}/compare/del`, params).then(res => res.data); };
 
 //-------------------------------------------服务拓扑
+//添加服务信息
+export const addAppInfo = params => { return axios.post(`${base}/appinfo/add`, params).then(res => res.data); };
+//修改服务信息
+export const updAppInfo = params => { return axios.post(`${base}/appinfo/upd`, params).then(res => res.data); };
+//删除服务信息
+export const delAppInfo = params => { return axios.post(`${base}/appinfo/del`, params).then(res => res.data); };
 //服务信息列表
-export const appInfoList = params => { return axios.post(`${base}/appinfo/list`, params).then(res => res.data); };
+export const listAppInfo = params => { return axios.post(`${base}/appinfo/list`, params).then(res => res.data); };
+
 //服务拓扑位置(这个暂时不用，在服务端组合好)
 export const coordinateList = params => { return axios.post(`${base}/appinfo/coordinatelist`, params).then(res => res.data); };
 //拓扑位置更新
 export const updCoordinate = params => { return axios.post(`${base}/appinfo/refreshcoordinate`, params).then(res => res.data); };
+
+//-------------------------------------------系统代码
+//添加代码
+export const addSysCode = params => { return axios.post(`${base}/syscode/add`, params).then(res => res.data); };
+//修改代码
+export const updSysCode = params => { return axios.post(`${base}/syscode/upd`, params).then(res => res.data); };
+//删除代码
+export const delSysCode = params => { return axios.post(`${base}/syscode/del`, params).then(res => res.data); };
+//列表
+export const listSysCode = params => { return axios.post(`${base}/syscode/list`, params).then(res => res.data); };

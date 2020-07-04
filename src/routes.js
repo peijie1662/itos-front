@@ -15,9 +15,10 @@ import reportModel from './views/report/reportModel.vue'
 import documentManage from './views/report/documentManage.vue'
 import documentBrowsing from './views/report/documentBrowsing.vue'
 import compare from './views/settings/compare.vue'
-import topology from './views/settings/topology.vue'
+import topology from './views/appinfo/topology.vue'
+import appInfo from './views/appinfo/appInfo.vue'
 
-let routes = [ 
+let routes = [
     {
         path: '/login',
         component: Login,
@@ -126,14 +127,19 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '',
-        iconCls: 'el-icon-setting',
-        leaf: true,
-        children: [{
-            path: '/topology', component: topology, name: '服务拓扑',
-            meta: { funId: '6001', dis: true }
-        }]
-    },    
+        name: '服务监控',
+        funId: '6000',
+        iconCls: 'el-icon-document-copy',
+        children: [
+            {
+                path: '/appinfo', component: appInfo, name: '定义服务',
+                meta: { funId: '6001', dis: true }
+            },
+            {
+                path: '/topology', component: topology, name: '服务拓扑',
+                meta: { funId: '6002', dis: true }
+            }]
+    },
     {
         path: '/',
         component: Home,

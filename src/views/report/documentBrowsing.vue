@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { documentList, groupList } from "@/api/api";
+import { documentList, listSysCode } from "@/api/api";
 import { documentUrl } from "@/api/data";
 
 export default {
@@ -53,7 +53,7 @@ export default {
     groupList() {
       return new Promise((resolve, reject) => {
         let me = this;
-        groupList({}).then(res => {
+        listSysCode({ category: "DOCUMENTGROUP" }).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
             me.$message.error(errMsg);

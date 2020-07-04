@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { smsSubscription, getTopicList } from "@/api/api";
+import { smsSubscription, listSysCode } from "@/api/api";
 
 export default {
   data() {
@@ -56,7 +56,7 @@ export default {
     },
     getTopicList() {
       let me = this;
-      getTopicList({}).then(res => {
+      listSysCode({ category: "SMSSUBSCRIPTION" }).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
           me.$message.error(errMsg);

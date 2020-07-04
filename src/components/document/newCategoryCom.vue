@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { newCategory, delCategory, categoryList } from "@/api/api";
+import { addSysCode, delSysCode, listSysCode } from "@/api/api";
 import { mapGetters } from "vuex";
 
 export default {
@@ -62,7 +62,7 @@ export default {
     //删除类别
     handleClose(tag) {
       let me = this;
-      delCategory({ category: tag }).then(res => {
+      delSysCode({ category: "DOCUMENTCATEGORY", id: tag }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
           me.$message.error(errMsg);
@@ -81,24 +81,26 @@ export default {
     handleInputConfirm() {
       let me = this;
       if (me.inputValue) {
-        newCategory({ category: me.inputValue }).then(res => {
-          let { flag, errMsg } = res;
-          if (!flag) {
-            me.$message.error(errMsg);
-          } else {
-            let inputValue = me.inputValue;
-            if (inputValue) {
-              me.dynamicTags.push(inputValue);
+        addSysCode({ category: "DOCUMENTCATEGORY", id: me.inputValue }).then(
+          res => {
+            let { flag, errMsg } = res;
+            if (!flag) {
+              me.$message.error(errMsg);
+            } else {
+              let inputValue = me.inputValue;
+              if (inputValue) {
+                me.dynamicTags.push(inputValue);
+              }
+              me.inputVisible = false;
+              me.inputValue = "";
             }
-            me.inputVisible = false;
-            me.inputValue = "";
           }
-        });
+        );
       }
     },
     categoryList() {
       let me = this;
-      categoryList({}).then(res => {
+      listSysCode({ category: "DOCUMENTCATEGORY" }).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
           me.$message.error(errMsg);

@@ -114,9 +114,10 @@ export const drawService = function (item) {
             id: "heartbeat",
             x: 10,
             y: SERVICE_HEIGHT - 10,
-            width: 30,
-            height: 3,
-            fill: "#00FF00"
+            radius: 5,
+            fill: '#00FF00',
+            stroke: '#409EFF',
+            strokeWidth: 1,
         }
     };
 }
