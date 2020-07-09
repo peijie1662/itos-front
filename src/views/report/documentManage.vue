@@ -47,10 +47,10 @@
     </div>
     <!-- 上传文档 -->
     <new-document-com :newDoc="newDoc" @updateSuccess="loadData"></new-document-com>
-    <!-- 新建分组 -->
-    <new-group-com :newGp="newGp" @updateSuccess="loadData"></new-group-com>
+    <!-- 文档分组 -->
+    <sys-code-com :sysCode="newGp" @updateSuccess="loadData"></sys-code-com>
     <!-- 新建分类 -->
-    <new-category-com :newCg="newCg" @updateSuccess="loadData"></new-category-com>
+    <sys-code-com :sysCode="newCg" @updateSuccess="loadData"></sys-code-com>
     <!-- 修改文档 -->
     <upd-document-com :updDoc="updDoc" @updateSuccess="loadData"></upd-document-com>
   </div>
@@ -60,10 +60,9 @@
 import { documentList, delDocument } from "@/api/api";
 import { localDateToStr } from "@/api/util";
 import { documentUrl } from "@/api/data";
-import newDocumentCom from "@/components/document/newDocumentCom.vue";
-import newGroupCom from "@/components/document/newGroupCom.vue";
-import newCategoryCom from "@/components/document/newCategoryCom.vue";
-import updDocumentCom from "@/components/document/updDocumentCom.vue";
+import newDocumentCom from "@/components/document/newDocumentCom";
+import updDocumentCom from "@/components/document/updDocumentCom";
+import sysCodeCom from "@/components/public/sysCodeCom"
 
 export default {
   data() {
@@ -82,10 +81,10 @@ export default {
       return documentUrl(fileName);
     },
     newGroup() {
-      this.newGp = {};
+      this.newGp = {category:"DOCUMENTGROUP",title:"文档分组"};
     },
     newCategory() {
-      this.newCg = {};
+      this.newCg = {category:"DOCUMENTCATEGORY",title:"文档分类"};
     },
     chgDocumentInfo(row) {
       this.updDoc = { ...row };
@@ -130,8 +129,7 @@ export default {
   },
   components: {
     newDocumentCom,
-    newGroupCom,
-    newCategoryCom,
+    sysCodeCom,
     updDocumentCom
   }
 };

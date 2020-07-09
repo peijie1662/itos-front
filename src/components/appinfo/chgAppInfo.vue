@@ -1,23 +1,32 @@
 <template>
   <div>
-    <el-dialog title="修改服务" width="500px" :visible.sync="dialogVisible">
+    <el-dialog title="修改服务" width="600px" :visible.sync="dialogVisible">
       <el-form ref="form" :model="app" label-width="120px">
         <!-- 服务名 -->
         <el-form-item
           label="服务名"
           prop="serviceName"
-          :rules="[{required: true, message: '请输入服务名', trigger: 'blur' }]"
+          :rules="[{required: true, message: '请输入服务名', trigger: 'blur' },
+          {max: 10, message: '长度不能超过10个字符', trigger: 'blur' }]"
         >
-          <el-input v-model="app.serviceName" size="mini"></el-input>
+          <el-input v-model="app.serviceName" size="mini" style="width:200px;"></el-input>
         </el-form-item>
-        <!-- 服务简介-->
+        <!-- 服务对象 -->
+        <el-form-item
+          label="服务对象"
+          prop="serviceObj"
+          :rules="[{required: true, message: '请输入服务对象', trigger: 'blur' }]"
+        >
+          <el-input v-model="app.serviceObj" size="mini" style="width:200px;"></el-input>
+        </el-form-item>
+        <!-- 服务简介 -->
         <el-form-item
           label="服务简介"
           prop="serviceAbs"
           :rules="[{required: true, message: '请输入服务简介', trigger: 'blur'},
           {max: 10, message: '长度不能超过10个字符', trigger: 'blur' }]"
         >
-          <el-input v-model="app.serviceAbs" size="mini"></el-input>
+          <el-input v-model="app.serviceAbs" size="mini" style="width:200px;"></el-input>
         </el-form-item>
         <!-- 服务类别 -->
         <el-form-item
@@ -29,7 +38,7 @@
             <el-option label="APP-SOCKET" value="APP-SOCKET"></el-option>
             <el-option label="APP-HTTP" value="APP-HTTP"></el-option>
             <el-option label="REG" value="REG"></el-option>
-            <el-option label="WEBSERVICE" value="REG"></el-option>
+            <el-option label="WEBSERVICE" value="WEBSERVICE"></el-option>
             <el-option label="DATABASE" value="DATABASE"></el-option>
             <el-option label="NGINX" value="NGINX"></el-option>
           </el-select>
@@ -48,7 +57,7 @@
           prop="ip"
           :rules="[{required: true, message: '请输入服务IP', trigger: 'blur'}]"
         >
-          <el-input v-model="app.ip" size="mini"></el-input>
+          <el-input v-model="app.ip" size="mini" style="width:200px;"></el-input>
         </el-form-item>
         <!-- IP -->
         <el-form-item
@@ -56,7 +65,7 @@
           prop="port"
           :rules="[{required: true, message: '请输入服务PORT', trigger: 'blur'}]"
         >
-          <el-input v-model="app.port" type="number" size="mini"></el-input>
+          <el-input v-model="app.port" type="number" size="mini" style="width:200px;"></el-input>
         </el-form-item>
         <!-- 所在区域 -->
         <el-form-item

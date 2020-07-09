@@ -77,8 +77,8 @@ export const drawArrow = function (stage, connectors) {
 //拓扑连接-服务
 export const drawService = function (item) {
     return {
-        id: item.serverName + "@" + item.ip, //group id
-        serverName: item.serverName,
+        id: item.serviceId, //group id
+        serviceName: item.serviceName,
         x: item.x ? item.x : 0,
         y: item.y ? item.y : 0,
         draggable: true,
@@ -94,10 +94,10 @@ export const drawService = function (item) {
             shadowOffset: { x: 3, y: 3 },
             shadowOpacity: 0.2,
         },
-        server_name_text: {
+        service_name_text: {
             x: 10,
             y: 10,
-            text: item.serverName,
+            text: item.serviceName,
             fontSize: SERVICE_FONTSIZE,
             fontFamily: "Calibri",
             fill: SERVICE_NAME_COLOR

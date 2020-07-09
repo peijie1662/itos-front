@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog
-      title="文档分组"
+      :title="title"
       width="550px"
       :close-on-click-modal="false"
       :visible.sync="dialogVisible"
@@ -24,7 +24,7 @@
           @keyup.enter.native="handleInputConfirm"
           @blur="handleInputConfirm"
         ></el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showInput">新分组</el-button>
+        <el-button v-else class="button-new-tag" size="small" @click="showInput">新场景</el-button>
       </div>
     </el-dialog>
   </div>
@@ -40,17 +40,22 @@ export default {
       dialogVisible: false,
       dynamicTags: [],
       inputVisible: false,
-      inputValue: ""
+      inputValue: "",
+      title: "",
+      category: ""
     };
   },
   computed: {
     ...mapGetters(["userInfo"])
   },
-  props: ["newGp"],
+  props: ["sysCode"],
   watch: {
-    newGp: {
-      handler(newVal) {
+    sysCode: {
+      handler: async function(newVal) {
         if (newVal != null) {
+          this.category = newVal.category;
+          this.title = newVal.title;
+          await this.groupList();
           this.dialogVisible = true;
         }
       },
@@ -59,15 +64,16 @@ export default {
     }
   },
   methods: {
-    //删除组
+    //删除代码
     handleClose(tag) {
       let me = this;
-      delSysCode({ category: "DOCUMENTGROUP", id: tag }).then(res => {
+      delSysCode({ category: me.category, id: tag }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
           me.$message.error(errMsg);
         } else {
           me.dynamicTags.splice(me.dynamicTags.indexOf(tag), 1);
+          me.$emit("updateSuccess");
         }
       });
     },
@@ -77,47 +83,48 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
-    //增加组
+    //增加代码
     handleInputConfirm() {
       let me = this;
       if (me.inputValue) {
-        addSysCode({ category: "DOCUMENTGROUP", id: me.inputValue }).then(
-          res => {
-            let { flag, errMsg } = res;
-            if (!flag) {
-              me.$message.error(errMsg);
-            } else {
-              let inputValue = me.inputValue;
-              if (inputValue) {
-                me.dynamicTags.push(inputValue);
-              }
-              me.inputVisible = false;
-              me.inputValue = "";
+        addSysCode({ category: me.category, id: me.inputValue }).then(res => {
+          let { flag, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+          } else {
+            let inputValue = me.inputValue;
+            if (inputValue) {
+              me.dynamicTags.push(inputValue);
             }
+            me.inputVisible = false;
+            me.inputValue = "";
+            me.$emit("updateSuccess");
           }
-        );
+        });
       }
     },
     groupList() {
-      let me = this;
-      listSysCode({ category: "DOCUMENTGROUP" }).then(res => {
-        let { flag, data, errMsg } = res;
-        if (!flag) {
-          me.$message.error(errMsg);
-        } else {
-          me.dynamicTags = data.map(item => {
-            return item.id;
-          });
-        }
+      return new Promise((resolve, reject) => {
+        let me = this;
+        listSysCode({ category: me.category }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            me.dynamicTags = data.map(item => {
+              return item.id;
+            });
+            resolve();
+          }
+        });
       });
     },
     quit() {
       this.dialogVisible = false;
     }
   },
-  mounted() {
-    this.groupList();
-  }
+  mounted() {}
 };
 </script>
 

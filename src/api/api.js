@@ -192,6 +192,10 @@ export const updAppInfo = params => { return axios.post(`${base}/appinfo/upd`, p
 export const delAppInfo = params => { return axios.post(`${base}/appinfo/del`, params).then(res => res.data); };
 //服务信息列表
 export const listAppInfo = params => { return axios.post(`${base}/appinfo/list`, params).then(res => res.data); };
+//场景添加服务
+export const addSceneApp = params => { return axios.post(`${base}/appinfo/addsceneapp`, params).then(res => res.data); };
+//场景服务列表
+export const listSceneApp = params => { return axios.post(`${base}/appinfo/listsceneapp`, params).then(res => res.data); };
 
 //服务拓扑位置(这个暂时不用，在服务端组合好)
 export const coordinateList = params => { return axios.post(`${base}/appinfo/coordinatelist`, params).then(res => res.data); };

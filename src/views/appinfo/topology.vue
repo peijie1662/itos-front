@@ -1,22 +1,56 @@
 <template>
   <div>
     <div class="header">
-      <el-button type="primary" size="mini" @click="saveCoordinate">保存</el-button>
+      <!-- 1.选择场景 -->
+      <span>选择场景</span>
+      <el-select
+        v-model="selScene"
+        @change="loadSceneTopology"
+        size="mini"
+        style="width:200px;margin-left:10px;"
+        placeholder="请选择"
+      >
+        <el-option v-for="item in scenes" :key="item.id" :label="item.id" :value="item.id">
+          <span>{{ item.id }}</span>
+        </el-option>
+      </el-select>
+      <el-button size="mini" @click="handleSysCode" style="margin-left:20px;">场景</el-button>
+      <el-divider direction="vertical"></el-divider>
+      <!-- 2.添加服务到场景中 -->
+      <el-select
+        v-model="newSceneAppId"
+        size="mini"
+        style="width:250px;margin-left:10px;"
+        placeholder="请选择"
+      >
+        <el-option
+          v-for="item in allApps"
+          :key="item.serviceId"
+          :label="item.serviceName"
+          :value="item.serviceId"
+        >
+          <div>
+            <span style="float:left;">{{item.serviceName}}</span>
+            <span style="float:right;">{{item.serviceAbs}}</span>
+          </div>
+        </el-option>
+      </el-select>
+      <el-button size="mini" @click="saveNewSceneApp" style="margin-left:20px;">添加</el-button>
+      <el-divider direction="vertical"></el-divider>
     </div>
     <div class="content">
       <v-stage :config="stageConfig" ref="stage" @click="handleStageClick">
         <v-layer ref="layer">
           <!-- 服务 -->
           <v-group
-            v-for="(item,index) in list"
+            v-for="(item,index) in sceneApps"
             :key="index"
             :config="item"
-            @dragstart="handleServiceDragStart "
             @dragend="handleServiceDragend"
             @click="handleServiceClick"
           >
             <v-rect :config="item.outer_rect"></v-rect>
-            <v-text :config="item.server_name_text"></v-text>
+            <v-text :config="item.service_name_text"></v-text>
             <v-text :config="item.ip_text"></v-text>
             <v-circle :config="item.heartbeat"></v-circle>
           </v-group>
@@ -27,12 +61,24 @@
         </v-layer>
       </v-stage>
     </div>
+    <div id="menu">
+      <div>
+        <button id="del-btn">删除</button>
+      </div>
+    </div>
+    <sys-code-com :sysCode="sysCode"></sys-code-com>
   </div>
 </template>
 
 <script>
 //import Konva from "konva";
-import { listAppInfo, updCoordinate } from "@/api/api";
+import {
+  listSysCode,
+  listAppInfo,
+  addSceneApp,
+  listSceneApp,
+  updCoordinate
+} from "@/api/api";
 import {
   drawLine,
   drawArrow,
@@ -40,6 +86,7 @@ import {
   drawSelService,
   drawNormalService
 } from "@/views/appinfo/topology_util.js";
+import sysCodeCom from "@/components/public/sysCodeCom";
 
 const STAGE_WIDTH = 1200;
 const STAGE_HEIGHT = 800;
@@ -47,16 +94,20 @@ const STAGE_HEIGHT = 800;
 export default {
   data() {
     return {
-      list: [],
       stageConfig: {
         width: STAGE_WIDTH,
         height: STAGE_HEIGHT
       },
-      dragID: null, //拖动的组件ID
       connectorLineList: [],
       connectorArrowList: [],
       timer: null,
       clickService: null, //点击选中
+      scenes: [], //场景
+      selScene: null, //选中场景
+      sysCode: null, //代码
+      allApps: [], //所有服务列表
+      sceneApps: [], //场景服务列表
+      newSceneAppId: null, //场景新服务ID
 
       //模拟相连数据传入
       connectors: [
@@ -74,6 +125,121 @@ export default {
     };
   },
   methods: {
+    initMenu() {
+      //let layer = this.$refs.layer.getNode();
+      let stage = this.$refs.stage.getNode();
+      //let currentShape;
+      let menuNode = document.getElementById("menu");
+      //删除服务
+      document.getElementById("del-btn").addEventListener("click", () => {
+
+
+
+      });
+      window.addEventListener("click", () => {
+        menuNode.style.display = "none";
+      });
+      stage.on("contextmenu", function(e) {
+        e.evt.preventDefault();
+        if (e.target === stage) {
+          return;
+        }
+        //currentShape = e.target;
+        menuNode.style.display = "initial";
+        var containerRect = stage.container().getBoundingClientRect();
+        menuNode.style.top =
+          containerRect.top + stage.getPointerPosition().y - 50 + "px";
+        menuNode.style.left =
+          containerRect.left + stage.getPointerPosition().x + "px";
+      });
+    },
+    //载入所有服务列表
+    loadAppInfoList() {
+      let me = this;
+      listAppInfo({}).then(res => {
+        let { flag, data, errMsg } = res;
+        if (!flag) {
+          me.$message.error(errMsg);
+        } else {
+          me.allApps = data;
+        }
+      });
+    },
+    //场景代码维护
+    handleSysCode() {
+      this.sysCode = { category: "TOPOLOGYSCENE", title: "拓扑场景" };
+    },
+    //载入场景代码
+    loadScene() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        listSysCode({
+          category: "TOPOLOGYSCENE"
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            me.scenes = data;
+            resolve();
+          }
+        });
+      });
+    },
+    //添加服务到场景
+    saveNewSceneApp() {
+      let me = this;
+      if (!me.selScene || !me.newSceneAppId) {
+        me.$message.warning("请先选择场景和要添加的服务");
+        return;
+      }
+      addSceneApp({
+        serviceId: me.newSceneAppId,
+        scene: me.selScene,
+        x: 10,
+        y: 10
+      }).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          me.$message.error(errMsg);
+        } else {
+          me.loadSceneTopology();
+          me.$message.success("添加场景服务成功");
+        }
+      });
+    },
+    //载入场景的服务信息
+    loadSceneApp() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        listSceneApp({
+          scene: me.selScene
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            me.sceneApps = data.map(item => {
+              return drawService(item);
+            });
+            resolve();
+          }
+        });
+      });
+    },
+    //载入场景所有信息
+    loadSceneTopology: async function() {
+      let me = this;
+      await me.loadSceneApp();
+    },
+    handleSceneEdit() {},
+
+    //
+    //
+    //
+
     handleStageClick(e) {
       if (e.target == this.$refs.stage.getNode()) {
         if (this.clickService != null) drawNormalService(this.clickService);
@@ -86,22 +252,18 @@ export default {
       this.clickService = e.currentTarget;
       drawSelService(this.clickService);
     },
-    handleServiceDragStart(e) {
-      this.dragID = e.target.id();
-    },
     handleServiceDragend(e) {
-      let item = this.list.find(item => item.id == e.target.id());
+      let item = this.sceneApps.find(item => item.id == e.target.id());
       item.x = e.currentTarget.attrs.x;
       item.y = e.currentTarget.attrs.y;
       this.drawTopology();
-      this.dragID = null;
     },
     saveCoordinate() {
       let me = this;
       updCoordinate(
         me.list.map(item => {
           return {
-            serverName: item.serverName,
+            serviceName: item.serviceName,
             ip: item.ip_text.text,
             x: item.x,
             y: item.y
@@ -114,64 +276,32 @@ export default {
         }
       });
     },
+    //绘制连线箭头等附属件
     drawTopology() {
       let me = this;
-      //if (me.dragID == null) return;
       let stage = me.$refs.stage.getNode();
+      //绘制连线
       me.connectorLineList = drawLine(stage, me.connectors).filter(
         item => item
       );
+      //绘制箭头
       me.connectorArrowList = drawArrow(stage, me.connectors).filter(
         item => item
       );
-      let shapes = me.$refs.stage.getNode().find("#heartbeat");
-
-      shapes.forEach(shape => {
-        shape.attrs.stroke =
-          shape.attrs.stroke == "#00FF00" ? "#409EFF" : "#00FF00";
-      });
-    },
-    loadConnectorList() {
-      //TODO 载入数据
-      this.drawTopology();
-    },
-    loadAppInfoList() {
-      let me = this;
-      listAppInfo({}).then(res => {
-        let { flag, data, errMsg } = res;
-        if (!flag) {
-          me.$message.error(errMsg);
-        } else {
-          me.list = data.map(item => {
-            return drawService(item);
-          });
-          this.dragID = "BGEGIN";
-          this.drawTopology();
-          this.gragId = null;
-          //this.heartbeat();
-        }
+      //心跳
+      me.sceneApps.forEach(app => {
+        app.heartbeat.stroke = app.heartbeat.stroke == "#00FF00" ? "#409EFF" : "#00FF00";
       });
     }
-    /** 
-    heartbeat() {
-      let me = this;
-      let period = 2000;
-      me.anim = new Konva.Animation(function(frame) {
-        let scale =
-          Math.abs(Math.sin((frame.time * 2 * Math.PI) / period)) + 0.001;
-        let shapes = me.$refs.stage.getNode().find("#heartbeat");
-        shapes.forEach(shape => {
-          shape.scale({ x: scale, y: 1 });
-        });
-      }, me.$refs.layer.getNode());
-      console.info("anim:")
-      me.anim.start();
-    }
-    */
   },
   mounted() {
     let me = this;
+    me.initMenu();
+    //场景代码
+    me.loadScene();
+    //服务信息
     me.loadAppInfoList();
+    //动态刷新连线等图形
     if (me.timer) {
       clearInterval(me.timer);
     } else {
@@ -181,8 +311,10 @@ export default {
     }
   },
   destroyed() {
-    //this.anim.stop();
     clearInterval(this.timer);
+  },
+  components: {
+    sysCodeCom
   }
 };
 </script>
@@ -200,5 +332,26 @@ export default {
   padding: 10px;
   margin-top: 10px;
   min-height: 700px;
+}
+
+#menu {
+  display: none;
+  position: absolute;
+  width: 60px;
+  background-color: white;
+  box-shadow: 0 0 5px grey;
+  border-radius: 3px;
+}
+
+#menu button {
+  width: 100%;
+  background-color: white;
+  border: none;
+  margin: 0;
+  padding: 10px;
+}
+
+#menu button:hover {
+  background-color: lightgray;
 }
 </style>
