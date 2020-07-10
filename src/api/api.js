@@ -196,11 +196,16 @@ export const listAppInfo = params => { return axios.post(`${base}/appinfo/list`,
 export const addSceneApp = params => { return axios.post(`${base}/appinfo/addsceneapp`, params).then(res => res.data); };
 //场景服务列表
 export const listSceneApp = params => { return axios.post(`${base}/appinfo/listsceneapp`, params).then(res => res.data); };
-
-//服务拓扑位置(这个暂时不用，在服务端组合好)
-export const coordinateList = params => { return axios.post(`${base}/appinfo/coordinatelist`, params).then(res => res.data); };
+//删除场景服务
+export const delSceneApp = params => { return axios.post(`${base}/appinfo/delsceneapp`, params).then(res => res.data); };
+//场景连接列表
+export const listSceneCon = params => { return axios.post(`${base}/appinfo/listscenecon`, params).then(res => res.data); };
+//添加场景连接
+export const addSceneCon = params => { return axios.post(`${base}/appinfo/addscenecon`, params).then(res => res.data); };
+//删除场景连接
+export const delSceneCon = params => { return axios.post(`${base}/appinfo/delscenecon`, params).then(res => res.data); };
 //拓扑位置更新
-export const updCoordinate = params => { return axios.post(`${base}/appinfo/refreshcoordinate`, params).then(res => res.data); };
+export const updCoordinate = params => { return axios.post(`${base}/appinfo/savecoordinate`, params).then(res => res.data); };
 
 //-------------------------------------------系统代码
 //添加代码

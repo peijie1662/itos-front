@@ -9,10 +9,6 @@
               <i class="el-icon-menu" style="font-size:35px;margin-top:15px;">
                 <span style="margin-left:10px;font-size:20px;">IT OPERATION AND MAINTENANCE SYSTEM</span>
                 <span style="margin-left:5px;font-size:15px;">资讯科技部运维系统</span>
-                <i
-                  class="iconfont icon-icon_crab_line icon"
-                  style="font-size:15px;margin-left:5px;"
-                ></i>
               </i>
             </div>
           </el-col>

@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="header">
-      <!-- 1.选择场景 -->
+      <el-button size="mini" @click="handleSysCode" style="margin-left:20px;">场景代码</el-button>
+      <el-divider direction="vertical"></el-divider>
       <span>选择场景</span>
       <el-select
         v-model="selScene"
@@ -14,28 +15,7 @@
           <span>{{ item.id }}</span>
         </el-option>
       </el-select>
-      <el-button size="mini" @click="handleSysCode" style="margin-left:20px;">场景</el-button>
-      <el-divider direction="vertical"></el-divider>
-      <!-- 2.添加服务到场景中 -->
-      <el-select
-        v-model="newSceneAppId"
-        size="mini"
-        style="width:250px;margin-left:10px;"
-        placeholder="请选择"
-      >
-        <el-option
-          v-for="item in allApps"
-          :key="item.serviceId"
-          :label="item.serviceName"
-          :value="item.serviceId"
-        >
-          <div>
-            <span style="float:left;">{{item.serviceName}}</span>
-            <span style="float:right;">{{item.serviceAbs}}</span>
-          </div>
-        </el-option>
-      </el-select>
-      <el-button size="mini" @click="saveNewSceneApp" style="margin-left:20px;">添加</el-button>
+      <el-button size="mini" @click="handleSceneEdit" style="margin-left:20px;">编辑</el-button>
       <el-divider direction="vertical"></el-divider>
     </div>
     <div class="content">
@@ -67,6 +47,7 @@
       </div>
     </div>
     <sys-code-com :sysCode="sysCode"></sys-code-com>
+    <scene-edit-com :scene="editScene" @updateSuccess="loadSceneTopology"></scene-edit-com>
   </div>
 </template>
 
@@ -74,10 +55,9 @@
 //import Konva from "konva";
 import {
   listSysCode,
-  listAppInfo,
-  addSceneApp,
   listSceneApp,
-  updCoordinate
+  updCoordinate,
+  listSceneCon
 } from "@/api/api";
 import {
   drawLine,
@@ -87,6 +67,7 @@ import {
   drawNormalService
 } from "@/views/appinfo/topology_util.js";
 import sysCodeCom from "@/components/public/sysCodeCom";
+import sceneEditCom from "@/components/appinfo/sceneEditCom";
 
 const STAGE_WIDTH = 1200;
 const STAGE_HEIGHT = 800;
@@ -105,37 +86,21 @@ export default {
       scenes: [], //场景
       selScene: null, //选中场景
       sysCode: null, //代码
-      allApps: [], //所有服务列表
-      sceneApps: [], //场景服务列表
+      sceneApps: [], //场景服务
+      sceneCons: [], //场景连接
       newSceneAppId: null, //场景新服务ID
-
-      //模拟相连数据传入
-      connectors: [
-        {
-          sourceId: "DTP@169.169.47.9",
-          targetId: "ITAF@169.169.41.26",
-          direction: "H" //'H','V'
-        },
-        {
-          sourceId: "Itop_Service@169.169.41.26",
-          targetId: "ITAF@169.169.41.26",
-          direction: "H" //'H','V'
-        }
-      ]
+      editScene: null //编辑场景
     };
   },
   methods: {
+    //初始化右键菜单
     initMenu() {
       //let layer = this.$refs.layer.getNode();
       let stage = this.$refs.stage.getNode();
       //let currentShape;
       let menuNode = document.getElementById("menu");
       //删除服务
-      document.getElementById("del-btn").addEventListener("click", () => {
-
-
-
-      });
+      document.getElementById("del-btn").addEventListener("click", () => {});
       window.addEventListener("click", () => {
         menuNode.style.display = "none";
       });
@@ -151,18 +116,6 @@ export default {
           containerRect.top + stage.getPointerPosition().y - 50 + "px";
         menuNode.style.left =
           containerRect.left + stage.getPointerPosition().x + "px";
-      });
-    },
-    //载入所有服务列表
-    loadAppInfoList() {
-      let me = this;
-      listAppInfo({}).then(res => {
-        let { flag, data, errMsg } = res;
-        if (!flag) {
-          me.$message.error(errMsg);
-        } else {
-          me.allApps = data;
-        }
       });
     },
     //场景代码维护
@@ -187,29 +140,7 @@ export default {
         });
       });
     },
-    //添加服务到场景
-    saveNewSceneApp() {
-      let me = this;
-      if (!me.selScene || !me.newSceneAppId) {
-        me.$message.warning("请先选择场景和要添加的服务");
-        return;
-      }
-      addSceneApp({
-        serviceId: me.newSceneAppId,
-        scene: me.selScene,
-        x: 10,
-        y: 10
-      }).then(res => {
-        let { flag, errMsg } = res;
-        if (!flag) {
-          me.$message.error(errMsg);
-        } else {
-          me.loadSceneTopology();
-          me.$message.success("添加场景服务成功");
-        }
-      });
-    },
-    //载入场景的服务信息
+    //载入场景服务
     loadSceneApp() {
       return new Promise((resolve, reject) => {
         let me = this;
@@ -229,34 +160,68 @@ export default {
         });
       });
     },
+    //载入场景连接
+    loadSceneCon() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        listSceneCon({
+          scene: me.selScene
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            me.sceneCons = data;
+            resolve();
+          }
+        });
+      });
+    },
     //载入场景所有信息
     loadSceneTopology: async function() {
       let me = this;
       await me.loadSceneApp();
+      await me.loadSceneCon();
     },
-    handleSceneEdit() {},
-
-    //
-    //
-    //
-
+    //编辑场景信息
+    handleSceneEdit() {
+      let me = this;
+      if (me.selScene) {
+        me.editScene = { scene: me.selScene };
+      } else {
+        me.$message.warning("请先选择要编辑的场景");
+      }
+    },
+    //单击背景时去掉选中状态
     handleStageClick(e) {
       if (e.target == this.$refs.stage.getNode()) {
         if (this.clickService != null) drawNormalService(this.clickService);
         this.clickService = null;
-        this.toolbars = [];
       }
     },
+    //单击选中服务
     handleServiceClick(e) {
       if (this.clickService != null) drawNormalService(this.clickService);
       this.clickService = e.currentTarget;
       drawSelService(this.clickService);
     },
+    //拖动结束时保存服务位置
     handleServiceDragend(e) {
-      let item = this.sceneApps.find(item => item.id == e.target.id());
-      item.x = e.currentTarget.attrs.x;
-      item.y = e.currentTarget.attrs.y;
-      this.drawTopology();
+      let me = this;
+      updCoordinate([
+        {
+          scene: me.selScene,
+          serviceId: e.currentTarget.attrs.id,
+          x: e.currentTarget.attrs.x,
+          y: e.currentTarget.attrs.y
+        }
+      ]).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          me.$message.error(errMsg);
+        }
+      });
     },
     saveCoordinate() {
       let me = this;
@@ -281,16 +246,15 @@ export default {
       let me = this;
       let stage = me.$refs.stage.getNode();
       //绘制连线
-      me.connectorLineList = drawLine(stage, me.connectors).filter(
-        item => item
-      );
+      me.connectorLineList = drawLine(stage, me.sceneCons).filter(item => item);
       //绘制箭头
-      me.connectorArrowList = drawArrow(stage, me.connectors).filter(
+      me.connectorArrowList = drawArrow(stage, me.sceneCons).filter(
         item => item
       );
       //心跳
       me.sceneApps.forEach(app => {
-        app.heartbeat.stroke = app.heartbeat.stroke == "#00FF00" ? "#409EFF" : "#00FF00";
+        app.heartbeat.stroke =
+          app.heartbeat.stroke == "#00FF00" ? "#409EFF" : "#00FF00";
       });
     }
   },
@@ -299,8 +263,6 @@ export default {
     me.initMenu();
     //场景代码
     me.loadScene();
-    //服务信息
-    me.loadAppInfoList();
     //动态刷新连线等图形
     if (me.timer) {
       clearInterval(me.timer);
@@ -314,7 +276,8 @@ export default {
     clearInterval(this.timer);
   },
   components: {
-    sysCodeCom
+    sysCodeCom,
+    sceneEditCom
   }
 };
 </script>
