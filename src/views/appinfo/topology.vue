@@ -31,7 +31,10 @@
           >
             <v-rect :config="item.outer_rect"></v-rect>
             <v-text :config="item.service_name_text"></v-text>
+            <v-text :config="item.service_abs_text"></v-text>
             <v-text :config="item.ip_text"></v-text>
+            <v-text :config="item.type_text"></v-text>
+            <v-text :config="item.domain_text"></v-text>
             <v-circle :config="item.heartbeat"></v-circle>
           </v-group>
           <!-- 连接线 -->

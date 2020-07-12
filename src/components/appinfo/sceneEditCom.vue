@@ -96,6 +96,15 @@
                 </div>
               </el-option>
             </el-select>
+            <el-select
+              v-model="direction"
+              size="mini"
+              style="width:100px;margin-left:10px;"
+              placeholder="方向"
+            >
+              <el-option label="水平方向" value="HORIZONTAL"></el-option>
+              <el-option label="垂直方向" value="VERTICAL"></el-option>
+            </el-select>
             <el-button size="mini" @click="saveNewSceneCon" style="margin-left:20px;">添加</el-button>
           </div>
           <div class="content">
@@ -109,6 +118,9 @@
               <el-table-column type="index" width="50" label="No."></el-table-column>
               <el-table-column prop="sourceName" width="100" label="起始"></el-table-column>
               <el-table-column prop="targetName" width="100" label="终点"></el-table-column>
+              <el-table-column width="100" label="方向">     
+                <template slot-scope="scope">{{scope.row.direction=="HORIZONTAL"?"水平":"垂直"}}</template>
+              </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-popconfirm title="确定要删除该连接吗？" @onConfirm="delSceneCon(scope.row)">
@@ -148,6 +160,7 @@ export default {
       newSceneAppId: "",
       sourceId: "",
       targetId: "",
+      direction: "",
       allApps: [], //所有服务列表
       sceneApps: [], //场景服务
       sceneCons: [], //场景连接
@@ -218,7 +231,7 @@ export default {
           me.$message.error(errMsg);
         } else {
           me.loadSceneApp();
-          me.$emit("updateSuccess")
+          me.$emit("updateSuccess");
         }
       });
     },
@@ -234,7 +247,7 @@ export default {
           me.$message.error(errMsg);
         } else {
           me.loadSceneApp();
-          me.$emit("updateSuccess")
+          me.$emit("updateSuccess");
         }
       });
     },
@@ -269,7 +282,7 @@ export default {
         targetId: me.targetId,
         preText: "",
         sufText: "",
-        direction: "RIGHT", //从左到右
+        direction: me.direction,
         lineType: "BROKEN" //折线
       }).then(res => {
         let { flag, errMsg } = res;
@@ -277,7 +290,7 @@ export default {
           me.$message.error(errMsg);
         } else {
           me.loadSceneCon();
-          me.$emit("updateSuccess")
+          me.$emit("updateSuccess");
         }
       });
     },
@@ -294,10 +307,10 @@ export default {
           me.$message.error(errMsg);
         } else {
           me.loadSceneCon();
-          me.$emit("updateSuccess")
+          me.$emit("updateSuccess");
         }
       });
-    },    
+    },
     headerCellStyle() {
       return "padding:0;";
     },
