@@ -17,6 +17,7 @@
       </el-select>
       <el-button size="mini" @click="handleSceneEdit" style="margin-left:20px;">编辑</el-button>
       <el-divider direction="vertical"></el-divider>
+      <el-button size="mini" @click="handleDownload" style="margin-left:20px;">图片</el-button>
     </div>
     <div class="content">
       <v-stage :config="stageConfig" ref="stage" @click="handleStageClick">
@@ -62,7 +63,7 @@
 </template>
 
 <script>
-//import Konva from "konva";
+import { downloadURI } from "@/api/util";
 import {
   listSysCode,
   listSceneApp,
@@ -109,9 +110,7 @@ export default {
   methods: {
     //初始化右键菜单
     initMenu() {
-      //let layer = this.$refs.layer.getNode();
       let stage = this.$refs.stage.getNode();
-      //let currentShape;
       let menuNode = document.getElementById("menu");
       //删除服务
       document.getElementById("del-btn").addEventListener("click", () => {});
@@ -123,7 +122,6 @@ export default {
         if (e.target === stage) {
           return;
         }
-        //currentShape = e.target;
         menuNode.style.display = "initial";
         var containerRect = stage.container().getBoundingClientRect();
         menuNode.style.top =
@@ -290,6 +288,12 @@ export default {
         app.heartbeat.stroke =
           app.heartbeat.stroke == "#00FF00" ? "#409EFF" : "#00FF00";
       });
+    },
+    //下载图片
+    handleDownload() {
+      let stage = this.$refs.stage.getNode();
+      let dataURL = stage.toDataURL({ pixelRatio: 3 });
+      downloadURI(dataURL, "stage.png");
     }
   },
   mounted() {

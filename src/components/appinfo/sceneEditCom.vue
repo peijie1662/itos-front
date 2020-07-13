@@ -31,16 +31,17 @@
               :header-cell-style="headerCellStyle"
               :cell-style="cellStyle"
               border
+              :default-sort="{prop: 'serviceName'}"
               style="font-size:10px;"
             >
               <el-table-column type="index" width="50" label="No."></el-table-column>
-              <el-table-column prop="serviceName" width="100" label="服务名"></el-table-column>
-              <el-table-column prop="serviceAbs" width="100" label="简介"></el-table-column>
-              <el-table-column label="地址" width="150">
+              <el-table-column prop="serviceName" width="100" label="服务名" sortable></el-table-column>
+              <el-table-column prop="serviceAbs" width="100" label="简介" sortable></el-table-column>
+              <el-table-column label="地址" width="150" sortable>
                 <template slot-scope="scope">{{scope.row.ip}}:{{scope.row.port}}</template>
               </el-table-column>
-              <el-table-column prop="serviceType" width="100" label="类型"></el-table-column>
-              <el-table-column prop="domain" width="80" label="区域"></el-table-column>
+              <el-table-column prop="serviceType" width="100" label="类型" sortable></el-table-column>
+              <el-table-column prop="domain" width="80" label="区域" sortable></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-popconfirm title="确定要删除该服务吗？" @onConfirm="delSceneApp(scope.row)">
@@ -117,11 +118,12 @@
               :header-cell-style="headerCellStyle"
               :cell-style="cellStyle"
               border
+              :default-sort="{prop: 'sourceName'}"
               style="font-size:10px;"
             >
               <el-table-column type="index" width="50" label="No."></el-table-column>
-              <el-table-column prop="sourceName" width="100" label="起始"></el-table-column>
-              <el-table-column prop="targetName" width="100" label="终点"></el-table-column>
+              <el-table-column prop="sourceName" width="100" label="起始" sortable></el-table-column>
+              <el-table-column prop="targetName" width="100" label="终点" sortable></el-table-column>
               <el-table-column prop="direction" width="100" label="方向"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -151,10 +153,26 @@
               :header-cell-style="headerCellStyle"
               :cell-style="cellStyle"
               border
+              :default-sort="{prop: 'text'}"
               style="font-size:10px;"
             >
               <el-table-column type="index" width="50" label="No."></el-table-column>
-              <el-table-column prop="text" width="200" label="文本内容"></el-table-column>
+              <el-table-column prop="x" width="50" label="X"></el-table-column>
+              <el-table-column prop="y" width="50" label="Y"></el-table-column>
+              <el-table-column prop="text" width="200" label="文本内容" sortable></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-popconfirm title="确定要删除该标签吗？" @onConfirm="delSceneLab(scope.row)">
+                    <el-button
+                      type="danger"
+                      plain
+                      size="mini"
+                      slot="reference"
+                      style="margin-left:10px;"
+                    >删除</el-button>
+                  </el-popconfirm>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </el-tab-pane>

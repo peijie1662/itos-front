@@ -265,7 +265,7 @@ export const drawLabel = function (lab) {
         y: lab.y,
         draggable: true,
         fill: "green",
-        fontSize: 15
+        fontSize: 13
     }
 }
 
