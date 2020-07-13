@@ -206,6 +206,14 @@ export const addSceneCon = params => { return axios.post(`${base}/appinfo/addsce
 export const delSceneCon = params => { return axios.post(`${base}/appinfo/delscenecon`, params).then(res => res.data); };
 //拓扑位置更新
 export const updCoordinate = params => { return axios.post(`${base}/appinfo/savecoordinate`, params).then(res => res.data); };
+//场景标签列表
+export const listSceneLab = params => { return axios.post(`${base}/appinfo/listscenelab`, params).then(res => res.data); };
+//添加场景标签
+export const addSceneLab = params => { return axios.post(`${base}/appinfo/addscenelab`, params).then(res => res.data); };
+//删除场景标签
+export const delSceneLab = params => { return axios.post(`${base}/appinfo/delscenelab`, params).then(res => res.data); };
+//标签位置更新
+export const updLabCoordinate = params => { return axios.post(`${base}/appinfo/savelabcoordinate`, params).then(res => res.data); };
 
 //-------------------------------------------系统代码
 //添加代码

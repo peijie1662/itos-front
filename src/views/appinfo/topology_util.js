@@ -25,9 +25,9 @@ export const drawLine = function (stage, connectors) {
         let t = stage.find(`#${con.targetId}`)[0];
         //确定起始点和终点
         if (!s || !t) return;
-        //1.水平模式
-        if (con.direction == "HORIZONTAL") {
-            //起始点(右侧中点)
+        //1.RL模式
+        if (con.direction == "RL") {
+            //起始点(R)
             let sp = {
                 x: s.attrs.x + SERVICE_WIDTH,
                 y: s.attrs.y + SERVICE_HEIGHT / 2
@@ -53,14 +53,14 @@ export const drawLine = function (stage, connectors) {
                 strokeWidth: 1
             };
         }
-        //2.垂直模式
-        if (con.direction == "VERTICAL") {
-            //起始点(下方中点)
+        //2.BT模式
+        if (con.direction == "BT") {
+            //起始点(B)
             let sp = {
                 x: s.attrs.x + SERVICE_WIDTH / 2,
                 y: s.attrs.y + SERVICE_HEIGHT
             };
-            //结束点(上方中点)
+            //结束点(T)
             let tp = {
                 x: t.attrs.x + SERVICE_WIDTH / 2,
                 y: t.attrs.y
@@ -81,6 +81,98 @@ export const drawLine = function (stage, connectors) {
                 strokeWidth: 1
             };
         }
+        //3.BL模式
+        if (con.direction == "BL") {
+            //起始点(B)
+            let sp = {
+                x: s.attrs.x + SERVICE_WIDTH / 2,
+                y: s.attrs.y + SERVICE_HEIGHT
+            };
+            //结束点(L)
+            let tp = {
+                x: t.attrs.x,
+                y: t.attrs.y + SERVICE_HEIGHT / 2
+            };
+            //过渡点
+            let mp = {
+                x: sp.x,
+                y: tp.y
+            }
+            return {
+                points: [sp.x, sp.y, mp.x, mp.y, tp.x, tp.y],
+                stroke: LINE_COLOR,
+                strokeWidth: 1
+            };
+        }
+        //4.RB模式
+        if (con.direction == "RB") {
+            //起始点(R)
+            let sp = {
+                x: s.attrs.x + SERVICE_WIDTH,
+                y: s.attrs.y + SERVICE_HEIGHT / 2
+            };
+            //结束点(B)
+            let tp = {
+                x: t.attrs.x + SERVICE_WIDTH / 2,
+                y: t.attrs.y + SERVICE_HEIGHT
+            };
+            //过渡点
+            let mp = {
+                x: tp.x,
+                y: sp.y
+            }
+            return {
+                points: [sp.x, sp.y, mp.x, mp.y, tp.x, tp.y],
+                stroke: LINE_COLOR,
+                strokeWidth: 1
+            };
+        }
+        //5.TL模式
+        if (con.direction == "TL") {
+            //起始点(T)
+            let sp = {
+                x: s.attrs.x + SERVICE_WIDTH / 2,
+                y: s.attrs.y
+            };
+            //结束点(L)
+            let tp = {
+                x: t.attrs.x,
+                y: t.attrs.y + SERVICE_HEIGHT / 2
+            };
+            //过渡点
+            let mp = {
+                x: sp.x,
+                y: tp.y
+            }
+            return {
+                points: [sp.x, sp.y, mp.x, mp.y, tp.x, tp.y],
+                stroke: LINE_COLOR,
+                strokeWidth: 1
+            };
+        }
+        //6.RT模式
+        if (con.direction == "RT") {
+            //起始点(R)
+            let sp = {
+                x: s.attrs.x + SERVICE_WIDTH,
+                y: s.attrs.y + SERVICE_HEIGHT / 2
+            };
+            //结束点(T)
+            let tp = {
+                x: t.attrs.x + SERVICE_WIDTH / 2,
+                y: t.attrs.y
+            };
+            //过渡点
+            let mp = {
+                x: sp.x,
+                y: tp.y
+            }
+            return {
+                points: [sp.x, sp.y, mp.x, mp.y, tp.x, tp.y],
+                stroke: LINE_COLOR,
+                strokeWidth: 1
+            };
+        }
     });
 }
 
@@ -89,9 +181,9 @@ export const drawArrow = function (stage, connectors) {
     return connectors.map(con => {
         let t = stage.find(`#${con.targetId}`)[0];
         if (!t) return;
-        //水平模式
-        if (con.direction == "HORIZONTAL") {
-            //结束点(左侧中点)
+        //右箭头
+        if (["RL", "BL", "TL"].indexOf(con.direction) >= 0) {
+            //结束点(L)
             let tp = {
                 x: t.attrs.x,
                 y: t.attrs.y + SERVICE_HEIGHT / 2
@@ -113,9 +205,9 @@ export const drawArrow = function (stage, connectors) {
                 closed: true
             };
         }
-        //垂直模式
-        if (con.direction == "VERTICAL") {
-            //结束点(上方中点)
+        //下箭头
+        if (["BT", "RT"].indexOf(con.direction) >= 0) {
+            //结束点(T)
             let tp = {
                 x: t.attrs.x + SERVICE_WIDTH / 2,
                 y: t.attrs.y
@@ -137,7 +229,44 @@ export const drawArrow = function (stage, connectors) {
                 closed: true
             };
         }
+        //上箭头
+        if (["RB"].indexOf(con.direction) >= 0) {
+            //结束点(B)
+            let tp = {
+                x: t.attrs.x + SERVICE_WIDTH / 2,
+                y: t.attrs.y + SERVICE_HEIGHT
+            };
+            //箭头点1
+            let a1 = {
+                x: tp.x - 2,
+                y: tp.y + 5
+            };
+            //箭头点2
+            let a2 = {
+                x: tp.x + 2,
+                y: tp.y + 5
+            };
+            return {
+                points: [a1.x, a1.y, tp.x, tp.y, a2.x, a2.y],
+                stroke: ARROW_COLOR,
+                strokeWidth: 1,
+                closed: true
+            };
+        }
     });
+}
+
+//拓扑连接-标签
+export const drawLabel = function (lab) {
+    return {
+        id: lab.labId,
+        text: lab.text,
+        x: lab.x,
+        y: lab.y,
+        draggable: true,
+        fill: "green",
+        fontSize: 15
+    }
 }
 
 function getFillColor(type) {

@@ -102,8 +102,12 @@
               style="width:100px;margin-left:10px;"
               placeholder="方向"
             >
-              <el-option label="水平方向" value="HORIZONTAL"></el-option>
-              <el-option label="垂直方向" value="VERTICAL"></el-option>
+              <el-option label="右->左" value="RL"></el-option>
+              <el-option label="下->上" value="BT"></el-option>
+              <el-option label="下->左" value="BL"></el-option>
+              <el-option label="右->下" value="RB"></el-option>
+              <el-option label="上->左" value="TL"></el-option>
+              <el-option label="右->上" value="RT"></el-option>
             </el-select>
             <el-button size="mini" @click="saveNewSceneCon" style="margin-left:20px;">添加</el-button>
           </div>
@@ -118,9 +122,7 @@
               <el-table-column type="index" width="50" label="No."></el-table-column>
               <el-table-column prop="sourceName" width="100" label="起始"></el-table-column>
               <el-table-column prop="targetName" width="100" label="终点"></el-table-column>
-              <el-table-column width="100" label="方向">     
-                <template slot-scope="scope">{{scope.row.direction=="HORIZONTAL"?"水平":"垂直"}}</template>
-              </el-table-column>
+              <el-table-column prop="direction" width="100" label="方向"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-popconfirm title="确定要删除该连接吗？" @onConfirm="delSceneCon(scope.row)">
@@ -137,6 +139,25 @@
             </el-table>
           </div>
         </el-tab-pane>
+        <!-- 场景标签 -->
+        <el-tab-pane label="场景标签" name="label">
+          <div class="header">
+            <el-input v-model="newLab" placeholder="标签内容" size="mini" style="width:200px;"></el-input>
+            <el-button size="mini" @click="saveNewSceneLab" style="margin-left:20px;">添加</el-button>
+          </div>
+          <div class="content">
+            <el-table
+              :data="sceneLabs"
+              :header-cell-style="headerCellStyle"
+              :cell-style="cellStyle"
+              border
+              style="font-size:10px;"
+            >
+              <el-table-column type="index" width="50" label="No."></el-table-column>
+              <el-table-column prop="text" width="200" label="文本内容"></el-table-column>
+            </el-table>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </el-dialog>
   </div>
@@ -150,7 +171,10 @@ import {
   delSceneApp,
   listSceneCon,
   addSceneCon,
-  delSceneCon
+  delSceneCon,
+  listSceneLab,
+  addSceneLab,
+  delSceneLab
 } from "@/api/api";
 
 export default {
@@ -161,9 +185,11 @@ export default {
       sourceId: "",
       targetId: "",
       direction: "",
+      newLab: "",
       allApps: [], //所有服务列表
       sceneApps: [], //场景服务
       sceneCons: [], //场景连接
+      sceneLabs: [], //场景标签
       dialogVisible: false
     };
   },
@@ -175,6 +201,7 @@ export default {
           await this.loadAppInfoList();
           await this.loadSceneApp();
           await this.loadSceneCon();
+          await this.loadSceneLab();
           this.dialogVisible = true;
         }
       },
@@ -307,6 +334,63 @@ export default {
           me.$message.error(errMsg);
         } else {
           me.loadSceneCon();
+          me.$emit("updateSuccess");
+        }
+      });
+    },
+    //添加场景标签
+    saveNewSceneLab() {
+      let me = this;
+      if (!me.newLab) {
+        me.$message.warning("未输入文本");
+        return;
+      }
+      addSceneLab({
+        scene: me.scene.scene,
+        text: me.newLab,
+        x: 10,
+        y: 10,
+        width: 999
+      }).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          me.$message.error(errMsg);
+        } else {
+          me.loadSceneLab();
+          me.$emit("updateSuccess");
+        }
+      });
+    },
+    //载入场景标签
+    loadSceneLab() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        listSceneLab({
+          scene: me.scene.scene
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            me.sceneLabs = data;
+            resolve();
+          }
+        });
+      });
+    },
+    //删除场景标签
+    delSceneLab(row) {
+      let me = this;
+      delSceneLab({
+        scene: me.scene.scene,
+        labId: row.labId
+      }).then(res => {
+        let { flag, errMsg } = res;
+        if (!flag) {
+          me.$message.error(errMsg);
+        } else {
+          me.loadSceneLab();
           me.$emit("updateSuccess");
         }
       });

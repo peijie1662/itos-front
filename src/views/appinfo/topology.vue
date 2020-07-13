@@ -41,6 +41,13 @@
           <v-line v-for="item in connectorLineList" :key="item.sourceId" :config="item"></v-line>
           <!-- 箭头 -->
           <v-line v-for="item in connectorArrowList" :key="item.sourceId" :config="item"></v-line>
+          <!-- 标签 -->
+          <v-text
+            v-for="item in sceneLabs"
+            :key="item.labId"
+            :config="item"
+            @dragend="handleLabelDragend"
+          ></v-text>
         </v-layer>
       </v-stage>
     </div>
@@ -60,14 +67,17 @@ import {
   listSysCode,
   listSceneApp,
   updCoordinate,
-  listSceneCon
+  listSceneCon,
+  listSceneLab,
+  updLabCoordinate
 } from "@/api/api";
 import {
   drawLine,
   drawArrow,
   drawService,
   drawSelService,
-  drawNormalService
+  drawNormalService,
+  drawLabel
 } from "@/views/appinfo/topology_util.js";
 import sysCodeCom from "@/components/public/sysCodeCom";
 import sceneEditCom from "@/components/appinfo/sceneEditCom";
@@ -91,6 +101,7 @@ export default {
       sysCode: null, //代码
       sceneApps: [], //场景服务
       sceneCons: [], //场景连接
+      sceneLabs: [], //场景标签
       newSceneAppId: null, //场景新服务ID
       editScene: null //编辑场景
     };
@@ -181,11 +192,32 @@ export default {
         });
       });
     },
+    //载入场景标签
+    loadSceneLab() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        listSceneLab({
+          scene: me.selScene
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            me.sceneLabs = data.map(item => {
+              return drawLabel(item);
+            });
+            resolve();
+          }
+        });
+      });
+    },
     //载入场景所有信息
     loadSceneTopology: async function() {
       let me = this;
       await me.loadSceneApp();
       await me.loadSceneCon();
+      await me.loadSceneLab();
     },
     //编辑场景信息
     handleSceneEdit() {
@@ -226,18 +258,17 @@ export default {
         }
       });
     },
-    saveCoordinate() {
+    //拖动结束时保存标签位置
+    handleLabelDragend(e) {
       let me = this;
-      updCoordinate(
-        me.list.map(item => {
-          return {
-            serviceName: item.serviceName,
-            ip: item.ip_text.text,
-            x: item.x,
-            y: item.y
-          };
-        })
-      ).then(res => {
+      updLabCoordinate([
+        {
+          scene: me.selScene,
+          labId: e.currentTarget.attrs.id,
+          x: e.currentTarget.attrs.x,
+          y: e.currentTarget.attrs.y
+        }
+      ]).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
           me.$message.error(errMsg);
