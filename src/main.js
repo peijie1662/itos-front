@@ -9,11 +9,13 @@ import './assets/iconfont/iconfont.css'
 import './assets/first-page/iconfont.css'
 import store from '@/api/store'
 import VueKonva from 'vue-konva'
+import Scroll from 'vue-seamless-scroll'
 
 Vue.use(VueRouter)
 Vue.use(ElementUI)
 Vue.use(VCharts)
 Vue.use(VueKonva)
+Vue.use(Scroll)
 
 const router = new VueRouter({
   //mode: "history",
@@ -24,7 +26,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   //登录动作删除原用户
   if (to.path == '/login') {
-    store.commit('update_userInfo',null)
+    store.commit('update_userInfo', null)
     next()
   } else {
     //如果无登录信息则转向登录页面，否则继续加载组件.

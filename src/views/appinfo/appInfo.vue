@@ -20,16 +20,17 @@
         :header-cell-style="headerCellStyle"
         :cell-style="cellStyle"
         border
+        :default-sort="{prop: 'serviceName'}"
         style="font-size:10px;"
       >
         <el-table-column type="index" width="50" label="No."></el-table-column>
-        <el-table-column prop="serviceName" width="100" label="服务名"></el-table-column>
+        <el-table-column prop="serviceName" width="100" label="服务名" sortable></el-table-column>
         <el-table-column prop="serviceAbs" width="100" label="简介"></el-table-column>
-        <el-table-column label="地址" width="150">
+        <el-table-column label="地址" width="150" sortable>
           <template slot-scope="scope">{{scope.row.ip}}:{{scope.row.port}}</template>
         </el-table-column>
-        <el-table-column prop="serviceType" width="100" label="类型"></el-table-column>
-        <el-table-column prop="domain" width="80" label="区域"></el-table-column>
+        <el-table-column prop="serviceType" width="100" label="类型" sortable></el-table-column>
+        <el-table-column prop="domain" width="80" label="区域" sortable></el-table-column>
         <el-table-column prop="serviceDesc" width="260" label="描述"></el-table-column>
         <el-table-column width="50" label="有效">
           <template slot-scope="scope">{{scope.row.valid ?"Y":"?"}}</template>

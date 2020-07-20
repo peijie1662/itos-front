@@ -10,6 +10,7 @@
               size="mini"
               style="width:200px;margin-left:10px;"
               placeholder="请选择"
+              filterable
             >
               <el-option
                 v-for="item in allApps"
@@ -68,7 +69,7 @@
               placeholder="起始服务"
             >
               <el-option
-                v-for="item in allApps"
+                v-for="item in sceneApps"
                 :key="item.serviceId"
                 :label="item.serviceName"
                 :value="item.serviceId"
@@ -86,7 +87,7 @@
               placeholder="终点服务"
             >
               <el-option
-                v-for="item in allApps"
+                v-for="item in sceneApps"
                 :key="item.serviceId"
                 :label="item.serviceName"
                 :value="item.serviceId"

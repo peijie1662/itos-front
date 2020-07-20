@@ -269,14 +269,19 @@
                   </div>
                 </div>
                 <div>
-                  <ul style="list-style:none;">
-                    <li v-for="(item,index) in itosLogs" :key="index" style="margin-top:10px;">
-                      <span style="font-size:10px;color:#a6b5c4;">{{item.opDate}}</span>
-                      <br />
-                      <i :class="item.status.icon" :style="{'color': item.status.iconclass.color}"></i>
-                      <span style="font-size:8px;">{{item.statusDesc}}</span>
-                    </li>
-                  </ul>
+                  <vue-seamless-scroll :data="itosLogs" class="seamless-warp">
+                    <ul style="list-style:none;">
+                      <li v-for="(item,index) in itosLogs" :key="index" style="margin-top:10px;">
+                        <span style="font-size:10px;color:#a6b5c4;">{{item.opDate}}</span>
+                        <br />
+                        <i
+                          :class="item.status.icon"
+                          :style="{'color': item.status.iconclass.color}"
+                        ></i>
+                        <span style="font-size:8px;">{{item.statusDesc}}</span>
+                      </li>
+                    </ul>
+                  </vue-seamless-scroll>
                 </div>
               </div>
             </div>
@@ -648,6 +653,11 @@ export default {
   border: 1px solid #ddd;
   margin: 3px;
   overflow: hidden;
+}
+
+.seamless-warp {
+    height: 450px;
+    overflow: hidden;
 }
 
 .second-tab {
