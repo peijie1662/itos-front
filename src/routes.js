@@ -2,7 +2,6 @@ import Login from './views/login.vue'
 import Home from './views/home.vue'
 import NotFound from './404.vue'
 import ManualTaskInput from './views/task/manualTaskInput.vue'
-import ManualTaskQuery from './views/task/manualTaskQuery.vue'
 import ModelList from './views/taskmodel/modelList.vue'
 import SmartTips from './views/settings/smartTips.vue'
 import DispatchTaskInput from './views/task/dispatchTaskInput.vue'
@@ -17,6 +16,7 @@ import documentBrowsing from './views/report/documentBrowsing.vue'
 import compare from './views/settings/compare.vue'
 import topology from './views/appinfo/topology.vue'
 import appInfo from './views/appinfo/appInfo.vue'
+import checkInOnDuty from "./views/settings/checkInOnDuty.vue"
 
 let routes = [
     {
@@ -52,12 +52,12 @@ let routes = [
         iconCls: 'el-icon-edit-outline',
         children: [
             {
-                path: '/manual_task_input', component: ManualTaskInput, name: '任务登记',
-                meta: { funId: '1001', dis: true }
+                path: '/check_in_on_duty', component: checkInOnDuty, name: '值班签到',
+                meta: { funId: '1003', dis: true }
             },
             {
-                path: '/manual_task_query', component: ManualTaskQuery, name: '任务查询',
-                meta: { funId: '1002', dis: true }
+                path: '/manual_task_input', component: ManualTaskInput, name: '任务登记',
+                meta: { funId: '1001', dis: true }
             },
             {
                 path: '/smart_tips', component: SmartTips, name: '智能提示',

@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="header">
-      <el-checkbox v-model="selCheckin" @change="filter">登记</el-checkbox>
-      <el-checkbox v-model="selProcessing" @change="filter">进行中</el-checkbox>
-      <el-checkbox v-model="selDone" @change="filter">完成</el-checkbox>
-      <el-checkbox v-model="selCancel" @change="filter">失败/取消</el-checkbox>
+      <el-checkbox v-model="selCheckin" @change="loadData">登记</el-checkbox>
+      <el-checkbox v-model="selProcessing" @change="loadData">进行中</el-checkbox>
+      <el-checkbox v-model="selDone" @change="loadData">完成</el-checkbox>
+      <el-checkbox v-model="selCancel" @change="loadData">失败/取消</el-checkbox>
       <el-divider direction="vertical"></el-divider>
       <el-date-picker
         v-model="dateRange"
@@ -33,7 +33,7 @@
           v-for="item in clientList"
           :key="item.serviceName"
           :label="item.serviceName"
-          :value="item.modelKey"
+          :value="item.serviceName"
         ></el-option>
       </el-select>
       <el-divider direction="vertical"></el-divider>
@@ -41,16 +41,30 @@
     </div>
     <div class="content">
       <!-- 任务列表 -->
-      <div v-for="(task,index) in finTaskList" :key="index" class="task">
+      <div v-for="(task,index) in taskList" :key="index" class="task">
         <taskCom :ttask="task" @updateTaskSuccess="loadData"></taskCom>
       </div>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :page-sizes="[10, 20, 50, 100]"
+        :current-page="curPage"
+        :page-size="pageSize"
+        layout="total,sizes, prev, pager, next"
+        background
+        :total="total"
+      ></el-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import { pickerOptions } from "@/api/data";
-import { getDispatchTaskAll, getClientList } from "@/api/api";
+import {
+  getDispatchTaskPage,
+  getDispatchTaskCount,
+  getClientList
+} from "@/api/api";
 import taskCom from "@/components/task/dispatchTaskCom";
 
 export default {
@@ -63,34 +77,39 @@ export default {
       //
       newTask: null,
       taskList: [],
-      finTaskList: [],
       //
       pickerOptions,
       dateRange: [new Date(), new Date()], //默认当天
       //
       clientList: [],
-      selClientList: []
+      selClientList: [],
+      //
+      total: 0,
+      curPage: 1,
+      pageSize: 20
     };
   },
+  computed: {
+    statuss() {
+      let ss = [];
+      if (this.selCheckin) ss.push("CHECKIN");
+      if (this.selProcessing) ss.push("PROCESSING");
+      if (this.selDone) ss.push("DONE");
+      if (this.selCancel) {
+        ss.push("CANCEL");
+        ss.push("FAIL");
+      }
+      return ss;
+    }
+  },
   methods: {
-    filter() {
-      let me = this;
-      me.finTaskList = me.taskList.filter(item => {
-        let status_flag =
-          (me.selCheckin && item.status == "CHECKIN") ||
-          (me.selProcessing && item.status == "PROCESSING") ||
-          (me.selDone && item.status == "DONE") ||
-          (me.selCancel && ((item.status == "CANCEL")||(item.status == "FAIL")));
-        let client_flag = false;
-        if (me.selClientList.length > 0) {
-          me.selClientList.forEach(client => {
-            client_flag = client_flag || client.indexOf(item.modelId) >= 0;
-          });
-        } else {
-          client_flag = true;
-        }
-        return status_flag && client_flag;
-      });
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.loadTaskList();
+    },
+    handleCurrentChange(val) {
+      this.curPage = val;
+      this.loadTaskList();
     },
     addTask() {
       this.newTask = {};
@@ -100,30 +119,56 @@ export default {
       getClientList({}).then(res => {
         let { flag, data, errMsg } = res;
         if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
+          me.$message.error(errMsg);
         } else {
           me.clientList = data;
         }
       });
     },
-    loadData() {
-      let me = this;
-      getDispatchTaskAll({
-        dateRange: me.dateRange
-      }).then(res => {
-        let { flag, data, errMsg } = res;
-        if (!flag) {
-          this.$message({
-            message: errMsg,
-            type: "error"
-          });
-        } else {
-          me.taskList = data;
-          me.filter();
-        }
+    async loadData() {
+      await this.loadTaskList();
+      await this.loadTaskCount();
+    },
+    loadTaskList() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getDispatchTaskPage({
+          dateRange: me.dateRange, //1.时间范围
+          clients: me.selClientList.map(item => "'" + item + "'").join(","), //2.终端范围
+          statuss: me.statuss.map(item => "'" + item + "'").join(","), //3.状态范围
+          //4.简介范围
+          curPage: me.curPage,
+          pageSize: me.pageSize
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            me.taskList = data;
+            resolve();
+          }
+        });
+      });
+    },
+    loadTaskCount() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getDispatchTaskCount({
+          dateRange: me.dateRange, //1.时间范围
+          clients: me.selClientList.map(item => "'" + item + "'").join(","), //2.终端范围
+          statuss: me.statuss.map(item => "'" + item + "'").join(",") //3.状态范围
+          //4.简介范围
+        }).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            me.total = data[0].COUNT;
+            resolve();
+          }
+        });
       });
     }
   },
@@ -162,6 +207,5 @@ export default {
   background: white;
   border: 1px solid #c0c4cc;
   border-radius: 5px;
-  
 }
 </style>

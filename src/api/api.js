@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 //后台URL
-//let base = '/api';
+let base = '/api';
 //OFFICE Websocket的URL
-//export const OFFICE_WS_URL = 'ws://169.169.41.27:7857/ws';
+export const OFFICE_WS_URL = 'ws://169.169.41.27:7857/ws';
 //PRD Websocket的URL
-//export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
+export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
 //移动App的URL//TODO
-//export const APP_URL = "http://169.169.41.27:8081/";
+export const APP_URL = "http://169.169.41.27:8081/";
 
 //后台URL
 //let base = 'http://169.169.41.27:8099/api';
@@ -19,13 +19,13 @@ import axios from 'axios'
 //export const APP_URL = "http://169.169.41.27:8081/";
 
 //后台URL
-let base = 'http://10.170.59.44:7856';
+//let base = 'http://10.170.59.44:7856';
 //OFFICE Websocket的URL
-export const OFFICE_WS_URL = 'ws://10.170.59.44:7857/ws';
+//export const OFFICE_WS_URL = 'ws://10.170.59.44:7857/ws';
 //PRD Websocket的URL
-export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
+//export const PRD_WS_URL = 'ws://169.169.40.107:7857/ws';
 //移动App的URL
-export const APP_URL = "http://10.170.59.44:8081/";
+//export const APP_URL = "http://10.170.59.44:8081/";
 
 export const STATIC_URL = `${base}/itosfile/`
 export const UPLOAD_TASK_URL = `${base}/task/uploadfile`
@@ -48,6 +48,10 @@ export const deleteClient = params => { return axios.post(`${base}/dispatchclien
 export const serverReloadClient = params => { return axios.post(`${base}/dispatchclient/reload`, params).then(res => res.data); };
 //所有终端任务列表
 export const getDispatchTaskAll = params => { return axios.post(`${base}/dispatchclient/alltask`, params).then(res => res.data); };
+//分页终端任务列表
+export const getDispatchTaskPage = params => { return axios.post(`${base}/dispatchclient/pagetask`, params).then(res => res.data); };
+//终端任务列表总数
+export const getDispatchTaskCount = params => { return axios.post(`${base}/dispatchclient/taskcount`, params).then(res => res.data); };
 
 //------------------------------------------模版管理
 //任务模版列表
@@ -104,6 +108,10 @@ export const updateDr = params => { return axios.post(`${base}/manualtask/update
 export const deleteDr = params => { return axios.post(`${base}/manualtask/deletedr`, params).then(res => res.data); };
 //任务委外列表
 export const getDrList = params => { return axios.post(`${base}/manualtask/drlist`, params).then(res => res.data); };
+//人工执行任务分页
+export const getManualTaskPage = params => { return axios.post(`${base}/manualtask/page`, params).then(res => res.data); };
+//人工执行任务总数
+export const getManualTaskCount = params => { return axios.post(`${base}/manualtask/count`, params).then(res => res.data); };
 
 //------------------------------------------任务通用
 //临时任务
