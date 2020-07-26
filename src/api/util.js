@@ -187,3 +187,13 @@ export const downloadURI = function(uri, name) {
   link.click();
   document.body.removeChild(link);
 }
+
+export const groupBy = function(list, fn) {
+  const groups = new Map();
+  list.forEach(function(o) {
+    const group = JSON.stringify(fn(o));
+    groups.set(group, groups.get(group) || []);
+    groups.get(group).push(o);
+  });
+  return groups;
+}

@@ -52,6 +52,8 @@ export const getDispatchTaskAll = params => { return axios.post(`${base}/dispatc
 export const getDispatchTaskPage = params => { return axios.post(`${base}/dispatchclient/pagetask`, params).then(res => res.data); };
 //终端任务列表总数
 export const getDispatchTaskCount = params => { return axios.post(`${base}/dispatchclient/taskcount`, params).then(res => res.data); };
+//查询项-简介
+export const getAbsList = params => { return axios.post(`${base}/dispatchclient/abss`, params).then(res => res.data); };
 
 //------------------------------------------模版管理
 //任务模版列表

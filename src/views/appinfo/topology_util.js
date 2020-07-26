@@ -13,6 +13,11 @@ const SERVICE_TYPE_COLOR = "#409EFF";
 const SERVICE_DOMIN_COLOR = "#409EFF";
 const SERVICE_FONTSIZE = 12;
 //
+const SERVICE_VALID_COLOR = "#00FF00";
+const SERVICE_INVALID_COLOR = "red";
+const SERVICE_UNKNOW_COLOR = "yellow";
+const SERVICE_ACTIVE_BORDER = "#00FF00";
+//
 const LINE_COLOR = "#FF5511";
 const ARROW_COLOR = "#FF5511";
 
@@ -281,6 +286,12 @@ function getFillColor(type) {
 
 //拓扑连接-服务
 export const drawService = function (item) {
+    let heartbeat_color = SERVICE_UNKNOW_COLOR;
+    if (item.actualStatus == "VALID") {
+        heartbeat_color = SERVICE_VALID_COLOR
+    } else if (item.actualStatus == "INVALID") {
+        heartbeat_color = SERVICE_INVALID_COLOR
+    }
     return {
         id: item.serviceId, //group id
         serviceName: item.serviceName,
@@ -351,8 +362,8 @@ export const drawService = function (item) {
             x: 10,
             y: SERVICE_HEIGHT - 10,
             radius: 5,
-            fill: '#00FF00',
-            stroke: '#409EFF',
+            fill: heartbeat_color,
+            stroke: SERVICE_ACTIVE_BORDER,
             strokeWidth: 1,
         }
     };

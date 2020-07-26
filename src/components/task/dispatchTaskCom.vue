@@ -65,7 +65,6 @@
           <span>{{item.opDtStr}}</span>
           <span style="margin-left:10px;">{{item.statusdesc}}</span>
           <div v-show="item.remark != null" style="margin-left:25px;">
-            <span>备注:</span>
             <div v-html="item.remark"></div>
           </div>
         </div>

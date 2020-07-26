@@ -40,21 +40,21 @@
               type="primary"
               plain
               size="mini"
-              @click="chgUserContent(scope.$index, scope.row)"
+              @click="chgUserContent(scope.row)"
             >修改</el-button>
             <el-button
               type="warning"
               plain
               size="mini"
-              @click="setAuthority(scope.$index, scope.row)"
+              @click="setAuthority(scope.row)"
             >权限</el-button>
             <el-button
               type="warning"
               plain
               size="mini"
-              @click="setSubscription(scope.$index, scope.row)"
+              @click="setSubscription(scope.row)"
             >短信</el-button>
-            <el-popconfirm title="确定要删除该用户吗？" @onConfirm="delUser(scope.$index, scope.row)">
+            <el-popconfirm title="确定要删除该用户吗？" @onConfirm="delUser(scope.row)">
               <el-button
                 type="danger"
                 plain
@@ -109,10 +109,10 @@ export default {
     addUser() {
       this.newUser = {};
     },
-    delUser(index) {
+    delUser(row) {
       let me = this;
       delUser({
-        userId: me.users[index].userId
+        userId: row.userId
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
@@ -122,14 +122,14 @@ export default {
         }
       });
     },
-    setAuthority(index) {
-      this.authorityUser = { ...this.finUsers[index] };
+    setAuthority(row) {
+      this.authorityUser = { ...row };
     },
-    setSubscription(index) {
-      this.subUser = { ...this.finUsers[index] };
+    setSubscription(row) {
+      this.subUser = { ...row };
     },
-    chgUserContent(index) {
-      this.contentUser = { ...this.finUsers[index] };
+    chgUserContent(row) {
+      this.contentUser = { ...row };
     },
     getUserList() {
       getUserList({}).then(res => {

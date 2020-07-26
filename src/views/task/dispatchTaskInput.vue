@@ -24,7 +24,6 @@
         v-model="selClientList"
         multiple
         collapse-tags
-        style="margin-left: 20px;"
         placeholder="请选择执行终端"
         size="mini"
         @change="loadData"
@@ -35,6 +34,25 @@
           :label="item.serviceName"
           :value="item.serviceName"
         ></el-option>
+      </el-select>
+      <el-divider direction="vertical"></el-divider>
+      <!-- 选择任务 -->
+      <el-select
+        v-model="selAbsList"
+        multiple
+        collapse-tags
+        placeholder="请选择任务"
+        size="mini"
+        @change="loadData"
+      >
+        <el-option-group v-for="group in absList" :key="group.label" :label="group.label">
+          <el-option
+            v-for="item in group.options"
+            :key="item.abs"
+            :label="item.abs"
+            :value="item.modelId"
+          ></el-option>
+        </el-option-group>
       </el-select>
       <el-divider direction="vertical"></el-divider>
       <el-button type="primary" @click="loadData" size="mini" style="margin-top:15px;">刷新</el-button>
@@ -63,8 +81,10 @@ import { pickerOptions } from "@/api/data";
 import {
   getDispatchTaskPage,
   getDispatchTaskCount,
-  getClientList
+  getClientList,
+  getAbsList
 } from "@/api/api";
+import { groupBy } from "@/api/util";
 import taskCom from "@/components/task/dispatchTaskCom";
 
 export default {
@@ -83,6 +103,9 @@ export default {
       //
       clientList: [],
       selClientList: [],
+      //
+      absList: [],
+      selAbsList: [],
       //
       total: 0,
       curPage: 1,
@@ -136,7 +159,7 @@ export default {
           dateRange: me.dateRange, //1.时间范围
           clients: me.selClientList.map(item => "'" + item + "'").join(","), //2.终端范围
           statuss: me.statuss.map(item => "'" + item + "'").join(","), //3.状态范围
-          //4.简介范围
+          abss: me.selAbsList.map(item => "'" + item + "'").join(","), //4.简介范围
           curPage: me.curPage,
           pageSize: me.pageSize
         }).then(res => {
@@ -157,8 +180,8 @@ export default {
         getDispatchTaskCount({
           dateRange: me.dateRange, //1.时间范围
           clients: me.selClientList.map(item => "'" + item + "'").join(","), //2.终端范围
-          statuss: me.statuss.map(item => "'" + item + "'").join(",") //3.状态范围
-          //4.简介范围
+          statuss: me.statuss.map(item => "'" + item + "'").join(","), //3.状态范围
+          abss: me.selAbsList.map(item => "'" + item + "'").join(",") //4.简介范围
         }).then(res => {
           let { flag, data, errMsg } = res;
           if (!flag) {
@@ -170,6 +193,30 @@ export default {
           }
         });
       });
+    },
+    loadAbsList() {
+      return new Promise((resolve, reject) => {
+        let me = this;
+        getAbsList({}).then(res => {
+          let { flag, data, errMsg } = res;
+          if (!flag) {
+            me.$message.error(errMsg);
+            reject();
+          } else {
+            let opts = [];
+            groupBy(data, item => {
+              return item.groupDesc;
+            }).forEach((v, k) => {
+              opts.push({
+                label: k,
+                options: v
+              });
+            });
+            me.absList = opts;
+            resolve();
+          }
+        });
+      });
     }
   },
   components: {
@@ -177,6 +224,7 @@ export default {
   },
   mounted() {
     this.loadData();
+    this.loadAbsList();
     this.loadClientList();
   }
 };

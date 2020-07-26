@@ -20,7 +20,7 @@
         :header-cell-style="headerCellStyle"
         :cell-style="cellStyle"
         border
-        :default-sort="{prop: 'serviceName'}"
+        :default-sort="{prop: 'domain,serviceType'}"
         style="font-size:10px;"
       >
         <el-table-column type="index" width="50" label="No."></el-table-column>
@@ -32,18 +32,16 @@
         <el-table-column prop="serviceType" width="100" label="类型" sortable></el-table-column>
         <el-table-column prop="domain" width="80" label="区域" sortable></el-table-column>
         <el-table-column prop="serviceDesc" width="260" label="描述"></el-table-column>
-        <el-table-column width="50" label="有效">
-          <template slot-scope="scope">{{scope.row.valid ?"Y":"?"}}</template>
-        </el-table-column>
+        <el-table-column prop="visible" width="50" label="可见"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
               type="primary"
               plain
               size="mini"
-              @click="updAppInfo(scope.$index, scope.row)"
+              @click="updAppInfo(scope.row)"
             >修改</el-button>
-            <el-popconfirm title="确定要删除该用户吗？" @onConfirm="delAppInfo(scope.$index, scope.row)">
+            <el-popconfirm title="确定要删除该用户吗？" @onConfirm="delAppInfo(scope.row)">
               <el-button
                 type="danger"
                 plain
@@ -78,10 +76,10 @@ export default {
     addAppInfo() {
       this.newAppInfo = {};
     },
-    delAppInfo(index) {
+    delAppInfo(row) {
       let me = this;
       delAppInfo({
-        serviceId: me.apps[index].serviceId
+        serviceId: row.serviceId
       }).then(res => {
         let { flag, errMsg } = res;
         if (!flag) {
@@ -91,8 +89,8 @@ export default {
         }
       });
     },
-    updAppInfo(index) {
-      this.chgAppInfo = { ...this.apps[index] };
+    updAppInfo(row) {
+      this.chgAppInfo = { ...row };
     },
     listAppInfo() {
       listAppInfo({}).then(res => {

@@ -112,7 +112,7 @@ export default {
       let me = this;
       me.$refs.form.validate(valid => {
         if (valid) {
-          me.app.valid = "Y"; //默认有效
+          me.app.visible = "Y"; //默认可见
           me.app.oper = me.userInfo.userId;
           me.app.port = Number(me.app.port);
           me.app.remark = me.app.remark || "";

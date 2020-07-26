@@ -22,7 +22,7 @@
               type="success"
               icon="el-icon-edit"
               size="mini"
-              @click="updateSmarttips(scope.$index)"
+              @click="updateSmarttips(scope.row)"
             >修改</el-button>
             <el-button
               type="danger"
@@ -75,8 +75,8 @@ export default {
     addSmarttips() {
       this.ntip = {};
     },
-    updateSmarttips(index) {
-      this.utip = { ...this.list[index] };
+    updateSmarttips(row) {
+      this.utip = { ...row };
     },
     deleteSmarttips(row) {
       this.$confirm("是否删除此条记录?", "提示", {

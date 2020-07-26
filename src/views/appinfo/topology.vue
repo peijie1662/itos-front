@@ -285,8 +285,12 @@ export default {
       );
       //心跳
       me.sceneApps.forEach(app => {
-        app.heartbeat.stroke =
-          app.heartbeat.stroke == "#00FF00" ? "#409EFF" : "#00FF00";
+        if (app.actualStatus == "VALID") {
+          app.heartbeat.stroke =
+            app.heartbeat.stroke == "#00FF00" ? "#409EFF" : "#00FF00";
+        } else {
+          app.heartbeat.stroke = "gray";
+        }
       });
     },
     //下载图片
