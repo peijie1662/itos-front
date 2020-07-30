@@ -295,6 +295,7 @@ export const drawService = function (item) {
     return {
         id: item.serviceId, //group id
         serviceName: item.serviceName,
+        actualStatus: item.actualStatus,
         x: item.x ? item.x : 0,
         y: item.y ? item.y : 0,
         draggable: true,

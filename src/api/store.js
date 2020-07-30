@@ -17,7 +17,12 @@ const store = new Vuex.Store({
         update_clientList: (state, clientList) => state.clientList = clientList,
         update_userList: (state, userList) => state.userList = userList,
         update_userInfo: (state, userInfo) => state.userInfo = userInfo,
-        update_sysLog: (state, log) => state.sysLog.unshift(log),
+        update_sysLog: (state, log) => {
+            state.sysLog.unshift(log)
+            if (state.sysLog.length > 100) {
+                state.sysLog.splice(100, state.sysLog.length - 100)
+            }
+        },
         clear_sysLog: (state) => state.sysLog = [],
         update_showIM: (state, showIM) => state.showIM = showIM,
         update_attentionIM: (state, attentionIM) => state.attentionIM = attentionIM,
