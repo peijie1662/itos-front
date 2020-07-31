@@ -51,9 +51,12 @@
         </div>
       </div>
       <!-- 第3行,内容 -->
-      <div style="min-height:50px;word-wrap: break-word;padding: 10px;">{{task.content}}</div>
+      <div
+        style="min-height:50px;word-wrap: break-word;padding: 10px;"
+        v-if="!hideContent"
+      >{{task.content}}</div>
       <!-- 第4行,处理人 -->
-      <div>
+      <div v-if="!hideContent">
         <span style="color: #a6b5c4;">处理人员：</span>
         <span style="margin-left:5px;">{{task.handlers}}</span>
       </div>
@@ -157,7 +160,7 @@ export default {
       }
     }
   },
-  props: ["ttask"],
+  props: ["ttask", "hideContent"],
   watch: {
     ttask: {
       handler(newVal) {

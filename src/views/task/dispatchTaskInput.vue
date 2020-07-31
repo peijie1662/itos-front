@@ -17,6 +17,7 @@
         size="mini"
         :picker-options="pickerOptions"
         @change="loadData"
+        style="width:250px;"
       ></el-date-picker>
       <el-divider direction="vertical"></el-divider>
       <!-- 选择执行终端 -->
@@ -27,6 +28,7 @@
         placeholder="请选择执行终端"
         size="mini"
         @change="loadData"
+        style="width:150px;"
       >
         <el-option
           v-for="item in clientList"
@@ -44,6 +46,7 @@
         placeholder="请选择任务"
         size="mini"
         @change="loadData"
+        style="width:150px;"
       >
         <el-option-group v-for="group in absList" :key="group.label" :label="group.label">
           <el-option
@@ -55,12 +58,14 @@
         </el-option-group>
       </el-select>
       <el-divider direction="vertical"></el-divider>
+      <el-checkbox v-model="hideContent">隐藏内容</el-checkbox>
+      <el-divider direction="vertical"></el-divider>
       <el-button type="primary" @click="loadData" size="mini" style="margin-top:15px;">刷新</el-button>
     </div>
     <div class="content">
       <!-- 任务列表 -->
       <div v-for="(task,index) in taskList" :key="index" class="task">
-        <taskCom :ttask="task" @updateTaskSuccess="loadData"></taskCom>
+        <taskCom :ttask="task" :hideContent="hideContent" @updateTaskSuccess="loadData"></taskCom>
       </div>
       <el-pagination
         @size-change="handleSizeChange"
@@ -109,7 +114,9 @@ export default {
       //
       total: 0,
       curPage: 1,
-      pageSize: 20
+      pageSize: 20,
+      //
+      hideContent: true
     };
   },
   computed: {
